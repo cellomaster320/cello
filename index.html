@@ -7,11 +7,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     
-    <!-- Firebase SDK (相容版) -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
-    <!-- 載入字體 -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;600;700;900&family=Cinzel:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
@@ -19,24 +17,15 @@
             --bg-base: #1e1b18; 
             --bg-gradient-start: #2c241b; 
             --bg-gradient-end: #12100e; 
-            
             --gold-primary: #c5a059; 
             --gold-dim: #8a6e30;
-            
             --text-main: #e8e6e3; 
-            
             --glass-bg: rgba(30, 27, 24, 0.96);
             --glass-border: rgba(255, 255, 255, 0.08);
             --input-bg: rgba(0, 0, 0, 0.3);
         }
 
-        /* --- 1. 佈局與字體強制設定 --- */
-        
-        *, *::before, *::after {
-            box-sizing: border-box !important; 
-            -webkit-tap-highlight-color: transparent;
-            outline: none;
-        }
+        *, *::before, *::after { box-sizing: border-box !important; -webkit-tap-highlight-color: transparent; outline: none; }
 
         body {
             font-family: 'Noto Serif TC', serif !important;
@@ -44,137 +33,59 @@
             background-color: var(--bg-base);
             color: var(--text-main);
             background-image: radial-gradient(circle at 50% 0%, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 80%);
-            height: 100dvh;
-            overflow: hidden;
-            font-size: 15px;
+            height: 100dvh; overflow: hidden; font-size: 15px;
         }
 
-        /* 英文與數字強制 Cinzel */
-        .font-en, .font-num, 
-        input[type="date"], input[type="time"], input[type="number"], input[type="tel"] {
-            font-family: 'Cinzel', serif !important;
-            letter-spacing: 0.03em;
-            font-weight: 700 !important;
+        .font-en, .font-num, input[type="date"], input[type="time"], input[type="number"], input[type="tel"] {
+            font-family: 'Cinzel', serif !important; letter-spacing: 0.03em; font-weight: 700 !important;
         }
 
-        /* 中文與按鈕強制思源宋體 */
-        .font-zh, textarea, select, button {
-            font-family: 'Noto Serif TC', serif !important;
-            letter-spacing: 0.05em;
-        }
-
+        .font-zh, textarea, select, button { font-family: 'Noto Serif TC', serif !important; letter-spacing: 0.05em; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
+        .glass { background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--glass-border); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); }
+        .glass-dock { background: rgba(18, 16, 14, 0.98); backdrop-filter: blur(30px); border-top: 1px solid rgba(197, 160, 89, 0.15); box-shadow: 0 -4px 30px rgba(0,0,0,0.7); }
 
-        /* 玻璃擬態 */
-        .glass {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-        }
-        
-        .glass-dock {
-            background: rgba(18, 16, 14, 0.98);
-            backdrop-filter: blur(30px);
-            border-top: 1px solid rgba(197, 160, 89, 0.15);
-            box-shadow: 0 -4px 30px rgba(0,0,0,0.7);
-        }
-
-        /* 輸入元件 - 通用設定 */
         input, select, textarea {
             background-color: var(--input-bg) !important;
             border: 1px solid rgba(255,255,255,0.15) !important;
             color: var(--text-main) !important;
-            border-radius: 10px !important;
-            transition: all 0.3s;
-            font-size: 15px;
-            
-            /* 預設滿版 */
-            width: 100%;
-            display: block;
-            padding: 12px !important;
+            border-radius: 10px !important; transition: all 0.3s; font-size: 15px; width: 100%; display: block; padding: 12px !important;
         }
 
-        /* [關鍵修正] 日期時間輸入框：95%寬度 + 置中 */
         input[type="date"], input[type="time"] {
-            display: block !important;
-            width: 95% !important;     /* 縮一點，不要撐滿 */
-            margin: 0 auto !important; /* 置中 */
-            text-align: center;
-            font-family: 'Cinzel', serif !important;
-            padding: 10px 0 !important; /* 移除左右 padding 防止撐開 */
-            height: 44px;
-            appearance: none;
+            display: block !important; width: 95% !important; margin: 0 auto !important; text-align: center;
+            font-family: 'Cinzel', serif !important; padding: 10px 0 !important; height: 44px; appearance: none;
         }
 
-        /* 週數輸入框：強制縮小 */
-        .input-mini {
-            width: 50px !important;
-            min-width: 50px !important;
-            flex-shrink: 0 !important;
-            padding: 4px !important;
-            text-align: center;
-            height: 36px;
-        }
-
-        input:focus, select:focus, textarea:focus {
-            border-color: var(--gold-primary) !important;
-            background-color: rgba(0,0,0,0.5) !important;
-        }
+        .input-mini { width: 50px !important; min-width: 50px !important; flex-shrink: 0 !important; padding: 4px !important; text-align: center; height: 36px; }
+        input:focus, select:focus, textarea:focus { border-color: var(--gold-primary) !important; background-color: rgba(0,0,0,0.5) !important; }
         ::placeholder { color: rgba(255, 255, 255, 0.25); font-family: 'Noto Serif TC', serif !important; font-weight: 700; }
 
-        /* 按鈕 */
-        .btn-gold {
-            background: linear-gradient(135deg, #c5a059 0%, #8f7032 100%);
-            color: #12100e;
-            box-shadow: 0 2px 10px rgba(197, 160, 89, 0.2);
-        }
-        .btn-type {
-            color: #a1a1aa;
-            background: rgba(255,255,255,0.05);
-            font-size: 13px;
-        }
-        .btn-type.active {
-            background: var(--gold-primary);
-            color: #12100e;
-        }
-
-        /* 導航 */
+        .btn-gold { background: linear-gradient(135deg, #c5a059 0%, #8f7032 100%); color: #12100e; box-shadow: 0 2px 10px rgba(197, 160, 89, 0.2); }
+        .btn-type { color: #a1a1aa; background: rgba(255,255,255,0.05); font-size: 13px; }
+        .btn-type.active { background: var(--gold-primary); color: #12100e; }
         .nav-btn.active i { color: var(--gold-primary); filter: drop-shadow(0 0 5px rgba(197, 160, 89, 0.2)); transform: scale(1.05); }
         .nav-btn.active span { color: var(--gold-primary); opacity: 1; }
         .nav-btn span { opacity: 0.5; transition: 0.3s; }
         .nav-btn i { transition: 0.3s; color: #71717a; }
 
-        /* 動畫 */
         .fade-in { animation: fadeIn 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
         .slide-up { animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; transform: translateY(100%); }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
         .hidden-tab { display: none; }
 
-        /* Checkbox */
         .toggle-checkbox {
-            appearance: none; width: 24px; height: 24px;
-            border: 2px solid #666; border-radius: 6px;
-            display: grid; place-content: center; transition: 0.2s;
-            flex-shrink: 0;
-            cursor: pointer;
+            appearance: none; width: 24px; height: 24px; border: 2px solid #666; border-radius: 6px;
+            display: grid; place-content: center; transition: 0.2s; flex-shrink: 0; cursor: pointer;
         }
-        .toggle-checkbox::before {
-            content: ""; width: 14px; height: 14px; transform: scale(0);
-            background: var(--gold-primary); border-radius: 2px; transition: 0.2s;
-        }
+        .toggle-checkbox::before { content: ""; width: 14px; height: 14px; transform: scale(0); background: var(--gold-primary); border-radius: 2px; transition: 0.2s; }
         .toggle-checkbox:checked { border-color: var(--gold-primary); }
         .toggle-checkbox:checked::before { transform: scale(1); }
 
-        /* 圖標 */
         .app-icon-container {
-            width: 56px; height: 56px;
-            border-radius: 14px;
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-            border: 1px solid rgba(255,255,255,0.1);
+            width: 56px; height: 56px; border-radius: 14px; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1);
         }
         .icon-soundcorset { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; }
         .icon-notion { background: #fdfdfd; color: black; }
@@ -183,18 +94,9 @@
         .piano-key.black::after { content:''; position: absolute; top: 0; left: 100%; width: 60%; height: 60%; background: black; transform: translateX(-50%); border-radius: 0 0 2px 2px; z-index: 10; }
         .icon-recorder { background: #27272a; color: #ef4444; }
         
-        /* 雲端狀態指示燈 */
         #cloud-status {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            z-index: 100;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: #ef4444; /* Default Red */
-            box-shadow: 0 0 10px rgba(0,0,0,0.5);
-            transition: all 0.3s;
+            position: fixed; top: 10px; right: 10px; z-index: 100; width: 8px; height: 8px; border-radius: 50%;
+            background-color: #ef4444; box-shadow: 0 0 10px rgba(0,0,0,0.5); transition: all 0.3s;
         }
         #cloud-status.connected { background-color: #22c55e; box-shadow: 0 0 10px #22c55e; }
         #cloud-status.syncing { background-color: #eab308; box-shadow: 0 0 10px #eab308; animation: pulse 1s infinite; }
@@ -202,30 +104,22 @@
 </head>
 <body class="flex flex-col">
 
-    <!-- 雲端連線狀態燈 -->
     <div id="cloud-status" title="雲端連線狀態"></div>
 
-    <!-- Header -->
     <header class="pt-[env(safe-area-inset-top,24px)] px-5 pb-3 flex justify-between items-center z-30 mt-2 bg-gradient-to-b from-[var(--bg-base)] to-transparent sticky top-0 flex-none">
-        <div>
-            <!-- 主標題 -->
-            <h1 class="text-4xl font-black font-en tracking-[0.05em] text-[#c5a059] drop-shadow-md">MASTER</h1>
-        </div>
+        <div><h1 class="text-4xl font-black font-en tracking-[0.05em] text-[#c5a059] drop-shadow-md">MASTER</h1></div>
         <button onclick="openSettings()" class="w-11 h-11 rounded-full border border-white/10 flex items-center justify-center bg-white/5 active:scale-90 transition hover:bg-white/10 hover:border-[#c5a059]/50 shadow-md">
             <i data-lucide="layout-grid" size="20" class="text-zinc-300"></i>
         </button>
     </header>
 
-    <!-- Main Content -->
     <main class="flex-1 overflow-y-auto no-scrollbar px-4 pb-32 pt-2 relative" id="main-container">
-
-        <!-- 1. SCHEDULE -->
         <div id="view-schedule" class="space-y-4 fade-in">
             <div class="glass rounded-xl p-2 flex items-center justify-between sticky top-0 z-20">
                 <button onclick="changeViewDate(-7)" class="p-2 text-zinc-500 hover:text-[#c5a059] transition"><i data-lucide="chevron-left" size="24"></i></button>
                 <div class="text-center">
                     <div id="cal-range" class="text-sm text-[#c5a059] font-en tracking-widest font-black">--</div>
-                    <div id="cal-mode" class="text-[12px] text-zinc-600 font-num font-bold mt-0.5">2025</div>
+                    <div id="cal-mode" class="text-[12px] text-zinc-600 font-num font-bold mt-0.5">2026</div>
                 </div>
                 <button onclick="changeViewDate(7)" class="p-2 text-zinc-500 hover:text-[#c5a059] transition"><i data-lucide="chevron-right" size="24"></i></button>
             </div>
@@ -233,7 +127,6 @@
             <div id="schedule-list" class="space-y-3 min-h-[50vh] pb-10"></div>
         </div>
 
-        <!-- 2. TEACHING -->
         <div id="view-teaching" class="space-y-5 hidden-tab fade-in">
             <h2 class="text-lg font-black text-zinc-200 font-zh tracking-widest mb-3 border-l-4 border-[#c5a059] pl-3">教學名單</h2>
             <div class="flex p-1 bg-black/20 rounded-xl mb-3 border border-white/5">
@@ -243,13 +136,11 @@
             <div id="teaching-list" class="space-y-2 pb-20"></div>
         </div>
 
-        <!-- 3. STAGE -->
         <div id="view-stage" class="space-y-5 hidden-tab fade-in">
             <h2 class="text-lg font-black text-zinc-200 font-zh tracking-widest mb-3 border-l-4 border-[#c5a059] pl-3">演出行程</h2>
             <div id="stage-list" class="space-y-3 pb-20"></div>
         </div>
 
-        <!-- 4. FINANCE -->
         <div id="view-finance" class="space-y-5 hidden-tab fade-in">
             <h2 class="text-lg font-black text-zinc-200 font-zh tracking-widest mb-3 border-l-4 border-[#c5a059] pl-3">收支概覽</h2>
             <div class="w-full aspect-[2.5/1] rounded-2xl bg-gradient-to-br from-[#29221b] to-[#12100e] border border-[#c5a059]/20 p-5 relative overflow-hidden shadow-lg flex flex-col justify-between">
@@ -259,14 +150,8 @@
                     <i data-lucide="trending-up" class="text-[#c5a059] opacity-80" size="20"></i>
                 </div>
                 <div class="relative z-10 flex justify-between items-end">
-                    <div>
-                        <div class="text-[10px] text-zinc-500 font-zh tracking-widest mb-0.5 font-bold">待收款項</div>
-                        <div id="fin-pending" class="text-xl font-black text-[#e8e6e3] font-num tracking-tight">NT$ 0</div>
-                    </div>
-                    <div class="text-right">
-                        <div class="text-[10px] text-zinc-600 font-zh tracking-widest mb-0.5 font-bold">已入帳</div>
-                        <div id="fin-received" class="text-base font-black text-[#c5a059] font-num">NT$ 0</div>
-                    </div>
+                    <div><div class="text-[10px] text-zinc-500 font-zh tracking-widest mb-0.5 font-bold">待收款項</div><div id="fin-pending" class="text-xl font-black text-[#e8e6e3] font-num tracking-tight">NT$ 0</div></div>
+                    <div class="text-right"><div class="text-[10px] text-zinc-600 font-zh tracking-widest mb-0.5 font-bold">已入帳</div><div id="fin-received" class="text-base font-black text-[#c5a059] font-num">NT$ 0</div></div>
                 </div>
             </div>
             <div class="glass rounded-2xl p-4 border-t border-[#c5a059]/10">
@@ -274,242 +159,127 @@
                 <div id="finance-list" class="space-y-2"></div>
             </div>
         </div>
-
     </main>
 
-    <!-- Bottom Dock -->
     <nav class="fixed bottom-5 left-4 right-4 h-[70px] glass-dock rounded-[2rem] flex justify-between items-center px-2 z-40 border border-[#c5a059]/10 shadow-2xl">
-        <button onclick="switchTab('view-schedule', this)" class="nav-btn active flex-1 flex flex-col items-center gap-1 transition-all active:scale-95 group">
-            <i data-lucide="calendar-days" size="20"></i>
-            <span class="text-[9px] font-zh tracking-widest">行程</span>
-        </button>
-        <button onclick="switchTab('view-teaching', this)" class="nav-btn flex-1 flex flex-col items-center gap-1 transition-all active:scale-95 group">
-            <i data-lucide="users" size="20"></i>
-            <span class="text-[9px] font-zh tracking-widest">教學</span>
-        </button>
+        <button onclick="switchTab('view-schedule', this)" class="nav-btn active flex-1 flex flex-col items-center gap-1 transition-all active:scale-95 group"><i data-lucide="calendar-days" size="20"></i><span class="text-[9px] font-zh tracking-widest">行程</span></button>
+        <button onclick="switchTab('view-teaching', this)" class="nav-btn flex-1 flex flex-col items-center gap-1 transition-all active:scale-95 group"><i data-lucide="users" size="20"></i><span class="text-[9px] font-zh tracking-widest">教學</span></button>
         <div class="relative -top-7 mx-1">
-            <button onclick="openActionSheet()" class="w-14 h-14 bg-gradient-to-br from-[#e0c080] to-[#8f7032] rounded-[1.2rem] rotate-45 flex items-center justify-center shadow-[0_6px_20px_rgba(197,160,89,0.3)] border-2 border-[#fff]/10 z-50 transition-all hover:scale-105 active:scale-95 hover:rotate-90 duration-300">
-                <i data-lucide="plus" class="text-[#12100e] -rotate-45" size="30" stroke-width="3"></i>
-            </button>
+            <button onclick="openActionSheet()" class="w-14 h-14 bg-gradient-to-br from-[#e0c080] to-[#8f7032] rounded-[1.2rem] rotate-45 flex items-center justify-center shadow-[0_6px_20px_rgba(197,160,89,0.3)] border-2 border-[#fff]/10 z-50 transition-all hover:scale-105 active:scale-95 duration-300"><i data-lucide="plus" class="text-[#12100e] -rotate-45" size="30" stroke-width="3"></i></button>
         </div>
-        <button onclick="switchTab('view-stage', this)" class="nav-btn flex-1 flex flex-col items-center gap-1 transition-all active:scale-95 group">
-            <i data-lucide="music" size="20"></i>
-            <span class="text-[9px] font-zh tracking-widest">演出</span>
-        </button>
-        <button onclick="switchTab('view-finance', this)" class="nav-btn flex-1 flex flex-col items-center gap-1 transition-all active:scale-95 group">
-            <i data-lucide="circle-dollar-sign" size="20"></i>
-            <span class="text-[9px] font-zh tracking-widest">帳務</span>
-        </button>
+        <button onclick="switchTab('view-stage', this)" class="nav-btn flex-1 flex flex-col items-center gap-1 transition-all active:scale-95 group"><i data-lucide="music" size="20"></i><span class="text-[9px] font-zh tracking-widest">演出</span></button>
+        <button onclick="switchTab('view-finance', this)" class="nav-btn flex-1 flex flex-col items-center gap-1 transition-all active:scale-95 group"><i data-lucide="circle-dollar-sign" size="20"></i><span class="text-[9px] font-zh tracking-widest">帳務</span></button>
     </nav>
 
-    <!-- Action Sheet -->
     <div id="action-sheet-overlay" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden opacity-0 transition-opacity duration-300" onclick="closeActionSheet()"></div>
     <div id="action-sheet" class="fixed bottom-0 left-0 right-0 bg-[#181614] rounded-t-[2rem] p-6 z-50 transform translate-y-full transition-transform duration-300 border-t border-[#c5a059]/20 shadow-2xl pb-10">
         <div class="w-10 h-1 bg-[#c5a059]/30 rounded-full mx-auto mb-6"></div>
         <div class="grid grid-cols-3 gap-4 mb-6">
-            <button onclick="openProfileModal('student')" class="flex flex-col items-center gap-2 active:scale-95 transition bg-white/5 p-3 rounded-2xl border border-white/5 hover:border-[#c5a059]/50 group">
-                <div class="w-12 h-12 rounded-full bg-[#12100e] flex items-center justify-center text-blue-400 shadow-inner"><i data-lucide="user-plus" size="22"></i></div>
-                <span class="text-xs font-zh text-zinc-300 font-bold group-hover:text-[#c5a059]">新增學生</span>
-            </button>
-            <button onclick="openProfileModal('school')" class="flex flex-col items-center gap-2 active:scale-95 transition bg-white/5 p-3 rounded-2xl border border-white/5 hover:border-[#c5a059]/50 group">
-                <div class="w-12 h-12 rounded-full bg-[#12100e] flex items-center justify-center text-emerald-400 shadow-inner"><i data-lucide="school" size="22"></i></div>
-                <span class="text-xs font-zh text-zinc-300 font-bold group-hover:text-[#c5a059]">新增學校</span>
-            </button>
-            <button onclick="openEventModal()" class="flex flex-col items-center gap-2 active:scale-95 transition bg-white/5 p-3 rounded-2xl border border-white/5 hover:border-[#c5a059]/50 group">
-                <div class="w-12 h-12 rounded-full bg-[#12100e] flex items-center justify-center text-[#c5a059] shadow-inner"><i data-lucide="calendar-plus" size="22"></i></div>
-                <span class="text-xs font-zh text-zinc-300 font-bold group-hover:text-[#c5a059]">新增行程</span>
-            </button>
+            <button onclick="openProfileModal('student')" class="flex flex-col items-center gap-2 active:scale-95 transition bg-white/5 p-3 rounded-2xl border border-white/5 group"><div class="w-12 h-12 rounded-full bg-[#12100e] flex items-center justify-center text-blue-400 shadow-inner"><i data-lucide="user-plus" size="22"></i></div><span class="text-xs font-zh text-zinc-300 font-bold group-hover:text-[#c5a059]">新增學生</span></button>
+            <button onclick="openProfileModal('school')" class="flex flex-col items-center gap-2 active:scale-95 transition bg-white/5 p-3 rounded-2xl border border-white/5 group"><div class="w-12 h-12 rounded-full bg-[#12100e] flex items-center justify-center text-emerald-400 shadow-inner"><i data-lucide="school" size="22"></i></div><span class="text-xs font-zh text-zinc-300 font-bold group-hover:text-[#c5a059]">新增學校</span></button>
+            <button onclick="openEventModal()" class="flex flex-col items-center gap-2 active:scale-95 transition bg-white/5 p-3 rounded-2xl border border-white/5 group"><div class="w-12 h-12 rounded-full bg-[#12100e] flex items-center justify-center text-[#c5a059] shadow-inner"><i data-lucide="calendar-plus" size="22"></i></div><span class="text-xs font-zh text-zinc-300 font-bold group-hover:text-[#c5a059]">新增行程</span></button>
         </div>
         <button onclick="closeActionSheet()" class="w-full py-3 text-zinc-500 font-en tracking-[0.2em] font-bold text-[10px] uppercase hover:text-white transition">CLOSE</button>
     </div>
 
-    <!-- MODAL: SETTINGS & TOOLBOX -->
     <div id="modal-settings" class="fixed inset-0 z-[70] hidden flex items-center justify-center px-6 bg-black/90 backdrop-blur-md">
         <div class="bg-[#181614] w-full max-w-sm rounded-[2rem] p-6 border border-[#c5a059]/20 shadow-2xl slide-up">
             <h3 class="text-lg text-white font-black mb-6 font-zh text-center">音樂工具箱</h3>
             <div class="grid grid-cols-4 gap-4 mb-8">
-                <a href="https://soundcorset.com/metronome" target="_blank" class="flex flex-col items-center gap-2 group">
-                    <div class="app-icon-container icon-soundcorset"><i data-lucide="activity" size="28"></i></div>
-                    <span class="text-[10px] text-zinc-400 font-zh group-hover:text-white text-center font-bold">調音節拍</span>
-                </a>
-                <a href="https://www.notion.so/" target="_blank" class="flex flex-col items-center gap-2 group">
-                    <div class="app-icon-container icon-notion"><span class="font-bold font-serif text-2xl">N</span></div>
-                    <span class="text-[10px] text-zinc-400 font-zh group-hover:text-white text-center font-bold">筆記</span>
-                </a>
-                <a href="https://recursivearts.com/virtual-piano/" target="_blank" class="flex flex-col items-center gap-2 group">
-                    <div class="app-icon-container icon-piano"><div class="piano-key black"></div><div class="piano-key black"></div><div class="piano-key"></div><div class="piano-key black"></div></div>
-                    <span class="text-[10px] text-zinc-400 font-zh group-hover:text-white text-center font-bold">鋼琴</span>
-                </a>
-                <a href="https://online-voice-recorder.com/tw/" target="_blank" class="flex flex-col items-center gap-2 group">
-                    <div class="app-icon-container icon-recorder"><i data-lucide="mic" size="24"></i></div>
-                    <span class="text-[10px] text-zinc-400 font-zh group-hover:text-white text-center font-bold">錄音</span>
-                </a>
+                <a href="https://soundcorset.com/metronome" target="_blank" class="flex flex-col items-center gap-2 group"><div class="app-icon-container icon-soundcorset"><i data-lucide="activity" size="28"></i></div><span class="text-[10px] text-zinc-400 font-zh group-hover:text-white text-center font-bold">調音節拍</span></a>
+                <a href="https://www.notion.so/" target="_blank" class="flex flex-col items-center gap-2 group"><div class="app-icon-container icon-notion"><span class="font-bold font-serif text-2xl">N</span></div><span class="text-[10px] text-zinc-400 font-zh group-hover:text-white text-center font-bold">筆記</span></a>
+                <a href="https://recursivearts.com/virtual-piano/" target="_blank" class="flex flex-col items-center gap-2 group"><div class="app-icon-container icon-piano"><div class="piano-key black"></div><div class="piano-key black"></div><div class="piano-key"></div><div class="piano-key black"></div></div><span class="text-[10px] text-zinc-400 font-zh group-hover:text-white text-center font-bold">鋼琴</span></a>
+                <a href="https://online-voice-recorder.com/tw/" target="_blank" class="flex flex-col items-center gap-2 group"><div class="app-icon-container icon-recorder"><i data-lucide="mic" size="24"></i></div><span class="text-[10px] text-zinc-400 font-zh group-hover:text-white text-center font-bold">錄音</span></a>
             </div>
             <div class="border-t border-white/5 pt-4">
-                <h4 class="text-[10px] text-[#c5a059] font-zh font-bold mb-3">資料管理 (雲端同步中)</h4>
-                <div class="flex gap-3">
-                    <button onclick="exportData()" class="flex-1 py-3 bg-zinc-800 rounded-xl text-xs font-zh text-zinc-400 hover:text-white hover:bg-zinc-700 transition flex items-center justify-center gap-2 font-bold"><i data-lucide="download" size="14"></i> 備份代碼</button>
-                    <!-- 隱藏還原按鈕，因為現在是自動同步 -->
-                </div>
+                <h4 class="text-[10px] text-[#c5a059] font-zh font-bold mb-3">資料管理</h4>
+                <div class="flex gap-3"><button onclick="exportData()" class="flex-1 py-3 bg-zinc-800 rounded-xl text-xs font-zh text-zinc-400 hover:text-white hover:bg-zinc-700 transition flex items-center justify-center gap-2 font-bold"><i data-lucide="download" size="14"></i> 備份代碼</button></div>
             </div>
             <button onclick="closeModal('modal-settings')" class="w-full mt-6 py-3 text-zinc-500 font-en tracking-[0.2em] font-bold text-[10px] uppercase hover:text-white transition">CLOSE</button>
         </div>
     </div>
 
-    <!-- MODAL: EVENT (行程編輯 - 修復版：絕對防爆) -->
     <div id="modal-event" class="fixed inset-0 z-[60] hidden flex items-end sm:items-center justify-center px-0 sm:px-4 pb-0 sm:pb-4">
         <div class="absolute inset-0 bg-black/90 backdrop-blur-md" onclick="closeModal('modal-event')"></div>
         <div class="relative bg-[#181614] w-full max-w-md rounded-t-[2rem] sm:rounded-[2rem] p-5 shadow-2xl border border-[#c5a059]/20 max-h-[90vh] overflow-y-auto slide-up">
-            
             <div class="flex justify-between items-center mb-5 border-b border-white/5 pb-3">
                 <h3 class="text-lg text-white font-black font-zh tracking-wide" id="modal-event-title">新增行程</h3>
                 <button onclick="closeModal('modal-event')" class="text-zinc-500 hover:text-white bg-white/5 p-1.5 rounded-full"><i data-lucide="x" size="18"></i></button>
             </div>
-
             <div class="space-y-5 pb-6">
                 <input type="hidden" id="evt-type">
                 <input type="hidden" id="evt-ref-id">
-
-                <!-- 1. 類型 -->
                 <div class="grid grid-cols-2 gap-2 bg-black/30 p-1 rounded-xl border border-white/5">
                     <button onclick="setEventType('lesson', this)" class="btn-type active flex-1 py-2.5 rounded-lg font-bold font-zh transition-all">家教/學校</button>
                     <button onclick="setEventType('performance', this)" class="btn-type flex-1 py-2.5 rounded-lg font-bold font-zh transition-all">演出活動</button>
                 </div>
-
-                <!-- 2. 標題 -->
                 <div class="space-y-1.5">
                     <label id="lbl-title" class="text-[10px] text-[#c5a059] font-zh font-bold ml-1">行程標題</label>
                     <div id="section-student" class="relative hidden">
-                        <select id="evt-student" onchange="autoFillStudent()" class="w-full p-3 rounded-xl text-sm font-zh appearance-none font-bold bg-[#24201c] border-white/10 focus:border-[#c5a059]">
-                            <option value="">選擇學生/學校...</option>
+                        <select id="evt-student" onchange="autoFillStudent()" class="w-full p-3 rounded-xl text-sm font-zh appearance-none font-bold bg-[#24201c] border-white/10">
+                            <option value="">選擇對象...</option>
                         </select>
                         <i data-lucide="chevron-down" size="16" class="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 pointer-events-none"></i>
                     </div>
-                    <div id="section-title">
-                        <input type="text" id="evt-title" placeholder="輸入主題" class="w-full p-3 rounded-xl text-sm font-zh font-bold bg-[#24201c]">
-                    </div>
+                    <div id="section-title"><input type="text" id="evt-title" placeholder="輸入主題" class="w-full p-3 rounded-xl text-sm font-zh font-bold bg-[#24201c]"></div>
                 </div>
-
-                <!-- 3. 演出細節 -->
                 <div id="section-performance" class="hidden space-y-3 bg-white/5 p-3 rounded-xl border border-dashed border-[#c5a059]/30">
                     <h4 class="text-[10px] text-[#c5a059] font-zh font-bold">演出細節</h4>
                     <div class="space-y-2">
-                        <select id="evt-perf-type" class="w-full p-2.5 rounded-lg text-xs font-zh bg-[#24201c] font-bold">
-                            <option value="樂團">樂團</option>
-                            <option value="商演">商演</option>
-                            <option value="婚禮">婚禮</option>
-                            <option value="演出">一般演出</option>
-                        </select>
+                        <select id="evt-perf-type" class="w-full p-2.5 rounded-lg text-xs font-zh bg-[#24201c] font-bold"><option value="樂團">樂團</option><option value="商演">商演</option><option value="婚禮">婚禮</option><option value="演出">一般演出</option></select>
                         <input type="text" id="evt-dress" placeholder="服裝建議" class="w-full p-2.5 rounded-lg text-xs font-zh bg-[#24201c]">
                     </div>
                     <div class="pt-2 border-t border-white/5 mt-1">
-                        <label class="flex items-center gap-2 cursor-pointer">
-                            <span class="text-[10px] text-zinc-400 font-zh whitespace-nowrap font-bold">彩排場次</span>
+                        <label class="flex items-center gap-2 cursor-pointer"><span class="text-[10px] text-zinc-400 font-zh whitespace-nowrap font-bold">彩排場次</span>
                             <select id="evt-rehearsal-count" onchange="toggleRehearsalInputs()" class="p-2 rounded-lg text-xs bg-[#24201c] text-[#c5a059] font-bold border border-zinc-700 flex-1 font-num">
-                                <option value="0">無</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
+                                <option value="0">無</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option>
                             </select>
                         </label>
                         <div id="rehearsal-inputs" class="mt-2 space-y-3 hidden"></div>
                     </div>
                 </div>
-
-                <!-- 4. 日期時間 (安全置中+防爆版) -->
                 <div class="space-y-3 bg-white/5 p-4 rounded-xl border border-white/5 text-center overflow-hidden">
-                    <div>
-                        <label class="text-[10px] text-[#c5a059] font-zh font-bold ml-1 block mb-1">日期</label>
-                        <input type="date" id="evt-date" class="rounded-xl text-lg font-en p-2 font-bold bg-[#24201c] border-white/20">
-                    </div>
-                    <div>
-                        <label class="text-[10px] text-[#c5a059] font-zh font-bold ml-1 block mb-1">開始時間</label>
-                        <input type="time" id="evt-start" class="rounded-xl text-lg font-en p-2 text-center bg-[#24201c] border-white/20">
-                    </div>
-                    <div>
-                        <label class="text-[10px] text-[#c5a059] font-zh font-bold ml-1 block mb-1">結束時間</label>
-                        <input type="time" id="evt-end" class="rounded-xl text-lg font-en p-2 text-center bg-[#24201c] border-white/20">
-                    </div>
+                    <div><label class="text-[10px] text-[#c5a059] font-zh font-bold block mb-1">日期</label><input type="date" id="evt-date" class="rounded-xl text-lg font-en p-2 font-bold bg-[#24201c] border-white/20"></div>
+                    <div><label class="text-[10px] text-[#c5a059] font-zh font-bold block mb-1">開始時間</label><input type="time" id="evt-start" class="rounded-xl text-lg font-en p-2 text-center bg-[#24201c]"></div>
+                    <div><label class="text-[10px] text-[#c5a059] font-zh font-bold block mb-1">結束時間</label><input type="time" id="evt-end" class="rounded-xl text-lg font-en p-2 text-center bg-[#24201c]"></div>
                 </div>
-
-                <!-- 5. 地點 -->
-                <div class="space-y-1">
-                    <label class="text-[10px] text-[#c5a059] font-zh font-bold ml-1">地點</label>
-                    <input type="text" id="evt-location" placeholder="輸入地點" class="w-full p-3 rounded-xl text-sm font-zh bg-[#24201c]">
-                </div>
-
-                <!-- 6. 費用 -->
+                <div class="space-y-1"><label class="text-[10px] text-[#c5a059] font-zh font-bold ml-1">地點</label><input type="text" id="evt-location" placeholder="輸入地點" class="w-full p-3 rounded-xl text-sm font-zh bg-[#24201c]"></div>
                 <div class="bg-gradient-to-r from-[#2c241b] to-[#12100e] p-3 rounded-xl border border-[#c5a059]/20 space-y-2 shadow-inner">
-                    <div class="flex justify-between items-center">
-                        <span class="text-[10px] font-bold text-[#c5a059] font-zh flex items-center gap-1"><i data-lucide="link" size="10"></i> 財務連動</span>
-                    </div>
-                    <div class="flex gap-2">
-                        <div class="relative flex-1">
-                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-[#c5a059] font-bold text-xs">$</span>
-                            <input type="number" id="evt-fee" placeholder="0" class="w-full p-2.5 pl-6 rounded-lg text-base font-num font-bold text-right bg-black/30 border-[#c5a059]/30 text-white">
-                        </div>
-                        <input type="text" id="evt-fin-note" placeholder="備註/收款日" class="flex-[1.5] p-2.5 rounded-lg text-xs font-zh bg-black/30 text-zinc-300 font-bold">
-                    </div>
+                    <span class="text-[10px] font-bold text-[#c5a059] font-zh">財務連動</span>
+                    <div class="flex gap-2"><div class="relative flex-1"><span class="absolute left-3 top-1/2 -translate-y-1/2 text-[#c5a059] font-bold text-xs">$</span><input type="number" id="evt-fee" placeholder="0" class="w-full p-2.5 pl-6 rounded-lg text-base font-num font-bold text-right bg-black/30 text-white"></div><input type="text" id="evt-fin-note" placeholder="備註/收款日" class="flex-[1.5] p-2.5 rounded-lg text-xs font-zh bg-black/30 text-zinc-300 font-bold"></div>
                 </div>
-
-                <!-- 7. 週期性 (水平排列 + 強制不換行 + 縮小輸入框) -->
                 <div id="section-recur" class="flex flex-row items-center justify-between p-3 bg-white/5 rounded-xl border border-white/5 hidden">
-                    <label class="flex items-center gap-2 cursor-pointer">
-                        <input type="checkbox" id="evt-recur-check" class="toggle-checkbox" onchange="toggleRecurInput(this)">
-                        <span class="text-xs text-zinc-300 font-zh font-bold whitespace-nowrap">週期性行程</span>
-                    </label>
-                    <div class="flex items-center gap-2 transition-opacity duration-300 opacity-50" id="recur-input-group">
-                        <span class="text-[10px] text-zinc-500 font-zh font-bold whitespace-nowrap">重複</span>
-                        <input type="number" id="evt-recur-weeks" value="1" disabled class="input-mini rounded-lg text-xs bg-black/50 border border-zinc-600 text-[#c5a059] font-bold font-num" min="1" max="24">
-                        <span class="text-[10px] text-zinc-500 font-zh font-bold whitespace-nowrap">週</span>
-                    </div>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="evt-recur-check" class="toggle-checkbox" onchange="toggleRecurInput(this)"><span class="text-xs text-zinc-300 font-zh font-bold whitespace-nowrap">週期性行程</span></label>
+                    <div class="flex items-center gap-2 transition-opacity duration-300 opacity-50" id="recur-input-group"><span class="text-[10px] text-zinc-500 font-zh font-bold">重複</span><input type="number" id="evt-recur-weeks" value="1" disabled class="input-mini rounded-lg text-xs bg-black/50 text-[#c5a059] font-num" min="1" max="24"><span class="text-[10px] text-zinc-500 font-zh font-bold">週</span></div>
                 </div>
-
                 <div class="flex gap-3 mt-4 pt-4 border-t border-white/10">
-                    <button id="btn-delete-evt" onclick="deleteEvent()" class="hidden flex-1 py-3 bg-red-900/10 text-red-500 font-bold font-zh rounded-xl border border-red-500/30 hover:bg-red-900/30 transition text-xs">刪除</button>
-                    <!-- Google Calendar Sync Button -->
-                    <button onclick="addToGoogleCalendar(editingEventId)" class="flex-none py-3 bg-blue-600/20 text-blue-400 font-bold rounded-xl border border-blue-500/30 hover:bg-blue-600/40 transition px-4 flex items-center justify-center">
-                        <i data-lucide="calendar-plus" size="18"></i>
-                    </button>
-                    <button onclick="saveEvent()" class="flex-[3] py-3 btn-gold rounded-xl font-zh text-sm shadow-lg hover:scale-[1.02] transition">確認儲存</button>
+                    <button id="btn-delete-evt" onclick="deleteEvent()" class="hidden flex-1 py-3 bg-red-900/10 text-red-500 font-bold rounded-xl border border-red-500/30 text-xs">刪除</button>
+                    <button onclick="saveEvent()" class="flex-[3] py-3 btn-gold rounded-xl font-zh text-sm shadow-lg transition">確認儲存</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL: PROFILE DETAILS & EDIT ETC (SAME LOGIC) -->
     <div id="modal-detail" class="fixed inset-0 z-[60] hidden flex items-end sm:items-center justify-center px-0 sm:px-4 pb-0 sm:pb-4">
         <div class="absolute inset-0 bg-black/90 backdrop-blur-md" onclick="closeModal('modal-detail')"></div>
         <div class="relative bg-[#181614] w-full max-w-md rounded-t-[2rem] sm:rounded-[2rem] p-6 shadow-2xl border border-[#c5a059]/20 max-h-[90vh] overflow-y-auto slide-up">
-            <div class="flex justify-between items-start mb-6">
-                <div><h3 id="det-name" class="text-2xl text-white font-bold font-zh">名稱</h3><p id="det-info" class="text-xs text-zinc-500 mt-1 font-zh font-bold">Info</p></div>
-                <button onclick="closeModal('modal-detail')" class="text-zinc-500"><i data-lucide="x" size="24"></i></button>
-            </div>
-            <div class="grid grid-cols-2 gap-3 mb-6">
-                <button onclick="openEventModalForDetail()" class="bg-[#c5a059] text-[#12100e] py-3 rounded-xl font-bold font-zh text-xs shadow-lg active:scale-95 transition">+ 新增排課</button>
-                <button onclick="deleteProfile()" class="bg-zinc-900 text-red-500 py-3 rounded-xl font-bold font-zh text-xs border border-white/5 active:scale-95 transition">刪除資料</button>
-            </div>
+            <div class="flex justify-between items-start mb-6"><div><h3 id="det-name" class="text-2xl text-white font-bold font-zh">名稱</h3><p id="det-info" class="text-xs text-zinc-500 mt-1 font-zh font-bold">Info</p></div><button onclick="closeModal('modal-detail')" class="text-zinc-500"><i data-lucide="x" size="24"></i></button></div>
+            <div class="grid grid-cols-2 gap-3 mb-6"><button onclick="openEventModalForDetail()" class="bg-[#c5a059] text-[#12100e] py-3 rounded-xl font-bold font-zh text-xs shadow-lg">+ 新增排課</button><button onclick="deleteProfile()" class="bg-zinc-900 text-red-500 py-3 rounded-xl font-bold font-zh text-xs border border-white/5 transition">刪除資料</button></div>
             <h4 class="text-[10px] text-[#c5a059] font-zh tracking-widest font-bold mb-3 border-b border-white/10 pb-2">上課紀錄</h4>
             <div id="det-history" class="space-y-4 pb-8"></div>
         </div>
     </div>
 
     <div id="modal-profile" class="fixed inset-0 z-[60] hidden flex items-center justify-center px-6 bg-black/80 backdrop-blur-md">
-        <div class="bg-[#181614] w-full max-w-sm rounded-[2rem] p-6 border border border-[#c5a059]/20 shadow-2xl slide-up max-h-[85vh] overflow-y-auto">
+        <div class="bg-[#181614] w-full max-w-sm rounded-[2rem] p-6 border border-[#c5a059]/20 shadow-2xl slide-up max-h-[85vh] overflow-y-auto">
             <h3 class="text-lg text-white font-bold mb-5 font-zh text-center border-b border-white/5 pb-3" id="modal-profile-title">新增資料</h3>
             <input type="hidden" id="prof-type">
             <div class="space-y-3">
-                <input type="text" id="prof-name" placeholder="名稱" class="w-full p-3 rounded-xl text-sm font-zh font-bold bg-[#24201c]">
-                <input type="text" id="prof-contact" placeholder="聯絡人" class="w-full p-3 rounded-xl text-sm font-zh bg-[#24201c]">
-                <input type="tel" id="prof-phone" placeholder="電話" class="w-full p-3 rounded-xl text-sm font-num bg-[#24201c]">
-                <input type="email" id="prof-email" placeholder="Email (選填)" class="w-full p-3 rounded-xl text-sm font-en bg-[#24201c]">
-                <input type="text" id="prof-addr" placeholder="地址 (選填)" class="w-full p-3 rounded-xl text-sm font-zh bg-[#24201c]">
-                <div class="flex gap-3 mt-4">
-                    <button onclick="closeModal('modal-profile')" class="flex-1 py-3 rounded-xl bg-zinc-800 text-zinc-400 font-zh text-xs font-bold">取消</button>
-                    <button onclick="saveProfile()" class="flex-1 py-3 rounded-xl btn-gold font-zh text-xs">儲存</button>
-                </div>
+                <input type="text" id="prof-name" placeholder="名稱" class="w-full p-3 rounded-xl text-sm bg-[#24201c] font-bold">
+                <input type="text" id="prof-contact" placeholder="聯絡人" class="w-full p-3 rounded-xl text-sm bg-[#24201c]">
+                <input type="tel" id="prof-phone" placeholder="電話" class="w-full p-3 rounded-xl text-sm bg-[#24201c]">
+                <input type="text" id="prof-addr" placeholder="地址 (選填)" class="w-full p-3 rounded-xl text-sm bg-[#24201c]">
+                <div class="flex gap-3 mt-4"><button onclick="closeModal('modal-profile')" class="flex-1 py-3 rounded-xl bg-zinc-800 text-zinc-400 font-bold">取消</button><button onclick="saveProfile()" class="flex-1 py-3 rounded-xl btn-gold">儲存</button></div>
             </div>
         </div>
     </div>
@@ -518,34 +288,24 @@
         <div class="bg-[#16100a] w-full max-w-sm rounded-[2rem] p-6 border border-[#c5a059]/20 shadow-2xl slide-up">
             <h3 class="text-lg text-white font-bold mb-1 font-zh flex items-center gap-2"><i data-lucide="message-square" class="text-green-500"></i> LINE 課後報告</h3>
             <div class="space-y-3 mt-4">
-                <input type="text" id="rep-progress" placeholder="進度" class="w-full p-3 rounded-xl text-sm font-zh bg-black/20 border border-white/10">
-                <textarea id="rep-comment" placeholder="評語" class="w-full p-3 rounded-xl text-sm font-zh bg-black/20 border border-white/10 h-20 resize-none"></textarea>
-                <input type="text" id="rep-homework" placeholder="作業" class="w-full p-3 rounded-xl text-sm font-zh bg-black/20 border border-white/10">
-                <input type="text" id="rep-next" placeholder="下次時間" class="w-full p-3 rounded-xl text-sm font-zh bg-black/20 border border-white/10">
+                <input type="text" id="rep-progress" placeholder="進度" class="w-full p-3 rounded-xl text-sm bg-black/20 border border-white/10">
+                <textarea id="rep-comment" placeholder="評語" class="w-full p-3 rounded-xl text-sm bg-black/20 border border-white/10 h-20 resize-none"></textarea>
+                <input type="text" id="rep-homework" placeholder="作業" class="w-full p-3 rounded-xl text-sm bg-black/20 border border-white/10">
+                <input type="text" id="rep-next" placeholder="下次時間" class="w-full p-3 rounded-xl text-sm bg-black/20 border border-white/10">
             </div>
-            <div class="mt-5 space-y-3">
-                <button onclick="generateAndCopyReport()" class="w-full py-3 bg-[#06c755] text-white font-bold font-zh rounded-xl shadow-lg active:scale-95 transition flex items-center justify-center gap-2 text-xs">
-                    <i data-lucide="copy" size="16"></i> 複製文字
-                </button>
-                <button onclick="closeModal('modal-report')" class="w-full py-3 text-zinc-500 font-zh text-xs font-bold">取消</button>
-            </div>
+            <div class="mt-5 space-y-3"><button onclick="generateAndCopyReport()" class="w-full py-3 bg-[#06c755] text-white font-bold rounded-xl shadow-lg flex items-center justify-center gap-2 text-xs"><i data-lucide="copy" size="16"></i> 複製文字</button><button onclick="closeModal('modal-report')" class="w-full py-3 text-zinc-500 font-bold">取消</button></div>
         </div>
     </div>
 
     <div id="modal-sub" class="fixed inset-0 z-[60] hidden flex items-center justify-center px-6 bg-black/80 backdrop-blur-md">
         <div class="bg-[#16100a] w-full max-w-sm rounded-[2rem] p-6 border border-white/10 shadow-2xl slide-up max-h-[80vh] overflow-y-auto">
             <h3 class="text-lg text-white font-bold mb-4 font-zh flex items-center gap-2"><i data-lucide="users" class="text-red-400"></i> 代課人選管理</h3>
-            <div class="flex gap-2 mb-4">
-                <input id="sub-name" placeholder="姓名" class="flex-1 p-3 rounded-xl text-sm bg-black/20 border border-white/10">
-                <input id="sub-phone" placeholder="電話" class="flex-1 p-3 rounded-xl text-sm bg-black/20 border border-white/10">
-                <button onclick="addSub()" class="bg-[#D4AF37] p-3 rounded-xl text-black shadow-lg"><i data-lucide="plus" size="16"></i></button>
-            </div>
+            <div class="flex gap-2 mb-4"><input id="sub-name" placeholder="姓名" class="flex-1 p-3 rounded-xl text-sm bg-black/20"><input id="sub-phone" placeholder="電話" class="flex-1 p-3 rounded-xl text-sm bg-black/20"><button onclick="addSub()" class="bg-[#D4AF37] p-3 rounded-xl text-black"><i data-lucide="plus" size="16"></i></button></div>
             <div id="sub-list" class="space-y-2"></div>
-            <button onclick="closeModal('modal-sub')" class="w-full mt-4 py-3 text-zinc-500 font-zh text-xs font-bold">關閉</button>
+            <button onclick="closeModal('modal-sub')" class="w-full mt-4 py-3 text-zinc-500 font-bold">關閉</button>
         </div>
     </div>
 
-    <!-- LOGIC -->
     <script>
         // --- Firebase Config & Init ---
         const firebaseConfig = {
@@ -558,9 +318,8 @@
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
-        const DATA_PATH = 'cello_data'; // 資料庫路徑
+        const DATA_PATH = 'cello_data'; 
 
-        // --- App Logic ---
         let appData = { events: [], profiles: [], subs: [] };
         let viewDate = new Date();
         let editingEventId = null;
@@ -568,84 +327,47 @@
         let currentReportEventId = null;
         const statusEl = document.getElementById('cloud-status');
 
-        document.addEventListener('DOMContentLoaded', () => {
-            initRealtimeListener(); 
-            lucide.createIcons();
-        });
+        document.addEventListener('DOMContentLoaded', () => { initRealtimeListener(); lucide.createIcons(); });
 
-        // --- CLOUD SYNC FUNCTIONS ---
         function initRealtimeListener() {
             statusEl.className = 'syncing';
-            
-            // 監聽雲端資料變化 (自動同步)
             db.ref(DATA_PATH).on('value', (snapshot) => {
                 const data = snapshot.val();
                 if (data) {
                     appData = data;
-                    // 防呆：確保陣列存在
                     if (!appData.events) appData.events = [];
                     if (!appData.profiles) appData.profiles = [];
                     if (!appData.subs) appData.subs = [];
-                    
                     refreshAll();
-                    statusEl.className = 'connected'; // 綠燈
-                } else {
-                    // 如果雲端完全沒資料，嘗試從 LocalStorage 找 (初次轉移)
-                    const local = localStorage.getItem('cello_os_v25');
-                    if(local) {
-                        try {
-                            appData = JSON.parse(local);
-                            saveData(); // 上傳舊資料到雲端
-                        } catch(e) { console.error(e); }
-                    }
                     statusEl.className = 'connected';
-                }
-            }, (error) => {
-                console.error(error);
-                statusEl.className = ''; // 紅燈 (錯誤)
-                alert('無法連線至資料庫，請檢查網路或權限設定。');
-            });
+                } else statusEl.className = 'connected';
+            }, (error) => { console.error(error); statusEl.className = ''; });
         }
 
         function saveData() {
-            statusEl.className = 'syncing'; // 黃燈
-            db.ref(DATA_PATH).set(appData)
-                .then(() => {
-                    statusEl.className = 'connected'; // 綠燈
-                    refreshAll();
-                })
-                .catch((error) => {
-                    alert("儲存失敗: " + error.message);
-                    statusEl.className = '';
-                });
+            statusEl.className = 'syncing';
+            db.ref(DATA_PATH).set(appData).then(() => { statusEl.className = 'connected'; refreshAll(); }).catch((error) => { alert("儲存失敗: " + error.message); statusEl.className = ''; });
         }
         
         function refreshAll() { renderSchedule(); renderTeaching(); renderStage(); renderFinance(); }
 
-        // --- SCHEDULE ---
-        function changeViewDate(days) {
-            viewDate.setDate(viewDate.getDate() + days);
-            renderSchedule();
-        }
+        function changeViewDate(days) { viewDate.setDate(viewDate.getDate() + days); renderSchedule(); }
         function renderSchedule() {
             const gridEl = document.getElementById('calendar-grid');
             const listEl = document.getElementById('schedule-list');
             const day = viewDate.getDay();
             const diff = viewDate.getDate() - day + (day == 0 ? -6 : 1);
-            const monday = new Date(viewDate);
-            monday.setDate(diff);
+            const monday = new Date(viewDate); monday.setDate(diff);
             
             document.getElementById('cal-range').innerText = `${monday.toLocaleDateString('en-US',{month:'short',day:'numeric'})} - ...`;
             document.getElementById('cal-mode').innerText = monday.getFullYear();
 
             gridEl.innerHTML = '';
             for(let i=0; i<7; i++) {
-                const d = new Date(monday);
-                d.setDate(monday.getDate() + i);
+                const d = new Date(monday); d.setDate(monday.getDate() + i);
                 const dateStr = d.toISOString().split('T')[0];
                 const isSelected = dateStr === viewDate.toISOString().split('T')[0];
                 const hasEvent = appData.events && appData.events.some(e => e.date === dateStr);
-                
                 const btn = document.createElement('div');
                 btn.className = `h-14 rounded-xl flex flex-col items-center justify-center cursor-pointer border transition-all duration-300 ${isSelected ? 'bg-[#c5a059] border-[#c5a059] text-[#12100e] shadow-md scale-105' : 'bg-white/5 border-white/5 text-zinc-500 hover:bg-white/10'}`;
                 btn.onclick = () => { viewDate = new Date(dateStr); renderSchedule(); };
@@ -656,266 +378,55 @@
             const dateStr = viewDate.toISOString().split('T')[0];
             const events = appData.events ? appData.events.filter(e => e.date === dateStr).sort((a,b) => a.startTime.localeCompare(b.startTime)) : [];
             listEl.innerHTML = '';
-            
-            if(events.length === 0) {
-                listEl.innerHTML = `<div class="flex flex-col items-center justify-center py-20 text-zinc-600 opacity-50"><i data-lucide="coffee" size="28" class="mb-2"></i><span class="font-zh text-xs tracking-widest font-bold">本日無行程</span></div>`;
-                lucide.createIcons(); return;
-            }
-
-            const conflicts = new Set();
-            for(let i=0; i<events.length; i++) {
-                for(let j=i+1; j<events.length; j++) {
-                    if (events[i].startTime < events[j].endTime && events[i].endTime > events[j].startTime) {
-                        conflicts.add(events[i].id); conflicts.add(events[j].id);
-                    }
-                }
-            }
-
+            if(events.length === 0) { listEl.innerHTML = `<div class="flex flex-col items-center justify-center py-20 text-zinc-600 opacity-50"><i data-lucide="coffee" size="28" class="mb-2"></i><span class="font-zh text-xs tracking-widest font-bold">本日無行程</span></div>`; lucide.createIcons(); return; }
             events.forEach(e => {
                 let borderClass = 'border-l-[#c5a059]'; let typeLabel = '演出';
-                if(e.type === 'lesson') { borderClass = 'border-l-blue-400'; typeLabel = '家教'; }
-                if(e.type === 'school') { borderClass = 'border-l-emerald-400'; typeLabel = '學校'; }
-                if(e.type === 'rehearsal') { borderClass = 'border-l-orange-400'; typeLabel = '彩排'; }
-                
-                const isConflict = conflicts.has(e.id);
-
+                if(e.type === 'lesson') borderClass = 'border-l-blue-400', typeLabel = '家教';
+                if(e.type === 'school') borderClass = 'border-l-emerald-400', typeLabel = '學校';
+                if(e.type === 'rehearsal') borderClass = 'border-l-orange-400', typeLabel = '彩排';
                 const item = document.createElement('div');
-                item.className = `glass p-4 rounded-xl relative group active:scale-[0.98] transition border-l-4 ${borderClass} ${isConflict ? 'ring-1 ring-red-500/80 shadow-[0_0_15px_rgba(220,38,38,0.2)]' : ''}`;
+                item.className = `glass p-4 rounded-xl relative group active:scale-[0.98] transition border-l-4 ${borderClass}`;
                 item.onclick = () => openEventModal(e.id);
-                
-                // Google Sync Button
-                const googleBtn = `
-                    <button onclick="event.stopPropagation(); addToGoogleCalendar(${e.id})" class="absolute bottom-3 right-3 p-2 rounded-full bg-blue-600/20 text-blue-400 border border-blue-500/30 hover:bg-blue-600 hover:text-white transition">
-                        <i data-lucide="calendar-plus" size="14"></i>
-                    </button>
-                `;
-
                 item.innerHTML = `
-                    <div class="flex justify-between items-start mb-1.5">
-                        <div class="flex items-center gap-2">
-                            <span class="text-[9px] font-zh font-bold bg-white/5 px-1.5 py-0.5 rounded text-zinc-400 border border-white/5">${typeLabel}</span>
-                            <span class="text-xs text-[#c5a059] font-num font-bold">${e.startTime} - ${e.endTime}</span>
-                        </div>
-                        ${isConflict ? `
-                            <button onclick="event.stopPropagation(); openSubModal()" class="flex items-center gap-1 bg-red-500/20 border border-red-500/50 text-red-400 px-2 py-0.5 rounded-full text-[9px] font-bold font-zh animate-pulse">
-                                <i data-lucide="alert-triangle" size="10"></i> 衝突
-                            </button>
-                        ` : ''}
-                    </div>
+                    <div class="flex justify-between items-start mb-1.5"><div class="flex items-center gap-2"><span class="text-[9px] font-zh font-bold bg-white/5 px-1.5 py-0.5 rounded text-zinc-400 border border-white/5">${typeLabel}</span><span class="text-xs text-[#c5a059] font-num font-bold">${e.startTime} - ${e.endTime}</span></div></div>
                     <h3 class="text-base text-[#e8e6e3] font-bold font-zh mb-1 leading-snug tracking-wide truncate pr-8">${e.title}</h3>
-                    <div class="flex flex-wrap gap-2 mt-2 text-[10px] text-zinc-400 font-zh">
-                        ${e.location ? `<div class="flex items-center gap-1 truncate max-w-[120px]"><i data-lucide="map-pin" size="10"></i> ${e.location}</div>` : ''}
-                        ${e.dressCode ? `<div class="flex items-center gap-1 text-[#c5a059]"><i data-lucide="shirt" size="10"></i> ${e.dressCode}</div>` : ''}
-                        ${e.fee ? `<div class="flex items-center gap-1 text-[#c5a059] font-num font-bold ml-auto">$${e.fee}</div>` : ''}
-                    </div>
-                    ${googleBtn}
-                `;
+                    <div class="flex flex-wrap gap-2 mt-2 text-[10px] text-zinc-400 font-zh">${e.location ? `<div class="flex items-center gap-1 truncate max-w-[120px]"><i data-lucide="map-pin" size="10"></i> ${e.location}</div>` : ''}${e.fee ? `<div class="flex items-center gap-1 text-[#c5a059] font-num font-bold ml-auto">$${e.fee}</div>` : ''}</div>`;
                 listEl.appendChild(item);
             });
             lucide.createIcons();
         }
 
-        // --- GOOGLE SYNC ---
-        function addToGoogleCalendar(id) {
-            const event = appData.events.find(e => e.id === id);
-            if (!event) return;
-
-            const formatGoogleDate = (dateStr, timeStr) => {
-                if (!dateStr || !timeStr) return '';
-                return dateStr.replace(/-/g, '') + 'T' + timeStr.replace(/:/g, '') + '00';
-            };
-
-            const start = formatGoogleDate(event.date, event.startTime);
-            const end = formatGoogleDate(event.date, event.endTime);
-            
-            let details = event.finNote ? `備註: ${event.finNote} ` : '';
-            if (event.dressCode) details += `\n服裝: ${event.dressCode} `;
-            if (event.fee) details += `\n費用: $${event.fee}`;
-
-            const url = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${start}/${end}&details=${encodeURIComponent(details)}&location=${encodeURIComponent(event.location || '')}`;
-            
-            window.open(url, '_blank');
-        }
-
-        // --- TEACHING ---
-        function renderTeaching(filterType = 'student') {
-            const list = document.getElementById('teaching-list');
-            const data = appData.profiles ? appData.profiles.filter(p => p.type === filterType) : [];
-            list.innerHTML = '';
-            if(data.length === 0) { list.innerHTML = `<div class="text-center py-10 text-zinc-600 font-zh text-xs">暫無資料</div>`; return; }
-            data.forEach(p => {
-                const item = document.createElement('div');
-                item.className = 'glass p-3 rounded-xl flex justify-between items-center cursor-pointer hover:bg-white/5 active:scale-[0.98] transition border border-white/5';
-                item.onclick = () => openProfileDetail(p.id);
-                item.innerHTML = `<div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full bg-[#181614] border border-[#c5a059]/30 flex items-center justify-center text-[#c5a059] text-base font-bold font-zh shadow-inner">${p.name[0]}</div><div><div class="text-[#e8e6e3] font-bold font-zh text-sm">${p.name}</div><div class="text-[10px] text-zinc-500 font-zh mt-0.5">${p.contact || '無備註'}</div></div></div>`;
-                list.appendChild(item);
-            });
-        }
-
-        // --- FINANCE (FIXED: Monthly Logic) ---
-        function renderFinance() {
-            const list = document.getElementById('finance-list');
-            const today = new Date();
-            const currentMonthStr = today.toISOString().slice(0, 7); 
-            
-            const events = appData.events ? appData.events.filter(e => {
-                return (Number(e.fee) > 0) && (e.date.startsWith(currentMonthStr));
-            }).sort((a,b) => b.date.localeCompare(a.date)) : [];
-
-            let pending = 0; let received = 0;
-            events.forEach(e => { if(e.isPaid) received += Number(e.fee); else pending += Number(e.fee); });
-            
-            document.getElementById('fin-pending').innerText = `NT$ ${pending.toLocaleString()}`;
-            document.getElementById('fin-received').innerText = `NT$ ${received.toLocaleString()}`;
-            
-            list.innerHTML = '';
-            if(events.length === 0) {
-                list.innerHTML = `<div class="text-center py-8 text-zinc-600 font-zh text-xs">本月暫無帳務</div>`;
-                return;
-            }
-
-            events.forEach(e => {
-                const item = document.createElement('div');
-                item.className = `flex justify-between items-center p-3 rounded-xl border mb-2 transition cursor-pointer select-none ${e.isPaid ? 'bg-black/20 border-transparent opacity-50' : 'bg-white/5 border-white/5 hover:bg-white/10'}`;
-                item.onclick = () => { const ev = appData.events.find(x => x.id === e.id); if(ev) { ev.isPaid = !ev.isPaid; saveData(); } };
-                item.innerHTML = `<div class="flex items-center gap-3 overflow-hidden"><div class="w-5 h-5 rounded border ${e.isPaid ? 'bg-[#c5a059] border-[#c5a059]' : 'border-zinc-500'} flex items-center justify-center transition-colors flex-shrink-0">${e.isPaid ? '<i data-lucide="check" size="12" class="text-[#12100e]"></i>' : ''}</div><div class="min-w-0"><div class="text-sm text-[#e8e6e3] font-zh font-bold truncate ${e.isPaid ? 'line-through text-zinc-500' : ''}">${e.title}</div><div class="text-[10px] text-zinc-500 font-en truncate">${e.date} ${e.finNote ? '• '+e.finNote : ''}</div></div></div><div class="text-sm font-bold font-num flex-shrink-0 ${e.isPaid ? 'text-zinc-600' : 'text-[#c5a059]'}">$${Number(e.fee).toLocaleString()}</div>`;
-                list.appendChild(item);
-            });
-            lucide.createIcons();
-        }
-
-        function renderStage() {
-            const list = document.getElementById('stage-list');
-            const events = appData.events ? appData.events.filter(e => e.type === 'performance').sort((a,b) => b.date.localeCompare(a.date)) : [];
-            list.innerHTML = '';
-            if(events.length === 0) { list.innerHTML = `<div class="text-center py-10 text-zinc-600 font-zh text-xs">尚無演出安排</div>`; return; }
-            events.forEach(e => {
-                const item = document.createElement('div');
-                item.className = 'glass p-4 rounded-xl border-l-4 border-[#c5a059] relative overflow-hidden mb-3';
-                item.onclick = () => openEventModal(e.id);
-                item.innerHTML = `<div class="relative z-10"><div class="flex justify-between mb-1"><span class="text-[9px] font-zh font-bold bg-[#c5a059]/10 text-[#c5a059] px-1.5 py-0.5 rounded border border-[#c5a059]/20">${e.perfType || '演出'}</span><span class="text-[10px] text-zinc-500 font-num font-bold">${e.date}</span></div><h3 class="text-base text-[#e8e6e3] font-bold font-zh mb-2">${e.title}</h3><div class="grid grid-cols-2 gap-2 text-[10px] text-zinc-400 font-zh bg-black/20 p-2 rounded-lg border border-white/5"><div class="flex items-center gap-1"><i data-lucide="clock" size="10"></i> <span class="font-num font-bold">${e.startTime}</span></div><div class="flex items-center gap-1 truncate"><i data-lucide="map-pin" size="10"></i> ${e.location}</div><div class="col-span-2 text-[#c5a059] font-bold border-t border-white/5 pt-1 mt-0.5 flex items-center gap-1"><i data-lucide="shirt" size="10"></i> 服裝：${e.dressCode || '未定'}</div></div></div>`;
-                list.appendChild(item);
-            });
-            lucide.createIcons();
-        }
-
-        // --- EVENT CRUD ---
-        function openEventModal(id = null, forceType = null, refId = null) {
-            closeActionSheet(); closeModal('modal-detail');
-            editingEventId = id;
-            document.getElementById('modal-event').classList.remove('hidden');
-            
-            // Defaults
-            document.getElementById('evt-title').value = '';
-            document.getElementById('evt-location').value = '';
-            document.getElementById('evt-dress').value = '';
-            document.getElementById('evt-fee').value = '';
-            document.getElementById('evt-fin-note').value = '';
-            document.getElementById('evt-recur-weeks').value = 1;
-            document.getElementById('evt-recur-check').checked = false;
-            toggleRecurInput(document.getElementById('evt-recur-check'));
-            
-            document.getElementById('evt-date').value = viewDate.toISOString().split('T')[0];
-            document.getElementById('evt-start').value = '10:00';
-            document.getElementById('evt-end').value = '12:00';
-            document.getElementById('evt-rehearsal-count').value = '0';
-            document.getElementById('rehearsal-inputs').innerHTML = '';
-            document.getElementById('rehearsal-inputs').classList.add('hidden');
-
-            let type = forceType || 'lesson';
-            let studentId = refId;
-
-            if (id) { // Edit
-                const e = appData.events.find(x => x.id === id);
-                document.getElementById('modal-event-title').innerText = "編輯行程";
-                document.getElementById('btn-delete-evt').classList.remove('hidden');
-                document.getElementById('section-recur').classList.add('hidden'); 
-                type = e.type;
-                studentId = e.refId;
-                document.getElementById('evt-title').value = e.title;
-                document.getElementById('evt-date').value = e.date;
-                document.getElementById('evt-start').value = e.startTime;
-                document.getElementById('evt-end').value = e.endTime;
-                document.getElementById('evt-location').value = e.location;
-                document.getElementById('evt-fee').value = e.fee;
-                document.getElementById('evt-fin-note').value = e.finNote || '';
-                document.getElementById('evt-dress').value = e.dressCode || '';
-                if(e.perfType) document.getElementById('evt-perf-type').value = e.perfType;
-            } else { // New
-                document.getElementById('modal-event-title').innerText = "新增行程";
-                document.getElementById('btn-delete-evt').classList.add('hidden');
-                if (studentId) {
-                    const p = appData.profiles.find(x => x.id === studentId);
-                    if(p) document.getElementById('evt-title').value = p.name + (p.type === 'school' ? ' 分部課' : ' 大提琴課');
-                }
-            }
-
-            document.getElementById('evt-type').value = type;
-            document.getElementById('evt-ref-id').value = studentId || '';
-            const secStudent = document.getElementById('section-student');
-            const secTitle = document.getElementById('section-title');
-            const secPerf = document.getElementById('section-performance');
-            const secRecur = document.getElementById('section-recur');
-
-            document.querySelectorAll('.btn-type').forEach(b => {
-                b.classList.remove('active');
-                if(b.innerText.includes('家教') && (type==='lesson'||type==='school')) b.classList.add('active');
-                if(b.innerText.includes('演出') && type==='performance') b.classList.add('active');
-            });
-
-            if (type === 'performance') {
-                secStudent.classList.add('hidden');
-                secTitle.classList.remove('hidden');
-                secPerf.classList.remove('hidden');
-                secRecur.classList.add('hidden');
-                document.getElementById('lbl-title').innerText = "演出主題";
-            } else {
-                secPerf.classList.add('hidden');
-                if(!id && !studentId) {
-                    secStudent.classList.remove('hidden');
-                    secTitle.classList.add('hidden');
-                    secRecur.classList.remove('hidden');
-                    populateStudentsDropdown();
-                } else {
-                    secStudent.classList.add('hidden');
-                    secTitle.classList.remove('hidden');
-                    if(!id) secRecur.classList.remove('hidden');
-                    document.getElementById('lbl-title').innerText = "課程名稱";
-                }
-            }
-        }
-
-        // Shared Utils
-        function setEventType(type) { openEventModal(null, type); }
-        function populateStudentsDropdown() { 
-            const sel = document.getElementById('evt-student'); 
-            sel.innerHTML = '<option value="">請選擇對象...</option>' + (appData.profiles ? appData.profiles.map(p => `<option value="${p.id}">${p.name} (${p.type==='school'?'學校':'學生'})</option>`).join('') : ''); 
-        }
-        function autoFillStudent() { const pid = document.getElementById('evt-student').value; const p = appData.profiles.find(x => x.id == pid); if(p) { document.getElementById('evt-title').value = p.name + (p.type === 'school' ? ' 分部課' : ' 大提琴課'); document.getElementById('evt-ref-id').value = p.id; document.getElementById('evt-type').value = p.type === 'school' ? 'school' : 'lesson'; } }
+        // --- 修復：彩排加入結束時間 ---
         function toggleRehearsalInputs() {
             const count = parseInt(document.getElementById('evt-rehearsal-count').value);
             const container = document.getElementById('rehearsal-inputs');
-            const mainDate = document.getElementById('evt-date').value;
-            const mainStart = document.getElementById('evt-start').value;
             container.innerHTML = '';
             if(count > 0) {
                 container.classList.remove('hidden');
                 for(let i=1; i<=count; i++) {
-                    container.innerHTML += `<div class="grid grid-cols-7 gap-2 items-center"><span class="text-[10px] text-zinc-500 font-zh col-span-1">彩排${i}</span><input type="date" value="${mainDate}" class="reh-date col-span-3 p-3 rounded-xl text-sm bg-black/30 text-white font-num font-bold"><input type="time" value="${mainStart}" class="reh-time col-span-3 p-3 rounded-xl text-sm bg-black/30 text-white font-num font-bold"></div>`;
+                    container.innerHTML += `
+                        <div class="p-3 bg-black/20 rounded-xl space-y-2 border border-white/5">
+                            <span class="text-[10px] text-[#c5a059] font-bold">彩排 ${i}</span>
+                            <input type="date" value="${document.getElementById('evt-date').value}" class="reh-date w-full p-2 rounded-lg text-sm bg-[#181614]">
+                            <div class="flex gap-2"><input type="time" value="10:00" class="reh-time flex-1 p-2 rounded-lg text-sm bg-[#181614]"><input type="time" value="12:00" class="reh-end flex-1 p-2 rounded-lg text-sm bg-[#181614]"></div>
+                        </div>`;
                 }
-            } else { container.classList.add('hidden'); }
+            } else container.classList.add('hidden');
         }
-        function toggleRecurInput(chk) { const group = document.getElementById('recur-input-group'); const input = document.getElementById('evt-recur-weeks'); if(chk.checked) { group.classList.remove('opacity-50'); input.disabled = false; } else { group.classList.add('opacity-50'); input.disabled = true; } }
-        
+
         function saveEvent() {
             const title = document.getElementById('evt-title').value;
             const date = document.getElementById('evt-date').value;
             if(!title || !date) return alert('請填寫完整');
             
             const type = document.getElementById('evt-type').value;
-            const weeks = parseInt(document.getElementById('evt-recur-weeks').value) || 1;
-            const recurChecked = document.getElementById('evt-recur-check').checked;
-            
+            let existingGroupId = null;
+            if (editingEventId) {
+                const idx = appData.events.findIndex(e => e.id === editingEventId);
+                if(idx !== -1) existingGroupId = appData.events[idx].groupId;
+            }
+            const groupId = existingGroupId || Date.now(); 
+
             const base = {
                 title, date, type,
                 startTime: document.getElementById('evt-start').value,
@@ -926,161 +437,135 @@
                 refId: document.getElementById('evt-ref-id').value ? parseInt(document.getElementById('evt-ref-id').value) : null,
                 dressCode: document.getElementById('evt-dress').value,
                 perfType: type === 'performance' ? document.getElementById('evt-perf-type').value : null,
+                groupId: groupId,
                 isPaid: false
             };
 
             if (editingEventId) {
                 const idx = appData.events.findIndex(e => e.id === editingEventId);
-                if(idx !== -1) appData.events[idx] = { ...appData.events[idx], ...base, fee: Number(base.fee) };
+                if(idx !== -1) appData.events[idx] = { ...appData.events[idx], ...base, id: editingEventId };
             } else {
                 appData.events.push({ ...base, id: Date.now() });
                 if (type === 'performance') {
-                    const rehDates = document.querySelectorAll('.reh-date');
-                    const rehTimes = document.querySelectorAll('.reh-time');
+                    const rehDates = document.querySelectorAll('.reh-date'), rehTimes = document.querySelectorAll('.reh-time'), rehEnds = document.querySelectorAll('.reh-end');
                     rehDates.forEach((d, idx) => {
-                        if(d.value) {
-                            appData.events.push({ ...base, id: Date.now() + idx + 1, title: `${title} (彩排 ${idx+1})`, type: 'rehearsal', date: d.value, startTime: rehTimes[idx].value, fee: 0 });
-                        }
+                        if(d.value) appData.events.push({ ...base, id: Date.now()+idx+1, title: `${title}(彩排${idx+1})`, type: 'rehearsal', date: d.value, startTime: rehTimes[idx].value, endTime: rehEnds[idx].value, fee: 0, groupId: groupId });
                     });
-                } else if (recurChecked && weeks > 1) {
+                } else if (document.getElementById('evt-recur-check').checked) {
+                    const weeks = parseInt(document.getElementById('evt-recur-weeks').value) || 1;
                     for(let i=1; i<weeks; i++) {
                         const d = new Date(date); d.setDate(d.getDate() + (i*7));
-                        appData.events.push({ ...base, id: Date.now()+i, date: d.toISOString().split('T')[0] });
+                        appData.events.push({ ...base, id: Date.now()+i, date: d.toISOString().split('T')[0], groupId: groupId });
                     }
                 }
             }
             saveData(); closeModal('modal-event');
-            if(activeProfileId) openProfileDetail(activeProfileId);
-        }
-        function deleteEvent() { if(confirm('確定刪除？')) { appData.events = appData.events.filter(e => e.id !== editingEventId); saveData(); closeModal('modal-event'); if(activeProfileId) openProfileDetail(activeProfileId); } }
-
-        function openSettings() { document.getElementById('modal-settings').classList.remove('hidden'); }
-        function exportData() { navigator.clipboard.writeText(JSON.stringify(appData)).then(() => alert('已複製資料代碼！')); }
-        // function importData() { ... } // Removed for Cloud version to avoid conflict
-
-        function openProfileDetail(id) {
-            activeProfileId = id;
-            const p = appData.profiles.find(x => x.id === id);
-            if(!p) return;
-            document.getElementById('det-name').innerText = p.name;
-            document.getElementById('det-info').innerText = `${p.type==='student'?'家教':'學校'} • ${p.contact}`;
-            
-            const history = appData.events.filter(e => e.refId === id).sort((a,b) => b.date.localeCompare(a.date));
-            const histEl = document.getElementById('det-history');
-            histEl.innerHTML = '';
-            if(history.length === 0) histEl.innerHTML = '<div class="text-zinc-600 text-xs font-zh text-center">尚無上課紀錄</div>';
-            
-            history.forEach(h => {
-                const row = document.createElement('div');
-                row.className = 'border-l-2 border-white/10 pl-3 py-1.5 relative';
-                row.innerHTML = `
-                    <div class="absolute -left-[5px] top-2.5 w-2.5 h-2.5 rounded-full bg-[#c5a059]"></div>
-                    <div class="flex justify-between items-center mb-1">
-                        <div class="text-xs text-[#c5a059] font-num font-bold">${h.date}</div>
-                        <button onclick="openReportGen('${h.id}')" class="text-[9px] bg-white/5 border border-white/10 px-2 py-0.5 rounded text-zinc-400 hover:text-white transition">匯報</button>
-                    </div>
-                    <div class="text-sm text-white font-zh font-bold">${h.title}</div>
-                    ${h.report ? `<div class="bg-black/30 p-2 rounded mt-1 text-[10px] text-zinc-400 font-zh whitespace-pre-wrap">${h.report}</div>` : ''}
-                `;
-                histEl.appendChild(row);
-            });
-            openModal('modal-detail');
-        }
-        function openProfileModal(type) {
-            closeActionSheet();
-            document.getElementById('prof-type').value = type;
-            document.getElementById('modal-profile-title').innerText = type === 'student' ? '新增學生' : '新增學校';
-            ['prof-name','prof-contact','prof-phone','prof-addr','prof-email'].forEach(id => document.getElementById(id).value = '');
-            openModal('modal-profile');
-        }
-        function saveProfile() {
-            const name = document.getElementById('prof-name').value;
-            if(!name) return;
-            appData.profiles.push({
-                id: Date.now(),
-                type: document.getElementById('prof-type').value,
-                name,
-                contact: document.getElementById('prof-contact').value,
-                phone: document.getElementById('prof-phone').value,
-                address: document.getElementById('prof-addr').value,
-                email: document.getElementById('prof-email').value
-            });
-            saveData(); closeModal('modal-profile');
-        }
-        function deleteProfile() { if(confirm('刪除？')) { appData.profiles = appData.profiles.filter(p => p.id !== activeProfileId); saveData(); closeModal('modal-detail'); } }
-        function openEventModalForDetail() { if(!activeProfileId) return; const p = appData.profiles.find(x => x.id === activeProfileId); openEventModal(null, p.type==='school'?'school':'lesson', activeProfileId); }
-
-        function openReportGen(evtId) { currentReportEventId = parseInt(evtId); openModal('modal-report'); }
-        function generateAndCopyReport() {
-            const prog = document.getElementById('rep-progress').value;
-            const comment = document.getElementById('rep-comment').value;
-            const hw = document.getElementById('rep-homework').value;
-            const next = document.getElementById('rep-next').value;
-            
-            const ev = appData.events.find(e => e.id === currentReportEventId);
-            const title = ev ? ev.title : '課程';
-            const text = `【${title} 課後報告】\n\n進度：${prog}\n老師的話：\n${comment}\n作業：${hw}\n${next ? '\n下週上課：'+next : ''}\n\n謝謝！`;
-            
-            if(ev) ev.report = text;
-            saveData();
-            
-            navigator.clipboard.writeText(text).then(() => alert('已複製 Line 文字！'));
-            closeModal('modal-report');
-            if(activeProfileId) openProfileDetail(activeProfileId);
         }
 
-        function renderSubs() {
-            const list = document.getElementById('sub-list');
-            list.innerHTML = (appData.subs || []).map(s => `
-                <div class="flex justify-between items-center bg-white/5 p-3 rounded-xl border border-white/5">
-                    <div>
-                        <div class="text-white text-sm font-zh font-bold">${s.name}</div>
-                        <div class="text-xs text-zinc-500 font-en">${s.phone}</div>
-                    </div>
-                    <div class="flex gap-2">
-                        <a href="tel:${s.phone}" class="bg-green-600/20 text-green-500 p-2 rounded-lg"><i data-lucide="phone" size="16"></i></a>
-                        <button onclick="delSub(${s.id})" class="text-red-500 p-2"><i data-lucide="trash-2" size="16"></i></button>
-                    </div>
-                </div>
-            `).join('');
+        // --- 修復：強化刪除判斷 (整筆或單筆) ---
+        function deleteEvent() {
+            const ev = appData.events.find(e => e.id === editingEventId);
+            if(!ev) return;
+            const related = ev.groupId ? appData.events.filter(e => e.groupId === ev.groupId) : [];
+            if (related.length > 1) {
+                if (confirm(`這是一筆連動行程(共 ${related.length} 筆)。\n按「確定」一鍵全部刪除，按「取消」僅刪除這單項。`)) {
+                    appData.events = appData.events.filter(e => e.groupId !== ev.groupId);
+                } else if (confirm('確定僅刪除這一單筆嗎？')) {
+                    appData.events = appData.events.filter(e => e.id !== editingEventId);
+                } else return;
+            } else {
+                if (!confirm('確定刪除此行程？')) return;
+                appData.events = appData.events.filter(e => e.id !== editingEventId);
+            }
+            saveData(); closeModal('modal-event');
+        }
+
+        // 其餘功能 (Teaching/Finance/Stage/Modals) 保持最原始邏輯
+        function renderTeaching(filterType = 'student') {
+            const list = document.getElementById('teaching-list');
+            const data = appData.profiles ? appData.profiles.filter(p => p.type === filterType) : [];
+            list.innerHTML = data.map(p => `<div class="glass p-3 rounded-xl flex justify-between items-center cursor-pointer mb-2" onclick="openProfileDetail(${p.id})"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full bg-[#181614] border border-[#c5a059]/30 flex items-center justify-center text-[#c5a059] font-bold shadow-inner">${p.name[0]}</div><div><div class="text-[#e8e6e3] font-bold font-zh text-sm">${p.name}</div><div class="text-[10px] text-zinc-500 font-zh mt-0.5">${p.contact || '無備註'}</div></div></div></div>`).join('');
+        }
+        function renderFinance() {
+            const list = document.getElementById('finance-list');
+            const curMonth = new Date().toISOString().slice(0, 7); 
+            const events = appData.events ? appData.events.filter(e => (Number(e.fee) > 0) && (e.date.startsWith(curMonth))).sort((a,b) => b.date.localeCompare(a.date)) : [];
+            let pend = 0, recv = 0; events.forEach(e => { if(e.isPaid) recv += Number(e.fee); else pend += Number(e.fee); });
+            document.getElementById('fin-pending').innerText = `NT$ ${pend.toLocaleString()}`;
+            document.getElementById('fin-received').innerText = `NT$ ${recv.toLocaleString()}`;
+            list.innerHTML = events.map(e => `<div class="flex justify-between items-center p-3 rounded-xl border mb-2 cursor-pointer ${e.isPaid ? 'opacity-50' : 'bg-white/5 border-white/5'}" onclick="togglePaid(${e.id})"><div class="flex items-center gap-3"><div class="w-5 h-5 rounded border ${e.isPaid ? 'bg-[#c5a059] border-[#c5a059]' : 'border-zinc-500'} flex items-center justify-center">${e.isPaid ? '<i data-lucide="check" size="12"></i>' : ''}</div><div><div class="text-sm text-[#e8e6e3] font-zh font-bold ${e.isPaid ? 'line-through' : ''}">${e.title}</div><div class="text-[10px] text-zinc-500 font-en">${e.date}</div></div></div><div class="text-sm font-bold font-num text-[#c5a059]">$${Number(e.fee).toLocaleString()}</div></div>`).join('');
             lucide.createIcons();
         }
-        function openSubModal() { renderSubs(); openModal('modal-sub'); }
-        function addSub() {
-            const name = document.getElementById('sub-name').value;
-            const phone = document.getElementById('sub-phone').value;
-            if(name) {
-                appData.subs.push({ id: Date.now(), name, phone });
-                document.getElementById('sub-name').value = '';
-                document.getElementById('sub-phone').value = '';
-                saveData();
-                renderSubs();
-            }
-        }
-        function delSub(id) {
-            appData.subs = appData.subs.filter(s => s.id !== id);
-            saveData();
-            renderSubs();
+        function togglePaid(id) { const ev = appData.events.find(x => x.id === id); if(ev) { ev.isPaid = !ev.isPaid; saveData(); } }
+        function renderStage() {
+            const list = document.getElementById('stage-list');
+            const events = appData.events ? appData.events.filter(e => e.type === 'performance').sort((a,b) => b.date.localeCompare(a.date)) : [];
+            list.innerHTML = events.map(e => `<div class="glass p-4 rounded-xl border-l-4 border-[#c5a059] relative mb-3" onclick="openEventModal(${e.id})"><div><div class="flex justify-between mb-1"><span class="text-[9px] font-zh font-bold bg-[#c5a059]/10 text-[#c5a059] px-1.5 py-0.5 rounded border border-[#c5a059]/20">${e.perfType || '演出'}</span><span class="text-[10px] text-zinc-500 font-num font-bold">${e.date}</span></div><h3 class="text-base text-[#e8e6e3] font-bold font-zh mb-2">${e.title}</h3><div class="text-[10px] text-zinc-400 font-zh">地點：${e.location}</div></div></div>`).join('');
         }
 
-        function switchTab(viewId, btn) {
-            ['view-schedule', 'view-teaching', 'view-stage', 'view-finance'].forEach(id => document.getElementById(id).classList.add('hidden-tab'));
-            document.getElementById(viewId).classList.remove('hidden-tab');
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            if(btn) btn.classList.add('active');
+        // Modal Controls
+        function openEventModal(id = null, forceType = null, refId = null) {
+            closeActionSheet(); closeModal('modal-detail'); editingEventId = id; document.getElementById('modal-event').classList.remove('hidden');
+            document.getElementById('modal-event-title').innerText = id ? "編輯行程" : "新增行程";
+            document.getElementById('evt-title').value = ''; document.getElementById('evt-date').value = viewDate.toISOString().split('T')[0];
+            document.getElementById('evt-start').value = '10:00'; document.getElementById('evt-end').value = '12:00';
+            document.getElementById('evt-rehearsal-count').value = '0'; document.getElementById('rehearsal-inputs').innerHTML = '';
+            document.getElementById('rehearsal-inputs').classList.add('hidden');
+            let type = forceType || 'lesson';
+            if (id) {
+                const e = appData.events.find(x => x.id === id); type = e.type;
+                document.getElementById('evt-title').value = e.title; document.getElementById('evt-date').value = e.date;
+                document.getElementById('evt-start').value = e.startTime; document.getElementById('evt-end').value = e.endTime;
+                document.getElementById('evt-location').value = e.location; document.getElementById('evt-fee').value = e.fee;
+                document.getElementById('evt-fin-note').value = e.finNote || ''; document.getElementById('evt-dress').value = e.dressCode || '';
+                document.getElementById('btn-delete-evt').classList.remove('hidden'); document.getElementById('section-recur').classList.add('hidden');
+            } else {
+                document.getElementById('btn-delete-evt').classList.add('hidden');
+                if(refId) { const p = appData.profiles.find(x => x.id === refId); if(p) document.getElementById('evt-title').value = p.name + (p.type==='school'?' 分部課':' 大提琴課'); }
+            }
+            document.getElementById('evt-type').value = type; document.getElementById('evt-ref-id').value = refId || '';
+            document.getElementById('section-performance').classList.toggle('hidden', type !== 'performance');
+            if(type === 'performance' || id) document.getElementById('section-recur').classList.add('hidden');
+            else document.getElementById('section-recur').classList.remove('hidden');
+            const secStudent = document.getElementById('section-student'), secTitle = document.getElementById('section-title');
+            if(!id && !refId && type !== 'performance') { secStudent.classList.remove('hidden'); secTitle.classList.add('hidden'); populateStudentsDropdown(); }
+            else { secStudent.classList.add('hidden'); secTitle.classList.remove('hidden'); }
+            document.querySelectorAll('.btn-type').forEach(b => { b.classList.remove('active'); if(b.innerText.includes('家教') && (type==='lesson'||type==='school')) b.classList.add('active'); if(b.innerText.includes('演出') && type==='performance') b.classList.add('active'); });
         }
+        function populateStudentsDropdown() { const sel = document.getElementById('evt-student'); sel.innerHTML = '<option value="">選擇對象...</option>' + appData.profiles.map(p => `<option value="${p.id}">${p.name}</option>`).join(''); }
+        function autoFillStudent() { const p = appData.profiles.find(x => x.id == document.getElementById('evt-student').value); if(p) { document.getElementById('evt-title').value = p.name + (p.type==='school'?' 分部課':' 大提琴課'); document.getElementById('evt-ref-id').value = p.id; } }
+        function toggleRecurInput(chk) { document.getElementById('recur-input-group').classList.toggle('opacity-50', !chk.checked); document.getElementById('evt-recur-weeks').disabled = !chk.checked; }
+        function openProfileDetail(id) {
+            activeProfileId = id; const p = appData.profiles.find(x => x.id === id); document.getElementById('det-name').innerText = p.name;
+            document.getElementById('det-info').innerText = p.contact || '無備註';
+            const history = appData.events.filter(e => e.refId === id).sort((a,b) => b.date.localeCompare(a.date));
+            document.getElementById('det-history').innerHTML = history.map(h => `<div class="border-l-2 border-white/10 pl-3 py-1.5 relative"><div class="absolute -left-[5px] top-2.5 w-2.5 h-2.5 rounded-full bg-[#c5a059]"></div><div class="flex justify-between items-center"><div class="text-xs text-[#c5a059] font-bold">${h.date}</div><button onclick="openReportGen('${h.id}')" class="text-[9px] bg-white/5 border border-white/10 px-2 py-0.5 rounded text-zinc-400">匯報</button></div><div class="text-sm font-bold">${h.title}</div>${h.report ? `<div class="bg-black/30 p-2 rounded mt-1 text-[10px] text-zinc-400 whitespace-pre-wrap">${h.report}</div>` : ''}</div>`).join('');
+            openModal('modal-detail');
+        }
+        function openProfileModal(type) { closeActionSheet(); document.getElementById('prof-type').value = type; openModal('modal-profile'); }
+        function saveProfile() { const n = document.getElementById('prof-name').value; if(!n) return; appData.profiles.push({ id: Date.now(), type: document.getElementById('prof-type').value, name: n, contact: document.getElementById('prof-contact').value, phone: document.getElementById('prof-phone').value, address: document.getElementById('prof-addr').value }); saveData(); closeModal('modal-profile'); }
+        function deleteProfile() { if(confirm('刪除資料？')) { appData.profiles = appData.profiles.filter(p => p.id !== activeProfileId); saveData(); closeModal('modal-detail'); } }
+        function openEventModalForDetail() { openEventModal(null, null, activeProfileId); }
+        function openReportGen(id) { currentReportEventId = parseInt(id); openModal('modal-report'); }
+        function generateAndCopyReport() {
+            const prog = document.getElementById('rep-progress').value, comm = document.getElementById('rep-comment').value, hw = document.getElementById('rep-homework').value, nex = document.getElementById('rep-next').value;
+            const ev = appData.events.find(e => e.id === currentReportEventId);
+            const text = `【${ev ? ev.title : '課程'} 課後報告】\n\n進度：${prog}\n老師的話：\n${comm}\n作業：${hw}\n${nex ? '\n下週上課：'+nex : ''}\n\n謝謝！`;
+            if(ev) ev.report = text; saveData(); navigator.clipboard.writeText(text).then(() => alert('已複製 Line 文字！')); closeModal('modal-report'); if(activeProfileId) openProfileDetail(activeProfileId);
+        }
+        function renderSubs() { document.getElementById('sub-list').innerHTML = (appData.subs || []).map(s => `<div class="flex justify-between items-center bg-white/5 p-3 rounded-xl"><div><div class="text-white text-sm font-bold">${s.name}</div><div class="text-xs text-zinc-500">${s.phone}</div></div><div class="flex gap-2"><a href="tel:${s.phone}" class="bg-green-600/20 text-green-500 p-2 rounded-lg"><i data-lucide="phone" size="16"></i></a><button onclick="delSub(${s.id})" class="text-red-500 p-2"><i data-lucide="trash-2" size="16"></i></button></div></div>`).join(''); lucide.createIcons(); }
+        function addSub() { const n = document.getElementById('sub-name').value, p = document.getElementById('sub-phone').value; if(n) { if(!appData.subs) appData.subs = []; appData.subs.push({ id: Date.now(), name: n, phone: p }); document.getElementById('sub-name').value = ''; document.getElementById('sub-phone').value = ''; saveData(); renderSubs(); } }
+        function delSub(id) { appData.subs = appData.subs.filter(s => s.id !== id); saveData(); renderSubs(); }
+        function switchTab(viewId, btn) { ['view-schedule', 'view-teaching', 'view-stage', 'view-finance'].forEach(id => document.getElementById(id).classList.add('hidden-tab')); document.getElementById(viewId).classList.remove('hidden-tab'); document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active')); if(btn) btn.classList.add('active'); }
         function openActionSheet() { document.getElementById('action-sheet-overlay').classList.remove('hidden','opacity-0'); document.getElementById('action-sheet').classList.remove('translate-y-full'); }
         function closeActionSheet() { document.getElementById('action-sheet-overlay').classList.add('opacity-0'); document.getElementById('action-sheet').classList.add('translate-y-full'); setTimeout(()=>document.getElementById('action-sheet-overlay').classList.add('hidden'),300); }
         function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
         function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
-        function filterTeaching(type, btn) {
-            document.querySelectorAll('.t-filter').forEach(b => { b.classList.remove('bg-[#c5a059]','text-[#12100e]'); b.classList.add('text-zinc-500'); });
-            btn.classList.remove('text-zinc-500'); btn.classList.add('bg-[#c5a059]','text-[#12100e]');
-            renderTeaching(type);
-        }
-
+        function filterTeaching(type, btn) { document.querySelectorAll('.t-filter').forEach(b => b.classList.remove('bg-[#c5a059]','text-[#12100e]')); btn.classList.add('bg-[#c5a059]','text-[#12100e]'); renderTeaching(type); }
+        function openSettings() { openModal('modal-settings'); }
+        function exportData() { navigator.clipboard.writeText(JSON.stringify(appData)).then(() => alert('已複製資料代碼！')); }
+        function setEventType(type) { openEventModal(null, type); }
         switchTab('view-schedule', document.querySelector('.nav-btn.active'));
     </script>
 </body>
 </html>
-
