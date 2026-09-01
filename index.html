@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>MASTER v28 (Cloud)</title>
+    <title>CELLO</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;600;700;900&family=Cinzel:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -100,6 +100,848 @@
         }
         #cloud-status.connected { background-color: #22c55e; box-shadow: 0 0 10px #22c55e; }
         #cloud-status.syncing { background-color: #eab308; box-shadow: 0 0 10px #eab308; animation: pulse 1s infinite; }
+
+
+        /* ===== CELLO editorial override — visual only, Firebase untouched ===== */
+        :root {
+            --bg-base: #f4f3ef;
+            --bg-gradient-start: #fbfaf7;
+            --bg-gradient-end: #e9e7e1;
+            --gold-primary: #111111;
+            --gold-dim: #6e6b64;
+            --text-main: #151515;
+            --glass-bg: rgba(255,255,255,.70);
+            --glass-border: rgba(17,17,17,.10);
+            --input-bg: rgba(255,255,255,.78);
+        }
+        body {
+            font-family: 'Noto Serif TC','Songti TC','PMingLiU',serif !important;
+            font-weight: 500 !important;
+            background: linear-gradient(180deg,#faf9f6 0%,#eeece6 100%) !important;
+            color:#151515 !important;
+        }
+        .font-en,.font-num,input[type="date"],input[type="time"],input[type="number"],input[type="tel"] {
+            font-family:'Bodoni Moda',Didot,'Times New Roman',serif !important;
+            font-weight:500 !important;
+            letter-spacing:.045em;
+        }
+        .font-zh,textarea,select,button {
+            font-family:'Noto Serif TC','Songti TC',serif !important;
+            letter-spacing:.025em;
+        }
+        header { background:linear-gradient(to bottom,rgba(250,249,246,.98),rgba(250,249,246,.82),transparent) !important; }
+        header h1 { color:#111 !important; font-family:'Bodoni Moda',Didot,serif !important; font-size:2.45rem !important; font-weight:500 !important; letter-spacing:.16em !important; text-shadow:none !important; }
+        header button { background:transparent !important; border:1px solid rgba(0,0,0,.15) !important; box-shadow:none !important; }
+        header button svg { color:#111 !important; stroke-width:1.35 !important; }
+        .glass { background:rgba(255,255,255,.66) !important; border:1px solid rgba(0,0,0,.09) !important; box-shadow:0 10px 30px rgba(0,0,0,.045) !important; }
+        #view-schedule > .glass { background:rgba(250,249,246,.90) !important; border-left:0 !important; border-right:0 !important; box-shadow:none !important; border-radius:0 !important; }
+        #cal-range { color:#111 !important; font-weight:500 !important; }
+        #cal-mode { color:#8b8780 !important; }
+        #calendar-grid > div { border-radius:10px !important; box-shadow:none !important; }
+        #schedule-list .glass,#teaching-list .glass,#stage-list .glass { border-radius:12px !important; }
+        input,select,textarea { color:#111 !important; background:#fbfaf7 !important; border:1px solid rgba(0,0,0,.14) !important; box-shadow:none !important; }
+        input:focus,select:focus,textarea:focus { border-color:#111 !important; background:#fff !important; }
+        ::placeholder { color:rgba(0,0,0,.34) !important; font-weight:400 !important; }
+        .btn-gold { background:#111 !important; color:#fff !important; box-shadow:none !important; }
+        .btn-type { background:rgba(0,0,0,.035) !important; color:#6e6a63 !important; }
+        .btn-type.active { background:#111 !important; color:#fff !important; }
+        #view-teaching h2,#view-stage h2,#view-finance h2 { color:#111 !important; border-left-color:#111 !important; }
+
+        /* Boutique bottom icon treatment */
+        nav.glass-dock {
+            background:rgba(250,249,246,.96) !important;
+            border:1px solid rgba(0,0,0,.12) !important;
+            box-shadow:0 14px 38px rgba(0,0,0,.10) !important;
+        }
+        .nav-btn svg {
+            color:#1b1b1b !important;
+            stroke-width:1.25 !important;
+            width:22px !important;
+            height:22px !important;
+            filter:none !important;
+        }
+        .nav-btn span { color:#77736c !important; opacity:1 !important; font-weight:500 !important; }
+        .nav-btn.active svg { color:#111 !important; transform:translateY(-1px) !important; }
+        .nav-btn.active span { color:#111 !important; }
+        nav > div.relative.-top-7 button {
+            background:#111 !important;
+            border-color:#111 !important;
+            box-shadow:0 8px 20px rgba(0,0,0,.18) !important;
+        }
+        nav > div.relative.-top-7 button svg { color:#fff !important; stroke-width:1.5 !important; }
+        #action-sheet,#modal-settings > div,#modal-event > div.relative,#modal-detail > div.relative,#modal-profile > div,#modal-report > div,#modal-sub > div {
+            background:#f8f7f3 !important; color:#111 !important; border-color:rgba(0,0,0,.13) !important;
+        }
+        #cloud-status.connected { background:#111 !important; box-shadow:none !important; }
+        #cloud-status.syncing { background:#aaa59b !important; box-shadow:none !important; }
+
+        /* Fix dynamic content colors on light editorial theme */
+        .text-\[\#e8e6e3\] { color:#171717 !important; }
+        .text-zinc-200, .text-zinc-300 { color:#252525 !important; }
+        .text-zinc-400 { color:#5f5b55 !important; }
+        .text-zinc-500 { color:#777169 !important; }
+        .text-zinc-600 { color:#9b958c !important; }
+        .text-white { color:#171717 !important; }
+        #schedule-list .text-\[\#c5a059\],
+        #stage-list .text-\[\#c5a059\],
+        #teaching-list .text-\[\#c5a059\],
+        #finance-list .text-\[\#c5a059\],
+        #det-history .text-\[\#c5a059\] { color:#111 !important; }
+        #schedule-list .bg-white\/5,
+        #teaching-list .bg-white\/5,
+        #stage-list .bg-white\/5,
+        #finance-list .bg-white\/5 { background:rgba(0,0,0,.025) !important; }
+        #teaching-list .bg-\[\#181614\] { background:#efede7 !important; }
+        #finance-list .border-white\/5,
+        #schedule-list .border-white\/5 { border-color:rgba(0,0,0,.08) !important; }
+
+
+        /* ===== ONLY: typography + alignment refinement ===== */
+        :root { --content-x: 20px; }
+
+        /* English brand word: elegant but not overly decorative */
+        header h1,
+        .font-en {
+            font-family: 'DM Serif Display', Georgia, serif !important;
+        }
+        header h1 {
+            font-weight: 400 !important;
+            letter-spacing: .08em !important;
+        }
+
+        /* Numbers/date/time: clean, readable, still premium */
+        .font-num,
+        input[type="date"],
+        input[type="time"],
+        input[type="number"],
+        input[type="tel"],
+        #cal-range,
+        #cal-mode {
+            font-family: 'Manrope', 'Helvetica Neue', Arial, sans-serif !important;
+            font-weight: 600 !important;
+            letter-spacing: .01em !important;
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Keep every main block on the same left/right axis */
+        header {
+            padding-left: var(--content-x) !important;
+            padding-right: var(--content-x) !important;
+        }
+        main {
+            padding-left: var(--content-x) !important;
+            padding-right: var(--content-x) !important;
+        }
+
+        /* Weekly header alignment only — do not restyle */
+        #view-schedule > .glass {
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+            width: 100% !important;
+        }
+        #calendar-grid {
+            width: 100% !important;
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+        }
+        #calendar-grid > div {
+            width: 100% !important;
+            min-width: 0 !important;
+        }
+
+        /* Section titles line up with content below */
+        #view-teaching > h2,
+        #view-stage > h2,
+        #view-finance > h2 {
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+        }
+
+        /* Bottom dock aligns to same page gutter */
+        nav.glass-dock {
+            left: var(--content-x) !important;
+            right: var(--content-x) !important;
+        }
+
+        @media (max-width: 480px) {
+            :root { --content-x: 16px; }
+        }
+
+
+        /* ===== surgical fix only: date font + selected color ===== */
+        #cal-range,
+        #cal-mode {
+            font-family:'DM Serif Display', Georgia, serif !important;
+        }
+        #calendar-grid > div.bg-\[\#c5a059\] {
+            background:#1a1a1a !important;
+            border-color:#1a1a1a !important;
+            box-shadow:none !important;
+        }
+        #calendar-grid > div.bg-\[\#c5a059\] span,
+        #calendar-grid > div.bg-\[\#c5a059\] * {
+            color:#f5f3ee !important;
+        }
+
+
+        /* ===== subtle background texture only ===== */
+        body {
+            position: relative;
+            background:
+                radial-gradient(circle at 15% 12%, rgba(255,255,255,.78) 0%, rgba(255,255,255,0) 30%),
+                radial-gradient(circle at 85% 18%, rgba(0,0,0,.025) 0%, rgba(0,0,0,0) 28%),
+                linear-gradient(180deg,#faf9f6 0%,#f1efe9 100%) !important;
+        }
+        body::before {
+            content:"";
+            position: fixed;
+            inset: 0;
+            pointer-events:none;
+            z-index:0;
+            opacity:.38;
+            background:
+                repeating-linear-gradient(
+                    108deg,
+                    rgba(17,17,17,.022) 0px,
+                    rgba(17,17,17,.022) 1px,
+                    transparent 1px,
+                    transparent 26px
+                ),
+                repeating-linear-gradient(
+                    72deg,
+                    rgba(255,255,255,.28) 0px,
+                    rgba(255,255,255,.28) 1px,
+                    transparent 1px,
+                    transparent 34px
+                );
+        }
+        body::after {
+            content:"";
+            position: fixed;
+            inset: 0;
+            pointer-events:none;
+            z-index:0;
+            opacity:.17;
+            background-image:
+                radial-gradient(circle at 20% 30%, rgba(17,17,17,.16) 0 .45px, transparent .55px),
+                radial-gradient(circle at 70% 65%, rgba(17,17,17,.12) 0 .4px, transparent .5px);
+            background-size: 7px 7px, 9px 9px;
+            mix-blend-mode:multiply;
+        }
+        body > * { position:relative; z-index:1; }
+
+
+        /* ===== typography system: unified content fonts, logo untouched ===== */
+        :root {
+            --font-zh-unified: 'Noto Serif TC','Songti TC','PMingLiU',serif;
+            --font-en-unified: 'Manrope','Helvetica Neue',Arial,sans-serif;
+        }
+
+        /* Chinese UI/content */
+        .font-zh,
+        textarea,
+        select,
+        button,
+        label,
+        #schedule-list,
+        #teaching-list,
+        #stage-list,
+        #finance-list,
+        #det-history,
+        #modal-settings,
+        #modal-event,
+        #modal-detail,
+        #modal-profile,
+        #modal-report,
+        #modal-sub,
+        #action-sheet {
+            font-family: var(--font-zh-unified) !important;
+        }
+
+        /* English, dates, times, numbers */
+        .font-en:not(header h1),
+        .font-num,
+        input[type="date"],
+        input[type="time"],
+        input[type="number"],
+        input[type="tel"],
+        #cal-range,
+        #cal-mode,
+        #calendar-grid span,
+        #schedule-list .font-num,
+        #finance-list .font-num,
+        #stage-list .font-num {
+            font-family: var(--font-en-unified) !important;
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Explicitly protect CELLO logo typography */
+        header h1 {
+            font-family: 'DM Serif Display', Georgia, serif !important;
+        }
+
+
+        /* Restore the previous version's calendar numeral treatment only */
+        #cal-range,
+        #cal-mode,
+        #calendar-grid span {
+            font-family: 'DM Serif Display', Georgia, serif !important;
+        }
+
+
+        /* ===== comprehensive content typography + card alignment ===== */
+        :root {
+            --font-content: 'DM Serif Display','Noto Serif TC','Songti TC','PMingLiU',serif;
+        }
+
+        /* One content font stack everywhere: Latin/numbers use DM Serif, CJK falls back to Noto Serif TC. */
+        .font-zh,
+        .font-en:not(header h1),
+        .font-num,
+        textarea,
+        select,
+        button,
+        label,
+        input,
+        #cal-range,
+        #cal-mode,
+        #calendar-grid,
+        #schedule-list,
+        #teaching-list,
+        #stage-list,
+        #finance-list,
+        #det-history,
+        #modal-settings,
+        #modal-event,
+        #modal-detail,
+        #modal-profile,
+        #modal-report,
+        #modal-sub,
+        #action-sheet {
+            font-family: var(--font-content) !important;
+        }
+
+        /* Numeric consistency throughout all dynamic content */
+        .font-num,
+        input[type="date"],
+        input[type="time"],
+        input[type="number"],
+        input[type="tel"],
+        #cal-range,
+        #cal-mode,
+        #calendar-grid span,
+        #schedule-list,
+        #stage-list,
+        #finance-list,
+        #det-history {
+            font-variant-numeric: lining-nums tabular-nums;
+        }
+
+        /* Protect the CELLO wordmark exactly as-is */
+        header h1 {
+            font-family: 'DM Serif Display', Georgia, serif !important;
+        }
+
+        /* Schedule card: one clean baseline system, without changing card style */
+        #schedule-list > .glass {
+            position: relative !important;
+            padding: 18px 20px !important;
+        }
+        #schedule-list > .glass > div:first-child {
+            margin-bottom: 10px !important;
+        }
+        #schedule-list > .glass > div:first-child > div {
+            align-items: center !important;
+            min-height: 26px !important;
+        }
+        #schedule-list > .glass > div:first-child span:first-child {
+            display: inline-flex !important;
+            align-items: center !important;
+            min-height: 26px !important;
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+            line-height: 1 !important;
+        }
+        #schedule-list > .glass > div:first-child .font-num {
+            display: inline-flex !important;
+            align-items: center !important;
+            min-height: 26px !important;
+            line-height: 1 !important;
+        }
+        #schedule-list > .glass > h3 {
+            margin-top: 0 !important;
+            margin-bottom: 6px !important;
+            padding-right: 90px !important;
+            line-height: 1.35 !important;
+        }
+        #schedule-list > .glass > div:last-child {
+            margin-top: 4px !important;
+            min-height: 18px !important;
+            align-items: center !important;
+        }
+        #schedule-list > .glass > div:last-child > .ml-auto.font-num {
+            position: absolute !important;
+            right: 20px !important;
+            top: 20px !important;
+            margin-left: 0 !important;
+            line-height: 1 !important;
+        }
+
+        /* Same internal left/right rhythm for generated cards elsewhere */
+        #teaching-list > .glass,
+        #stage-list > .glass,
+        #finance-list > div {
+            padding-left: 20px !important;
+            padding-right: 20px !important;
+        }
+
+
+        /* ===== targeted finance fix only ===== */
+        #fin-pending,
+        #fin-received {
+            font-family: 'DM Serif Display', Georgia, serif !important;
+            font-variant-numeric: lining-nums tabular-nums !important;
+            opacity: 1 !important;
+        }
+        #fin-pending {
+            color: #f4f1ea !important;
+            font-size: 1.55rem !important;
+            font-weight: 400 !important;
+        }
+        #fin-received {
+            color: #d9b45f !important;
+            font-size: 1.2rem !important;
+            font-weight: 400 !important;
+        }
+        #view-finance .aspect-\[2\.5\/1\] .text-zinc-500,
+        #view-finance .aspect-\[2\.5\/1\] .text-zinc-600 {
+            color: rgba(244,241,234,.62) !important;
+        }
+        #view-finance .aspect-\[2\.5\/1\] > div:first-of-type span {
+            font-family: 'Noto Serif TC','Songti TC','PMingLiU',serif !important;
+        }
+
+        #finance-list .finance-row {
+            min-height: 72px !important;
+            padding: 14px 16px !important;
+            gap: 16px !important;
+        }
+        #finance-list .finance-title {
+            font-family: 'Noto Serif TC','Songti TC','PMingLiU',serif !important;
+            color:#171717 !important;
+            font-size: .98rem !important;
+            line-height: 1.25 !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+        }
+        #finance-list .finance-date,
+        #finance-list .finance-amount {
+            font-family: 'DM Serif Display', Georgia, serif !important;
+            font-variant-numeric: lining-nums tabular-nums !important;
+        }
+        #finance-list .finance-date {
+            color:#777169 !important;
+            font-size:.78rem !important;
+            margin-top:3px !important;
+        }
+        #finance-list .finance-amount {
+            color:#111 !important;
+            font-size:1rem !important;
+            text-align:right !important;
+            min-width:88px !important;
+        }
+
+
+        /* ===== premium polish only: teaching toggle colors + richer material feel ===== */
+        body {
+            background-color:#f6f4ef !important;
+            background-image:
+                radial-gradient(circle at 20% 0%, rgba(255,255,255,.88) 0%, rgba(255,255,255,0) 34%),
+                radial-gradient(circle at 85% 12%, rgba(0,0,0,.025) 0%, rgba(0,0,0,0) 22%),
+                linear-gradient(115deg, rgba(0,0,0,.022) 0%, rgba(0,0,0,0) 26%, rgba(0,0,0,.018) 50%, rgba(0,0,0,0) 74%),
+                repeating-linear-gradient(90deg, rgba(0,0,0,.018) 0, rgba(0,0,0,.018) 1px, transparent 1px, transparent 13px),
+                linear-gradient(180deg,#faf8f2 0%, #f3f0e8 100%) !important;
+            background-size:auto, auto, auto, auto, auto !important;
+        }
+        body::before {
+            content:'';
+            position:fixed;
+            inset:0;
+            pointer-events:none;
+            background:
+                radial-gradient(circle at 50% 0%, rgba(255,255,255,.42), rgba(255,255,255,0) 46%),
+                linear-gradient(180deg, rgba(255,255,255,.20), rgba(255,255,255,0) 32%);
+            mix-blend-mode:screen;
+            opacity:.65;
+            z-index:0;
+        }
+        header, main, nav, #action-sheet, #modal-settings, #modal-event, #modal-detail, #modal-profile, #modal-report, #modal-sub {
+            position:relative;
+            z-index:1;
+        }
+        .glass {
+            background:linear-gradient(180deg, rgba(255,255,255,.82) 0%, rgba(255,255,255,.68) 100%) !important;
+            border:1px solid rgba(17,17,17,.08) !important;
+            box-shadow:0 8px 24px rgba(0,0,0,.055), inset 0 1px 0 rgba(255,255,255,.55) !important;
+        }
+        #schedule-list .glass,
+        #teaching-list .glass,
+        #stage-list .glass,
+        #view-finance .glass {
+            backdrop-filter: blur(14px) !important;
+            -webkit-backdrop-filter: blur(14px) !important;
+        }
+        header button {
+            background:rgba(255,255,255,.42) !important;
+            border:1px solid rgba(17,17,17,.12) !important;
+            box-shadow:0 4px 14px rgba(0,0,0,.05), inset 0 1px 0 rgba(255,255,255,.7) !important;
+        }
+        nav.glass-dock {
+            background:linear-gradient(180deg, rgba(250,248,242,.95) 0%, rgba(244,240,232,.96) 100%) !important;
+            box-shadow:0 14px 34px rgba(0,0,0,.09), inset 0 1px 0 rgba(255,255,255,.62) !important;
+        }
+
+        /* teaching filter pill */
+        #view-teaching .flex.p-1.bg-black\/20 {
+            background:linear-gradient(180deg, rgba(0,0,0,.055) 0%, rgba(0,0,0,.035) 100%) !important;
+            border:1px solid rgba(17,17,17,.08) !important;
+            border-radius:20px !important;
+            padding:7px !important;
+            box-shadow:inset 0 1px 0 rgba(255,255,255,.38) !important;
+        }
+        #view-teaching .t-filter {
+            background:transparent !important;
+            color:#8a847a !important;
+            border-radius:15px !important;
+            font-weight:700 !important;
+            letter-spacing:.03em !important;
+            box-shadow:none !important;
+        }
+        #view-teaching .t-filter:hover {
+            color:#171717 !important;
+            background:rgba(255,255,255,.22) !important;
+        }
+        #view-teaching .t-filter.bg-\[\#c5a059\],
+        #view-teaching .t-filter.text-\[\#12100e\],
+        #view-teaching .t-filter.active,
+        #view-teaching .t-filter[class*="bg-\[\#c5a059\]"] {
+            background:linear-gradient(180deg, #262626 0%, #101010 100%) !important;
+            color:#f5f3ee !important;
+            box-shadow:0 7px 18px rgba(0,0,0,.14) !important;
+            border:1px solid rgba(255,255,255,.06) !important;
+        }
+
+        /* subtle premium emphasis for section title rule and finance hero */
+        #view-teaching h2,
+        #view-stage h2,
+        #view-finance h2 {
+            text-shadow:0 1px 0 rgba(255,255,255,.4) !important;
+        }
+        #view-finance > .w-full.aspect-\[2\.5\/1\] {
+            background:
+                radial-gradient(circle at 92% 16%, rgba(198,162,88,.16) 0%, rgba(198,162,88,0) 16%),
+                linear-gradient(120deg, #33271b 0%, #19120e 48%, #090807 100%) !important;
+            border:1px solid rgba(166,129,57,.55) !important;
+            box-shadow:0 12px 28px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.06) !important;
+        }
+        #view-finance > .w-full.aspect-\[2\.5\/1\]::after {
+            content:'';
+            position:absolute;
+            inset:0;
+            pointer-events:none;
+            background:linear-gradient(100deg, rgba(255,255,255,.03) 0%, rgba(255,255,255,0) 36%, rgba(198,162,88,.045) 78%, rgba(255,255,255,0) 100%);
+        }
+
+
+        /* ===== finance visibility + dock overlap fix ===== */
+        #view-finance {
+            padding-bottom: 150px !important;
+        }
+        #view-finance > .glass.rounded-2xl {
+            position: relative !important;
+            overflow: visible !important;
+        }
+        #finance-list {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 10px !important;
+            margin-top: 14px !important;
+            padding-bottom: 10px !important;
+            min-height: 72px !important;
+        }
+        #finance-list:empty::after {
+            content: '本月尚無帳務資料';
+            display: block;
+            padding: 18px 4px 8px;
+            color: #8c857a;
+            font-family: 'Noto Serif TC','Songti TC','PMingLiU',serif;
+            font-size: 13px;
+        }
+        #finance-list .finance-row {
+            display: flex !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            position: relative !important;
+            z-index: 1 !important;
+            background: rgba(255,255,255,.72) !important;
+            border: 1px solid rgba(17,17,17,.08) !important;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.42) !important;
+        }
+        #finance-list .finance-row + .finance-row {
+            margin-top: 0 !important;
+        }
+
+
+        /* ===== REAL finance layout fix: stop desktop hero from becoming a giant block ===== */
+        #view-finance > .w-full.aspect-\[2\.5\/1\] {
+            aspect-ratio: auto !important;
+            height: auto !important;
+            min-height: 168px !important;
+            max-height: none !important;
+            padding: 22px 24px !important;
+        }
+        #view-finance > .w-full.aspect-\[2\.5\/1\] .relative.z-10:last-child {
+            margin-top: 38px !important;
+        }
+        #view-finance > .glass.rounded-2xl {
+            margin-top: 16px !important;
+        }
+        #view-finance {
+            padding-bottom: 130px !important;
+        }
+        #finance-list {
+            min-height: 0 !important;
+        }
+        @media (max-width: 640px) {
+            #view-finance > .w-full.aspect-\[2\.5\/1\] {
+                min-height: 154px !important;
+                padding: 18px 20px !important;
+            }
+            #view-finance > .w-full.aspect-\[2\.5\/1\] .relative.z-10:last-child {
+                margin-top: 30px !important;
+            }
+        }
+
+
+        /* ===== ROOT FIX: overlays must stay out of document flow ===== */
+        #action-sheet {
+            position: fixed !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            z-index: 50 !important;
+        }
+        #action-sheet-overlay,
+        #modal-settings,
+        #modal-event,
+        #modal-detail,
+        #modal-profile,
+        #modal-report,
+        #modal-sub {
+            position: fixed !important;
+        }
+        #action-sheet-overlay { inset: 0 !important; z-index: 50 !important; }
+        #modal-settings { inset: 0 !important; z-index: 70 !important; }
+        #modal-event,
+        #modal-detail,
+        #modal-profile,
+        #modal-report,
+        #modal-sub { inset: 0 !important; z-index: 60 !important; }
+
+        /* The premium-layer rule must not change overlay positioning */
+        header, main, nav {
+            position: relative;
+            z-index: 1;
+        }
+
+        #finance-list:empty::after { content: none !important; }
+        #finance-list .finance-empty {
+            padding: 18px 4px 10px;
+            color:#8c857a;
+            font-family:'Noto Serif TC','Songti TC','PMingLiU',serif !important;
+            font-size:13px;
+        }
+
+
+        /* ===== all numerals use the finance hero typeface ===== */
+        .font-num,
+        input[type="date"],
+        input[type="time"],
+        input[type="number"],
+        input[type="tel"],
+        #cal-range,
+        #cal-mode,
+        #calendar-grid > div span:nth-child(2),
+        #schedule-list .font-num,
+        #stage-list .font-num,
+        #finance-list .finance-date,
+        #finance-list .finance-amount,
+        #fin-pending,
+        #fin-received,
+        #det-history .text-xs,
+        #rehearsal-inputs input[type="date"],
+        #rehearsal-inputs input[type="time"] {
+            font-family:'DM Serif Display', Georgia, serif !important;
+            font-variant-numeric: lining-nums tabular-nums !important;
+        }
+
+        /* keep weights readable, matching NT$ 44,800 treatment */
+        .font-num,
+        #cal-range,
+        #cal-mode,
+        #calendar-grid > div span:nth-child(2),
+        #schedule-list .font-num,
+        #stage-list .font-num,
+        #finance-list .finance-date,
+        #finance-list .finance-amount,
+        #det-history .text-xs {
+            font-weight:400 !important;
+        }
+
+        /* preserve the CELLO wordmark exactly */
+        header h1 {
+            font-family:'DM Serif Display', Georgia, serif !important;
+        }
+
+
+        /* ===== CELLO WORKSPACE 2.0 — additive upgrade, existing visual language preserved ===== */
+        .workspace-view-switch { display:flex; align-items:center; gap:6px; padding:5px; border:1px solid rgba(17,17,17,.08); background:rgba(255,255,255,.50); border-radius:15px; backdrop-filter:blur(12px); }
+        .workspace-tab { flex:1; min-width:0; border:0 !important; background:transparent !important; color:#817b72 !important; padding:9px 10px !important; border-radius:11px !important; font-size:11px !important; font-weight:700 !important; }
+        .workspace-tab.active { background:#111 !important; color:#f7f4ed !important; box-shadow:0 5px 14px rgba(0,0,0,.12) !important; }
+        .workspace-today { margin-left:auto; background:transparent !important; color:#111 !important; border:0 !important; padding:8px 10px !important; font-size:9px !important; letter-spacing:.08em; font-family:'DM Serif Display',Georgia,serif !important; }
+        .workspace-dashboard { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:9px; }
+        .dash-card { min-height:84px; padding:14px; border-radius:15px; border:1px solid rgba(17,17,17,.075); background:rgba(255,255,255,.68); box-shadow:0 7px 20px rgba(0,0,0,.04); display:flex; flex-direction:column; justify-content:space-between; }
+        .dash-card.dark { background:linear-gradient(135deg,#171717,#2c2925); color:#f5f2eb; }
+        .dash-label { font-size:9px; color:#8a847b; font-weight:700; letter-spacing:.08em; }
+        .dash-card.dark .dash-label { color:rgba(255,255,255,.56); }
+        .dash-value { font-family:'DM Serif Display',Georgia,serif !important; font-size:1.35rem; line-height:1; font-variant-numeric:lining-nums tabular-nums; }
+        .dash-sub { font-size:9px; color:#8a847b; margin-top:5px; }
+        .dash-card.dark .dash-sub { color:rgba(255,255,255,.46); }
+        .workspace-task-preview { display:none; }
+        .workspace-task-preview.has-tasks { display:block; padding:14px 16px; border-radius:16px; background:rgba(255,255,255,.62); border:1px solid rgba(17,17,17,.075); }
+        .task-mini-row { display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid rgba(17,17,17,.06); }
+        .task-mini-row:last-child{border-bottom:0}.task-dot{width:8px;height:8px;border-radius:50%;background:#111;flex:none}.task-mini-title{font-size:12px;font-weight:700;flex:1}.task-mini-date{font-family:'DM Serif Display',Georgia,serif!important;font-size:11px;color:#827c73}
+        #calendar-alt { min-height:260px; }
+        .month-grid { display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:6px; }
+        .month-weekday { text-align:center; font-size:9px; color:#9a948c; padding:5px 0; }
+        .month-day { min-height:72px; border:1px solid rgba(17,17,17,.07); background:rgba(255,255,255,.54); border-radius:12px; padding:8px; cursor:pointer; position:relative; }
+        .month-day.muted { opacity:.25; }.month-day.today { outline:1px solid #111; }.month-day.selected { background:#111;color:#fff; }
+        .month-num { font-family:'DM Serif Display',Georgia,serif!important;font-size:1rem; }.month-count { position:absolute; right:7px; bottom:6px; font-family:'DM Serif Display',Georgia,serif!important;font-size:10px;color:#847e75; }.month-day.selected .month-count{color:rgba(255,255,255,.65)}
+        .year-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
+        .year-month { border:1px solid rgba(17,17,17,.075); background:rgba(255,255,255,.62); border-radius:14px; padding:14px; cursor:pointer; min-height:100px; }.year-month-name{font-family:'DM Serif Display',Georgia,serif!important;font-size:1.25rem}.year-month-meta{font-size:10px;color:#8a847b;margin-top:14px;line-height:1.5}.year-month-revenue{font-family:'DM Serif Display',Georgia,serif!important;font-size:.95rem;color:#111}
+        .agenda-group { margin-bottom:16px; }.agenda-date{font-family:'DM Serif Display',Georgia,serif!important;font-size:1rem;margin-bottom:7px;color:#5e5952}.agenda-item{display:grid;grid-template-columns:62px 1fr auto;gap:10px;align-items:center;padding:12px 14px;border-radius:13px;background:rgba(255,255,255,.65);border:1px solid rgba(17,17,17,.07);margin-bottom:6px}.agenda-time{font-family:'DM Serif Display',Georgia,serif!important}.agenda-title{font-size:12px;font-weight:700}.agenda-fee{font-family:'DM Serif Display',Georgia,serif!important;font-size:12px}
+        .workspace-mini-summary { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:12px; }.mini-stat{padding:12px;border-radius:13px;background:rgba(255,255,255,.55);border:1px solid rgba(17,17,17,.07)}.mini-stat-label{font-size:9px;color:#8d877e}.mini-stat-value{font-family:'DM Serif Display',Georgia,serif!important;font-size:1.15rem;margin-top:3px}
+        .finance-kpis { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }.finance-kpi{padding:13px;border-radius:14px;background:rgba(255,255,255,.62);border:1px solid rgba(17,17,17,.07)}.finance-kpi-label{font-size:9px;color:#8b857c}.finance-kpi-value{font-family:'DM Serif Display',Georgia,serif!important;font-size:1.1rem;margin-top:4px}.finance-expense-row{background:rgba(255,255,255,.55)!important}.finance-expense-row .finance-amount{color:#9b3f38!important}
+        .workspace-modal { background:#f8f6f0; border:1px solid rgba(17,17,17,.10); border-radius:24px; box-shadow:0 30px 70px rgba(0,0,0,.20); color:#111; }
+        .workspace-primary-btn{padding:12px;border-radius:12px;background:#111;color:#fff;font-weight:700}.workspace-secondary-btn{padding:12px;border-radius:12px;background:rgba(0,0,0,.05);font-weight:700}
+        .search-result{padding:12px 14px;border-radius:12px;background:rgba(255,255,255,.60);border:1px solid rgba(17,17,17,.07);cursor:pointer}.search-type{font-size:9px;color:#8b857c;letter-spacing:.08em}.search-title{font-size:13px;font-weight:700;margin-top:2px}.search-meta{font-family:'DM Serif Display',Georgia,serif!important;font-size:11px;color:#7f796f;margin-top:3px}
+        #action-sheet .grid.grid-cols-3 { grid-template-columns:repeat(5,minmax(0,1fr)) !important; }
+        #action-sheet .grid.grid-cols-3 > button { min-width:0; }
+        #action-sheet .grid.grid-cols-3 > button span { font-size:10px!important; }
+        #action-sheet .grid.grid-cols-3 > button > div { width:50px!important;height:50px!important; }
+        @media(max-width:700px){.workspace-dashboard{grid-template-columns:repeat(2,1fr)}.year-grid{grid-template-columns:repeat(2,1fr)}#action-sheet .grid.grid-cols-3{grid-template-columns:repeat(3,1fr)!important}.month-day{min-height:58px;padding:6px}.finance-kpis{grid-template-columns:1fr 1fr 1fr}}
+
+        #modal-task,#modal-expense,#modal-search { position:fixed !important; inset:0 !important; }
+
+        /* ===== CELLO 2.1 UX cleanup ===== */
+        .schedule-control-bar{display:flex;align-items:center;gap:10px;justify-content:space-between;margin-bottom:2px}
+        .schedule-view-tabs{display:flex;gap:4px;padding:4px;background:rgba(17,17,17,.045);border:1px solid rgba(17,17,17,.06);border-radius:14px;flex:1;max-width:430px}
+        .schedule-view-tabs .workspace-tab{flex:1;padding:9px 10px;border-radius:10px;font-size:11px;background:transparent;color:#777169;border:0}
+        .schedule-view-tabs .workspace-tab.active{background:#111;color:#fff;box-shadow:none}
+        .compact-today{height:38px;padding:0 12px!important;border:1px solid rgba(17,17,17,.09)!important;border-radius:12px!important;background:rgba(255,255,255,.62)!important;color:#111!important;display:flex;align-items:center;gap:6px;font-size:10px!important;letter-spacing:.06em!important}
+        .work-overview-shell{border:1px solid rgba(17,17,17,.07);border-radius:16px;background:rgba(255,255,255,.48);overflow:hidden}
+        .work-overview-shell summary{list-style:none;cursor:pointer;padding:13px 15px;display:flex;align-items:center;justify-content:space-between;color:#24211e}
+        .work-overview-shell summary::-webkit-details-marker{display:none}.overview-title{display:flex;align-items:center;gap:8px;font-weight:700;font-size:12px}.overview-hint{font-size:9px;color:#90897f}
+        .work-overview-shell[open] summary{border-bottom:1px solid rgba(17,17,17,.06)}
+        .work-overview-shell .workspace-dashboard{margin:12px 12px 8px}.work-overview-shell .workspace-task-preview{margin:0 12px 12px}
+        .finance-filter-panel{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding:13px 14px;background:rgba(255,255,255,.58);border:1px solid rgba(17,17,17,.07);border-radius:16px}
+        .finance-filter-main{display:flex;gap:10px;align-items:flex-end}.finance-select-wrap{display:flex;flex-direction:column;gap:5px}.finance-select-wrap>span{font-size:9px;color:#8e877e;letter-spacing:.08em}.finance-select-wrap select{height:38px!important;min-width:112px!important;padding:0 30px 0 12px!important;border-radius:10px!important;background:#f8f6f1!important;border:1px solid rgba(17,17,17,.09)!important;color:#111!important;font-family:'DM Serif Display',Georgia,serif!important;font-size:13px!important}
+        .finance-status-tabs{display:flex;padding:3px;background:rgba(17,17,17,.045);border-radius:11px}.finance-status-btn{border:0!important;background:transparent!important;color:#827c73!important;padding:8px 12px!important;border-radius:8px!important;font-size:10px!important}.finance-status-btn.active{background:#111!important;color:#fff!important}
+        .quick-add-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:22px}
+        .quick-add-item{display:flex;flex-direction:column;align-items:center;gap:8px;padding:8px 4px!important;background:transparent!important;border:0!important;color:#171717!important}
+        .quick-add-icon{width:52px;height:52px;border-radius:16px;background:linear-gradient(180deg,#fffdf8,#ede8df);border:1px solid rgba(17,17,17,.09);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(0,0,0,.05)}
+        .quick-add-icon svg{color:#111!important;stroke:#111!important;stroke-width:1.6!important}.quick-add-item span{font-size:10px!important;color:#3e3933!important;font-weight:700!important}
+        @media(max-width:700px){.finance-filter-panel{align-items:stretch;flex-direction:column}.finance-filter-main{width:100%}.finance-select-wrap{flex:1}.finance-select-wrap select{width:100%!important;min-width:0!important}.finance-status-tabs{align-self:flex-start}.quick-add-grid{grid-template-columns:repeat(5,1fr);gap:4px}.quick-add-icon{width:46px;height:46px;border-radius:14px}.quick-add-item span{font-size:9px!important}.schedule-view-tabs{max-width:none}}
+
+        /* 2.1 simple schedule: the original weekly view is the only primary calendar UI */
+        .schedule-control-bar,
+        .schedule-view-tabs,
+        .workspace-today,
+        .work-overview-shell,
+        #calendar-alt {
+            display:none !important;
+        }
+
+        /* ===== 2.2 schedule breathing room + softer selected date ===== */
+        #view-schedule {
+            padding-top: 8px !important;
+        }
+
+        #week-toolbar {
+            margin-bottom: 22px !important;
+            padding-top: 14px !important;
+            padding-bottom: 14px !important;
+        }
+
+        #calendar-grid {
+            margin-bottom: 26px !important;
+            column-gap: 10px !important;
+        }
+
+        #calendar-grid > div {
+            min-height: 70px !important;
+            border-radius: 16px !important;
+            transition: background .2s ease, border-color .2s ease, transform .2s ease !important;
+        }
+
+        /* selected date: premium soft state, no reverse black */
+        #calendar-grid > div.bg-\[\#111\] {
+            background: rgba(17,17,17,.055) !important;
+            border-color: rgba(17,17,17,.18) !important;
+            color: #111 !important;
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,.55) !important;
+        }
+
+        #calendar-grid > div.bg-\[\#111\] span,
+        #calendar-grid > div.bg-\[\#111\] * {
+            color: #111 !important;
+        }
+
+        #calendar-grid > div.bg-\[\#111\] .bg-white {
+            background:#111 !important;
+        }
+
+        #schedule-list {
+            display:flex !important;
+            flex-direction:column !important;
+            gap:16px !important;
+        }
+
+        #schedule-list > .glass {
+            padding-top:20px !important;
+            padding-bottom:20px !important;
+        }
+
+        /* finance status tabs: fit 3 options cleanly */
+        .finance-status-tabs {
+            gap:2px !important;
+        }
+        .finance-status-btn {
+            min-width:64px !important;
+            text-align:center !important;
+            white-space:nowrap !important;
+        }
+
+        @media (max-width:700px){
+            #week-toolbar { margin-bottom:18px !important; }
+            #calendar-grid { margin-bottom:22px !important; column-gap:6px !important; }
+            #calendar-grid > div { min-height:64px !important; border-radius:14px !important; }
+            #schedule-list { gap:14px !important; }
+            .finance-status-tabs { width:100% !important; }
+            .finance-status-btn { flex:1 !important; min-width:0 !important; }
+        }
+
     </style>
 </head>
 <body class="flex flex-col">
@@ -107,15 +949,20 @@
     <div id="cloud-status" title="雲端連線狀態"></div>
 
     <header class="pt-[env(safe-area-inset-top,24px)] px-5 pb-3 flex justify-between items-center z-30 mt-2 bg-gradient-to-b from-[var(--bg-base)] to-transparent sticky top-0 flex-none">
-        <div><h1 class="text-4xl font-black font-en tracking-[0.05em] text-[#c5a059] drop-shadow-md">MASTER</h1></div>
-        <button onclick="openSettings()" class="w-11 h-11 rounded-full border border-white/10 flex items-center justify-center bg-white/5 active:scale-90 transition hover:bg-white/10 hover:border-[#c5a059]/50 shadow-md">
-            <i data-lucide="layout-grid" size="20" class="text-zinc-300"></i>
-        </button>
+        <div><h1 class="text-4xl font-black font-en tracking-[0.05em] text-[#c5a059] drop-shadow-md">CELLO</h1></div>
+        <div class="flex items-center gap-2">
+            <button onclick="openSearchModal()" class="w-11 h-11 rounded-full border border-white/10 flex items-center justify-center bg-white/5 active:scale-90 transition hover:bg-white/10 shadow-md" aria-label="搜尋">
+                <i data-lucide="search" size="19" class="text-zinc-300"></i>
+            </button>
+            <button onclick="openSettings()" class="w-11 h-11 rounded-full border border-white/10 flex items-center justify-center bg-white/5 active:scale-90 transition hover:bg-white/10 hover:border-[#c5a059]/50 shadow-md">
+                <i data-lucide="layout-grid" size="20" class="text-zinc-300"></i>
+            </button>
+        </div>
     </header>
 
     <main class="flex-1 overflow-y-auto no-scrollbar px-4 pb-32 pt-2 relative" id="main-container">
         <div id="view-schedule" class="space-y-4 fade-in">
-            <div class="glass rounded-xl p-2 flex items-center justify-between sticky top-0 z-20">
+            <div id="week-toolbar" class="glass rounded-xl p-2 flex items-center justify-between sticky top-0 z-20">
                 <button onclick="changeViewDate(-7)" class="p-2 text-zinc-500 hover:text-[#c5a059] transition"><i data-lucide="chevron-left" size="24"></i></button>
                 <div class="text-center">
                     <div id="cal-range" class="text-sm text-[#c5a059] font-en tracking-widest font-black">--</div>
@@ -133,20 +980,38 @@
                 <button onclick="filterTeaching('student', this)" class="flex-1 py-3 text-xs font-bold rounded-lg bg-[#c5a059] text-[#12100e] transition-all t-filter shadow-sm">個人學生</button>
                 <button onclick="filterTeaching('school', this)" class="flex-1 py-3 text-xs font-bold rounded-lg text-zinc-500 hover:text-white transition-all t-filter">學校分部</button>
             </div>
+            <div id="teaching-summary" class="workspace-mini-summary"></div>
             <div id="teaching-list" class="space-y-2 pb-20"></div>
         </div>
 
         <div id="view-stage" class="space-y-5 hidden-tab fade-in">
             <h2 class="text-lg font-black text-zinc-200 font-zh tracking-widest mb-3 border-l-4 border-[#c5a059] pl-3">演出行程</h2>
+            <div id="stage-summary" class="workspace-mini-summary"></div>
             <div id="stage-list" class="space-y-3 pb-20"></div>
         </div>
 
         <div id="view-finance" class="space-y-5 hidden-tab fade-in">
             <h2 class="text-lg font-black text-zinc-200 font-zh tracking-widest mb-3 border-l-4 border-[#c5a059] pl-3">收支概覽</h2>
+            <div class="finance-filter-panel">
+                <div class="finance-filter-main">
+                    <label class="finance-select-wrap"><span>年份</span><select id="finance-year" onchange="onFinanceFilterChange()"></select></label>
+                    <label class="finance-select-wrap"><span>月份</span><select id="finance-month" onchange="onFinanceFilterChange()">
+                        <option value="0">全年</option>
+                        <option value="1">1 月</option><option value="2">2 月</option><option value="3">3 月</option><option value="4">4 月</option>
+                        <option value="5">5 月</option><option value="6">6 月</option><option value="7">7 月</option><option value="8">8 月</option>
+                        <option value="9">9 月</option><option value="10">10 月</option><option value="11">11 月</option><option value="12">12 月</option>
+                    </select></label>
+                </div>
+                <div class="finance-status-tabs">
+                    <button onclick="setFinanceStatus('all',this)" class="finance-status-btn active">全部</button>
+                    <button onclick="setFinanceStatus('paid',this)" class="finance-status-btn">已收款</button>
+                    <button onclick="setFinanceStatus('unpaid',this)" class="finance-status-btn">未收款</button>
+                </div>
+            </div>
             <div class="w-full aspect-[2.5/1] rounded-2xl bg-gradient-to-br from-[#29221b] to-[#12100e] border border-[#c5a059]/20 p-5 relative overflow-hidden shadow-lg flex flex-col justify-between">
                 <div class="absolute -right-6 -top-6 w-28 h-28 bg-[#c5a059]/10 rounded-full blur-[30px]"></div>
                 <div class="relative z-10 flex justify-between items-start">
-                    <span class="text-[10px] text-[#c5a059] border border-[#c5a059]/30 px-2 py-0.5 rounded font-en tracking-widest bg-[#c5a059]/5 font-bold">本月概況</span>
+                    <span data-finance-month class="text-[10px] text-[#c5a059] border border-[#c5a059]/30 px-2 py-0.5 rounded font-en tracking-widest bg-[#c5a059]/5 font-bold">本月概況</span>
                     <i data-lucide="trending-up" class="text-[#c5a059] opacity-80" size="20"></i>
                 </div>
                 <div class="relative z-10 flex justify-between items-end">
@@ -154,8 +1019,9 @@
                     <div class="text-right"><div class="text-[10px] text-zinc-600 font-zh tracking-widest mb-0.5 font-bold">已入帳</div><div id="fin-received" class="text-base font-black text-[#c5a059] font-num">NT$ 0</div></div>
                 </div>
             </div>
+            <div id="finance-kpis" class="finance-kpis"></div>
             <div class="glass rounded-2xl p-4 border-t border-[#c5a059]/10">
-                <h3 class="text-xs font-black text-zinc-500 tracking-widest font-zh mb-3 flex items-center gap-2"><i data-lucide="list-checks" size="16"></i> 帳務明細 (行程連動)</h3>
+                <h3 id="finance-list-title" class="text-xs font-black text-zinc-500 tracking-widest font-zh mb-3 flex items-center gap-2"><i data-lucide="list-checks" size="16"></i> 帳務明細</h3>
                 <div id="finance-list" class="space-y-2"></div>
             </div>
         </div>
@@ -174,10 +1040,12 @@
     <div id="action-sheet-overlay" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden opacity-0 transition-opacity duration-300" onclick="closeActionSheet()"></div>
     <div id="action-sheet" class="fixed bottom-0 left-0 right-0 bg-[#181614] rounded-t-[2rem] p-6 z-50 transform translate-y-full transition-transform duration-300 border-t border-[#c5a059]/20 shadow-2xl pb-10">
         <div class="w-10 h-1 bg-[#c5a059]/30 rounded-full mx-auto mb-6"></div>
-        <div class="grid grid-cols-3 gap-4 mb-6">
-            <button onclick="openProfileModal('student')" class="flex flex-col items-center gap-2 active:scale-95 transition bg-white/5 p-3 rounded-2xl border border-white/5 group"><div class="w-12 h-12 rounded-full bg-[#12100e] flex items-center justify-center text-blue-400 shadow-inner"><i data-lucide="user-plus" size="22"></i></div><span class="text-xs font-zh text-zinc-300 font-bold group-hover:text-[#c5a059]">新增學生</span></button>
-            <button onclick="openProfileModal('school')" class="flex flex-col items-center gap-2 active:scale-95 transition bg-white/5 p-3 rounded-2xl border border-white/5 group"><div class="w-12 h-12 rounded-full bg-[#12100e] flex items-center justify-center text-emerald-400 shadow-inner"><i data-lucide="school" size="22"></i></div><span class="text-xs font-zh text-zinc-300 font-bold group-hover:text-[#c5a059]">新增學校</span></button>
-            <button onclick="openEventModal()" class="flex flex-col items-center gap-2 active:scale-95 transition bg-white/5 p-3 rounded-2xl border border-white/5 group"><div class="w-12 h-12 rounded-full bg-[#12100e] flex items-center justify-center text-[#c5a059] shadow-inner"><i data-lucide="calendar-plus" size="22"></i></div><span class="text-xs font-zh text-zinc-300 font-bold group-hover:text-[#c5a059]">新增行程</span></button>
+        <div class="quick-add-grid">
+            <button onclick="openProfileModal('student')" class="quick-add-item"><div class="quick-add-icon"><i data-lucide="user-round-plus" size="22"></i></div><span>學生</span></button>
+            <button onclick="openProfileModal('school')" class="quick-add-item"><div class="quick-add-icon"><i data-lucide="building-2" size="22"></i></div><span>學校</span></button>
+            <button onclick="openEventModal()" class="quick-add-item"><div class="quick-add-icon"><i data-lucide="calendar-plus-2" size="22"></i></div><span>行程</span></button>
+            <button onclick="openTaskModal()" class="quick-add-item"><div class="quick-add-icon"><i data-lucide="list-todo" size="22"></i></div><span>待辦</span></button>
+            <button onclick="openExpenseModal()" class="quick-add-item"><div class="quick-add-icon"><i data-lucide="wallet-cards" size="22"></i></div><span>支出</span></button>
         </div>
         <button onclick="closeActionSheet()" class="w-full py-3 text-zinc-500 font-en tracking-[0.2em] font-bold text-[10px] uppercase hover:text-white transition">CLOSE</button>
     </div>
@@ -306,6 +1174,42 @@
         </div>
     </div>
 
+
+    <div id="modal-task" class="fixed inset-0 z-[60] hidden flex items-center justify-center px-6 bg-black/70 backdrop-blur-md">
+        <div class="workspace-modal w-full max-w-sm p-6 slide-up">
+            <div class="flex justify-between items-center mb-5"><h3 class="text-lg font-bold font-zh">待辦事項</h3><button onclick="closeModal('modal-task')"><i data-lucide="x" size="20"></i></button></div>
+            <input type="hidden" id="task-id">
+            <div class="space-y-3">
+                <input id="task-title" type="text" placeholder="要處理什麼？">
+                <input id="task-date" type="date">
+                <textarea id="task-note" class="h-20 resize-none" placeholder="備註（選填）"></textarea>
+            </div>
+            <div class="flex gap-2 mt-5"><button id="task-delete" onclick="deleteTask()" class="hidden flex-1 workspace-secondary-btn text-red-600">刪除</button><button onclick="saveTask()" class="flex-[2] workspace-primary-btn">儲存</button></div>
+        </div>
+    </div>
+
+    <div id="modal-expense" class="fixed inset-0 z-[60] hidden flex items-center justify-center px-6 bg-black/70 backdrop-blur-md">
+        <div class="workspace-modal w-full max-w-sm p-6 slide-up">
+            <div class="flex justify-between items-center mb-5"><h3 class="text-lg font-bold font-zh">支出紀錄</h3><button onclick="closeModal('modal-expense')"><i data-lucide="x" size="20"></i></button></div>
+            <input type="hidden" id="expense-id">
+            <div class="space-y-3">
+                <input id="expense-title" type="text" placeholder="支出項目，例如：琴弦">
+                <input id="expense-date" type="date">
+                <select id="expense-category"><option>器材</option><option>交通</option><option>場租</option><option>樂譜</option><option>服裝</option><option>餐費</option><option>其他</option></select>
+                <input id="expense-amount" type="number" placeholder="金額">
+                <input id="expense-note" type="text" placeholder="備註（選填）">
+            </div>
+            <div class="flex gap-2 mt-5"><button id="expense-delete" onclick="deleteExpense()" class="hidden flex-1 workspace-secondary-btn text-red-600">刪除</button><button onclick="saveExpense()" class="flex-[2] workspace-primary-btn">儲存</button></div>
+        </div>
+    </div>
+
+    <div id="modal-search" class="fixed inset-0 z-[70] hidden flex items-start justify-center px-5 pt-20 bg-black/50 backdrop-blur-md">
+        <div class="workspace-modal w-full max-w-lg p-5 slide-up">
+            <div class="flex items-center gap-3 mb-4"><i data-lucide="search" size="18"></i><input id="global-search" type="search" placeholder="搜尋學生、學校、行程、待辦…" oninput="renderSearchResults()"><button onclick="closeModal('modal-search')"><i data-lucide="x" size="20"></i></button></div>
+            <div id="search-results" class="space-y-2 max-h-[60vh] overflow-y-auto"></div>
+        </div>
+    </div>
+
     <script>
         // --- Firebase Config & Init ---
         const firebaseConfig = {
@@ -320,7 +1224,11 @@
         const db = firebase.database();
         const DATA_PATH = 'cello_data'; 
 
-        let appData = { events: [], profiles: [], subs: [] };
+        let appData = { events: [], profiles: [], subs: [], tasks: [], expenses: [] };
+        let calendarMode = 'week';
+        let financeStatus = 'all';
+        let financeSelectedYear = new Date().getFullYear();
+        let financeSelectedMonth = new Date().getMonth() + 1;
         let viewDate = new Date();
         let editingEventId = null;
         let activeProfileId = null;
@@ -338,6 +1246,8 @@
                     if (!appData.events) appData.events = [];
                     if (!appData.profiles) appData.profiles = [];
                     if (!appData.subs) appData.subs = [];
+                    if (!appData.tasks) appData.tasks = [];
+                    if (!appData.expenses) appData.expenses = [];
                     refreshAll();
                     statusEl.className = 'connected';
                 } else statusEl.className = 'connected';
@@ -349,50 +1259,84 @@
             db.ref(DATA_PATH).set(appData).then(() => { statusEl.className = 'connected'; refreshAll(); }).catch((error) => { alert("儲存失敗: " + error.message); statusEl.className = ''; });
         }
         
-        function refreshAll() { renderSchedule(); renderTeaching(); renderStage(); renderFinance(); }
+        function refreshAll() { renderSchedule(); renderTeaching(); renderStage(); populateFinanceFilters(); renderFinance(); }
 
-        function changeViewDate(days) { viewDate.setDate(viewDate.getDate() + days); renderSchedule(); }
+        function pad2(n){ return String(n).padStart(2,'0'); }
+        function fmtDate(d){ return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`; }
+        function money(n){ return Number(n||0).toLocaleString(); }
+        function getEventsArray(){ return Array.isArray(appData.events) ? appData.events : (appData.events && typeof appData.events==='object' ? Object.values(appData.events) : []); }
+        function getTasksArray(){ return Array.isArray(appData.tasks) ? appData.tasks : (appData.tasks && typeof appData.tasks==='object' ? Object.values(appData.tasks) : []); }
+        function getExpensesArray(){ return Array.isArray(appData.expenses) ? appData.expenses : (appData.expenses && typeof appData.expenses==='object' ? Object.values(appData.expenses) : []); }
+
+        function goToday(){ viewDate = new Date(); renderSchedule(); renderDashboard(); renderFinance(); }
+        function setCalendarMode(mode, btn){
+            calendarMode = mode;
+            document.querySelectorAll('#calendar-view-tabs .workspace-tab').forEach(b=>b.classList.remove('active'));
+            if(btn) btn.classList.add('active');
+            renderSchedule();
+        }
+        function changeViewDate(days) { viewDate.setDate(viewDate.getDate() + days); renderSchedule(); renderFinance(); }
+        function renderDashboard(){
+            const el=document.getElementById('work-dashboard'); if(!el) return;
+            const events=getEventsArray(); const y=viewDate.getFullYear(), m=viewDate.getMonth();
+            const monthEvents=events.filter(e=>{ if(!e?.date)return false; const d=new Date(e.date+'T12:00:00'); return d.getFullYear()===y&&d.getMonth()===m; });
+            const billable=monthEvents.filter(e=>Number(e.fee)>0); const gross=billable.reduce((s,e)=>s+Number(e.fee||0),0); const unpaid=billable.filter(e=>!e.isPaid).reduce((s,e)=>s+Number(e.fee||0),0); const performances=monthEvents.filter(e=>e.type==='performance').length;
+            el.innerHTML=`<div class="dash-card dark"><div class="dash-label">${y}.${pad2(m+1)} WORKLOAD</div><div><div class="dash-value">${monthEvents.length}</div><div class="dash-sub">本月行程</div></div></div><div class="dash-card"><div class="dash-label">EXPECTED</div><div><div class="dash-value">NT$ ${money(gross)}</div><div class="dash-sub">預計收入</div></div></div><div class="dash-card"><div class="dash-label">RECEIVABLE</div><div><div class="dash-value">NT$ ${money(unpaid)}</div><div class="dash-sub">尚未收到</div></div></div><div class="dash-card"><div class="dash-label">PERFORMANCE</div><div><div class="dash-value">${performances}</div><div class="dash-sub">本月演出</div></div></div>`;
+        }
+        function renderTaskPreview(){
+            const el=document.getElementById('task-preview'); if(!el)return; const tasks=getTasksArray().filter(t=>!t.done).sort((a,b)=>(a.dueDate||'9999').localeCompare(b.dueDate||'9999')).slice(0,3);
+            if(!tasks.length){ el.className='workspace-task-preview'; el.innerHTML=''; return; }
+            el.className='workspace-task-preview has-tasks'; el.innerHTML=`<div class="flex justify-between items-center mb-1"><span class="text-[10px] font-bold text-zinc-500">NEXT TO DO</span><button onclick="openTaskModal()" class="text-[10px]">＋ 新增</button></div>`+tasks.map(t=>`<div class="task-mini-row" onclick="openTaskModal(${t.id})"><span class="task-dot"></span><span class="task-mini-title">${t.title}</span><span class="task-mini-date">${t.dueDate||''}</span></div>`).join('');
+        }
+        function renderEventCard(e){
+            let typeLabel='演出'; if(e.type==='lesson')typeLabel='家教'; if(e.type==='school')typeLabel='學校'; if(e.type==='rehearsal')typeLabel='彩排';
+            return `<div class="glass p-4 rounded-xl relative group active:scale-[0.98] transition cursor-pointer" onclick="openEventModal(${e.id})"><div class="flex items-center gap-2 mb-1.5"><span class="text-[9px] font-zh font-bold bg-black/5 px-1.5 py-0.5 rounded text-zinc-500">${typeLabel}</span><span class="text-xs font-num font-bold">${e.startTime||''}${e.endTime?' - '+e.endTime:''}</span></div><h3 class="text-base font-bold font-zh mb-1 leading-snug">${e.title||'未命名行程'}</h3><div class="flex gap-2 text-[10px] text-zinc-500">${e.location?`<span>${e.location}</span>`:''}${Number(e.fee)>0?`<span class="ml-auto font-num">$${money(e.fee)}</span>`:''}</div></div>`;
+        }
         function renderSchedule() {
             const gridEl = document.getElementById('calendar-grid');
             const listEl = document.getElementById('schedule-list');
+            if (!gridEl || !listEl) return;
+
+            const events = getEventsArray();
             const day = viewDate.getDay();
-            const diff = viewDate.getDate() - day + (day == 0 ? -6 : 1);
-            const monday = new Date(viewDate); monday.setDate(diff);
-            
-            document.getElementById('cal-range').innerText = `${monday.toLocaleDateString('en-US',{month:'short',day:'numeric'})} - ...`;
+            const diff = viewDate.getDate() - day + (day === 0 ? -6 : 1);
+            const monday = new Date(viewDate);
+            monday.setDate(diff);
+            const sunday = new Date(monday);
+            sunday.setDate(monday.getDate() + 6);
+
+            document.getElementById('cal-range').innerText =
+                `${monday.toLocaleDateString('en-US',{month:'short',day:'numeric'})} - ${sunday.toLocaleDateString('en-US',{month:'short',day:'numeric'})}`;
             document.getElementById('cal-mode').innerText = monday.getFullYear();
 
             gridEl.innerHTML = '';
-            for(let i=0; i<7; i++) {
-                const d = new Date(monday); d.setDate(monday.getDate() + i);
-                const dateStr = d.toISOString().split('T')[0];
-                const isSelected = dateStr === viewDate.toISOString().split('T')[0];
-                const hasEvent = appData.events && appData.events.some(e => e.date === dateStr);
+            for (let i = 0; i < 7; i++) {
+                const d = new Date(monday);
+                d.setDate(monday.getDate() + i);
+                const dateStr = fmtDate(d);
+                const isSelected = dateStr === fmtDate(viewDate);
+                const hasEvent = events.some(e => e && e.date === dateStr);
+
                 const btn = document.createElement('div');
-                btn.className = `h-14 rounded-xl flex flex-col items-center justify-center cursor-pointer border transition-all duration-300 ${isSelected ? 'bg-[#c5a059] border-[#c5a059] text-[#12100e] shadow-md scale-105' : 'bg-white/5 border-white/5 text-zinc-500 hover:bg-white/10'}`;
-                btn.onclick = () => { viewDate = new Date(dateStr); renderSchedule(); };
-                btn.innerHTML = `<span class="text-[9px] font-en tracking-widest font-bold opacity-80">${d.toLocaleDateString('en-US',{weekday:'short'})}</span><span class="text-base font-bold font-en leading-none mt-0.5">${d.getDate()}</span>${hasEvent ? `<div class="w-1 h-1 rounded-full ${isSelected?'bg-black':'bg-[#c5a059]'} mt-1"></div>`:''}`;
+                btn.className = `h-14 rounded-xl flex flex-col items-center justify-center cursor-pointer border transition-all duration-300 ${isSelected ? 'bg-[#111] border-[#111] text-white shadow-md' : 'bg-white/5 border-white/5 text-zinc-500 hover:bg-white/10'}`;
+                btn.onclick = () => {
+                    viewDate = new Date(d);
+                    renderSchedule();
+                    renderFinance();
+                };
+                btn.innerHTML = `<span class="text-[9px] font-en tracking-widest font-bold opacity-80">${d.toLocaleDateString('en-US',{weekday:'short'})}</span><span class="text-base font-bold font-en leading-none mt-0.5">${d.getDate()}</span>${hasEvent ? `<div class="w-1 h-1 rounded-full ${isSelected ? 'bg-white' : 'bg-black'} mt-1"></div>` : ''}`;
                 gridEl.appendChild(btn);
             }
 
-            const dateStr = viewDate.toISOString().split('T')[0];
-            const events = appData.events ? appData.events.filter(e => e.date === dateStr).sort((a,b) => a.startTime.localeCompare(b.startTime)) : [];
-            listEl.innerHTML = '';
-            if(events.length === 0) { listEl.innerHTML = `<div class="flex flex-col items-center justify-center py-20 text-zinc-600 opacity-50"><i data-lucide="coffee" size="28" class="mb-2"></i><span class="font-zh text-xs tracking-widest font-bold">本日無行程</span></div>`; lucide.createIcons(); return; }
-            events.forEach(e => {
-                let borderClass = 'border-l-[#c5a059]'; let typeLabel = '演出';
-                if(e.type === 'lesson') borderClass = 'border-l-blue-400', typeLabel = '家教';
-                if(e.type === 'school') borderClass = 'border-l-emerald-400', typeLabel = '學校';
-                if(e.type === 'rehearsal') borderClass = 'border-l-orange-400', typeLabel = '彩排';
-                const item = document.createElement('div');
-                item.className = `glass p-4 rounded-xl relative group active:scale-[0.98] transition border-l-4 ${borderClass}`;
-                item.onclick = () => openEventModal(e.id);
-                item.innerHTML = `
-                    <div class="flex justify-between items-start mb-1.5"><div class="flex items-center gap-2"><span class="text-[9px] font-zh font-bold bg-white/5 px-1.5 py-0.5 rounded text-zinc-400 border border-white/5">${typeLabel}</span><span class="text-xs text-[#c5a059] font-num font-bold">${e.startTime} - ${e.endTime}</span></div></div>
-                    <h3 class="text-base text-[#e8e6e3] font-bold font-zh mb-1 leading-snug tracking-wide truncate pr-8">${e.title}</h3>
-                    <div class="flex flex-wrap gap-2 mt-2 text-[10px] text-zinc-400 font-zh">${e.location ? `<div class="flex items-center gap-1 truncate max-w-[120px]"><i data-lucide="map-pin" size="10"></i> ${e.location}</div>` : ''}${e.fee ? `<div class="flex items-center gap-1 text-[#c5a059] font-num font-bold ml-auto">$${e.fee}</div>` : ''}</div>`;
-                listEl.appendChild(item);
-            });
+            const dateStr = fmtDate(viewDate);
+            const dayEvents = events
+                .filter(e => e && e.date === dateStr)
+                .sort((a,b) => (a.startTime || '').localeCompare(b.startTime || ''));
+
+            listEl.innerHTML = dayEvents.length
+                ? dayEvents.map(renderEventCard).join('')
+                : `<div class="flex flex-col items-center justify-center py-16 text-zinc-500 opacity-60"><i data-lucide="coffee" size="26" class="mb-2"></i><span class="font-zh text-xs">本日無行程</span></div>`;
+
             lucide.createIcons();
         }
 
@@ -482,26 +1426,66 @@
 
         // 其餘功能 (Teaching/Finance/Stage/Modals) 保持最原始邏輯
         function renderTeaching(filterType = 'student') {
-            const list = document.getElementById('teaching-list');
-            const data = appData.profiles ? appData.profiles.filter(p => p.type === filterType) : [];
-            list.innerHTML = data.map(p => `<div class="glass p-3 rounded-xl flex justify-between items-center cursor-pointer mb-2" onclick="openProfileDetail(${p.id})"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full bg-[#181614] border border-[#c5a059]/30 flex items-center justify-center text-[#c5a059] font-bold shadow-inner">${p.name[0]}</div><div><div class="text-[#e8e6e3] font-bold font-zh text-sm">${p.name}</div><div class="text-[10px] text-zinc-500 font-zh mt-0.5">${p.contact || '無備註'}</div></div></div></div>`).join('');
+            const list=document.getElementById('teaching-list'); const summary=document.getElementById('teaching-summary'); const profiles=Array.isArray(appData.profiles)?appData.profiles:[]; const events=getEventsArray(); const data=profiles.filter(p=>p.type===filterType); const year=viewDate.getFullYear();
+            const related=events.filter(e=>e.refId && data.some(p=>p.id===e.refId)); const yearRelated=related.filter(e=>String(e.date||'').startsWith(String(year))); const rev=yearRelated.reduce((s,e)=>s+Number(e.fee||0),0);
+            if(summary) summary.innerHTML=`<div class="mini-stat"><div class="mini-stat-label">名單</div><div class="mini-stat-value">${data.length}</div></div><div class="mini-stat"><div class="mini-stat-label">${year} 堂數</div><div class="mini-stat-value">${yearRelated.length}</div></div><div class="mini-stat"><div class="mini-stat-label">年度收入</div><div class="mini-stat-value">NT$ ${money(rev)}</div></div>`;
+            list.innerHTML=data.map(p=>{const pe=events.filter(e=>e.refId===p.id);const ype=pe.filter(e=>String(e.date||'').startsWith(String(year)));const prev=ype.reduce((s,e)=>s+Number(e.fee||0),0);return `<div class="glass p-3 rounded-xl flex justify-between items-center cursor-pointer mb-2" onclick="openProfileDetail(${p.id})"><div class="flex items-center gap-3 min-w-0"><div class="w-10 h-10 rounded-full bg-[#181614] border border-black/10 flex items-center justify-center text-white font-bold">${(p.name||'?')[0]}</div><div class="min-w-0"><div class="font-bold font-zh text-sm truncate">${p.name}</div><div class="text-[10px] text-zinc-500 mt-0.5">${p.contact||'無備註'} · ${ype.length} 堂</div></div></div><div class="font-num text-xs">$${money(prev)}</div></div>`;}).join('');
+        }
+        function filterTeaching(type, btn){document.querySelectorAll('.t-filter').forEach(b=>b.classList.remove('bg-[#c5a059]','text-[#12100e]','active'));btn.classList.add('active');renderTeaching(type);}
+
+        function populateFinanceFilters(){
+            const years=new Set([new Date().getFullYear(), viewDate.getFullYear()]);
+            getEventsArray().forEach(e=>{const y=Number(String(e.date||'').slice(0,4));if(y)years.add(y);});
+            getExpensesArray().forEach(e=>{const y=Number(String(e.date||'').slice(0,4));if(y)years.add(y);});
+            const ySel=document.getElementById('finance-year'),mSel=document.getElementById('finance-month');
+            if(ySel){ySel.innerHTML=[...years].sort((a,b)=>b-a).map(y=>`<option value="${y}">${y}</option>`).join('');ySel.value=String(financeSelectedYear);}
+            if(mSel)mSel.value=String(financeSelectedMonth);
+        }
+        function onFinanceFilterChange(){const y=document.getElementById('finance-year'),m=document.getElementById('finance-month');financeSelectedYear=Number(y?.value)||new Date().getFullYear();financeSelectedMonth=Number(m?.value)||0;renderFinance();}
+        function setFinanceStatus(status,btn){financeStatus=status;document.querySelectorAll('.finance-status-btn').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');renderFinance();}
+        function financePeriod(){
+            const y=financeSelectedYear, m=financeSelectedMonth;
+            const label=m===0?`${y} 全年`:`${y}.${String(m).padStart(2,'0')} 月概況`;
+            const dateMatch=e=>{
+                if(!e || !e.date) return false;
+                const parts=e.date.split('-');
+                const ey=Number(parts[0]), em=Number(parts[1]);
+                return ey===y && (m===0 || em===m);
+            };
+            const incomeFilter=e=>{
+                if(!dateMatch(e)) return false;
+                if(financeStatus==='paid') return !!e.isPaid;
+                if(financeStatus==='unpaid') return !e.isPaid;
+                return true;
+            };
+            const expenseFilter=e=>dateMatch(e) && financeStatus==='all';
+            return {label,incomeFilter,expenseFilter};
         }
         function renderFinance() {
-            const list = document.getElementById('finance-list');
-            const curMonth = new Date().toISOString().slice(0, 7); 
-            const events = appData.events ? appData.events.filter(e => (Number(e.fee) > 0) && (e.date.startsWith(curMonth))).sort((a,b) => b.date.localeCompare(a.date)) : [];
-            let pend = 0, recv = 0; events.forEach(e => { if(e.isPaid) recv += Number(e.fee); else pend += Number(e.fee); });
-            document.getElementById('fin-pending').innerText = `NT$ ${pend.toLocaleString()}`;
-            document.getElementById('fin-received').innerText = `NT$ ${recv.toLocaleString()}`;
-            list.innerHTML = events.map(e => `<div class="flex justify-between items-center p-3 rounded-xl border mb-2 cursor-pointer ${e.isPaid ? 'opacity-50' : 'bg-white/5 border-white/5'}" onclick="togglePaid(${e.id})"><div class="flex items-center gap-3"><div class="w-5 h-5 rounded border ${e.isPaid ? 'bg-[#c5a059] border-[#c5a059]' : 'border-zinc-500'} flex items-center justify-center">${e.isPaid ? '<i data-lucide="check" size="12"></i>' : ''}</div><div><div class="text-sm text-[#e8e6e3] font-zh font-bold ${e.isPaid ? 'line-through' : ''}">${e.title}</div><div class="text-[10px] text-zinc-500 font-en">${e.date}</div></div></div><div class="text-sm font-bold font-num text-[#c5a059]">$${Number(e.fee).toLocaleString()}</div></div>`).join('');
-            lucide.createIcons();
+            const list=document.getElementById('finance-list');if(!list)return;const period=financePeriod(), incomes=getEventsArray().filter(e=>Number(e.fee)>0).filter(period.incomeFilter), expenses=getExpensesArray().filter(period.expenseFilter);
+            const gross=incomes.reduce((s,e)=>s+Number(e.fee||0),0),received=incomes.filter(e=>e.isPaid).reduce((s,e)=>s+Number(e.fee||0),0),pending=incomes.filter(e=>!e.isPaid).reduce((s,e)=>s+Number(e.fee||0),0),expenseTotal=expenses.reduce((s,e)=>s+Number(e.amount||0),0),net=gross-expenseTotal;
+            document.getElementById('fin-pending').textContent=`NT$ ${money(pending)}`;document.getElementById('fin-received').textContent=`NT$ ${money(received)}`;const badge=document.querySelector('[data-finance-month]');if(badge)badge.textContent=period.label;
+            const k=document.getElementById('finance-kpis');if(k)k.innerHTML=`<div class="finance-kpi"><div class="finance-kpi-label">預計收入</div><div class="finance-kpi-value">NT$ ${money(gross)}</div></div><div class="finance-kpi"><div class="finance-kpi-label">支出</div><div class="finance-kpi-value">NT$ ${money(expenseTotal)}</div></div><div class="finance-kpi"><div class="finance-kpi-label">淨額</div><div class="finance-kpi-value">NT$ ${money(net)}</div></div>`;
+            const rows=[];incomes.forEach(e=>rows.push({kind:'income',date:e.date||'',item:e}));if(financeStatus==='all')expenses.forEach(e=>rows.push({kind:'expense',date:e.date||'',item:e}));rows.sort((a,b)=>b.date.localeCompare(a.date));
+            const title=document.getElementById('finance-list-title');
+            if(title){
+                const label = financeStatus==='paid' ? '已收款' : financeStatus==='unpaid' ? '尚未收到款' : '帳務明細';
+                title.innerHTML=`<i data-lucide="list-checks" size="16"></i> ${label}`;
+            }
+            list.innerHTML=rows.length?rows.map(r=>{if(r.kind==='income'){const e=r.item;return `<div class="finance-row flex justify-between items-center p-3 rounded-xl border cursor-pointer" onclick="togglePaid(${e.id})"><div class="flex items-center gap-3 min-w-0"><div class="w-5 h-5 rounded border ${e.isPaid?'bg-black border-black':'border-zinc-400'} flex items-center justify-center flex-none">${e.isPaid?'<i data-lucide="check" size="12" class="text-white"></i>':''}</div><div class="min-w-0"><div class="finance-title font-bold truncate">${e.title}</div><div class="finance-date">${e.date} · ${e.isPaid?'已收':'待收'}</div></div></div><div class="finance-amount">$${money(e.fee)}</div></div>`;}const e=r.item;return `<div class="finance-row finance-expense-row flex justify-between items-center p-3 rounded-xl border cursor-pointer" onclick="openExpenseModal(${e.id})"><div class="flex items-center gap-3 min-w-0"><div class="w-5 h-5 flex items-center justify-center"><i data-lucide="receipt" size="15"></i></div><div class="min-w-0"><div class="finance-title font-bold truncate">${e.title}</div><div class="finance-date">${e.date} · ${e.category||'支出'}</div></div></div><div class="finance-amount">-$${money(e.amount)}</div></div>`;}).join(''):`<div class="finance-empty">${financeStatus==='paid'?'目前沒有已收款':financeStatus==='unpaid'?'目前沒有未收款':'此期間尚無帳務資料'}</div>`;lucide.createIcons();
         }
-        function togglePaid(id) { const ev = appData.events.find(x => x.id === id); if(ev) { ev.isPaid = !ev.isPaid; saveData(); } }
-        function renderStage() {
-            const list = document.getElementById('stage-list');
-            const events = appData.events ? appData.events.filter(e => e.type === 'performance').sort((a,b) => b.date.localeCompare(a.date)) : [];
-            list.innerHTML = events.map(e => `<div class="glass p-4 rounded-xl border-l-4 border-[#c5a059] relative mb-3" onclick="openEventModal(${e.id})"><div><div class="flex justify-between mb-1"><span class="text-[9px] font-zh font-bold bg-[#c5a059]/10 text-[#c5a059] px-1.5 py-0.5 rounded border border-[#c5a059]/20">${e.perfType || '演出'}</span><span class="text-[10px] text-zinc-500 font-num font-bold">${e.date}</span></div><h3 class="text-base text-[#e8e6e3] font-bold font-zh mb-2">${e.title}</h3><div class="text-[10px] text-zinc-400 font-zh">地點：${e.location}</div></div></div>`).join('');
-        }
+        function togglePaid(id){const ev=getEventsArray().find(x=>x.id===id);if(ev){ev.isPaid=!ev.isPaid;saveData();}}
+        function renderStage(){const list=document.getElementById('stage-list'),sum=document.getElementById('stage-summary'),events=getEventsArray().filter(e=>e.type==='performance').sort((a,b)=>(b.date||'').localeCompare(a.date||''));const today=fmtDate(new Date()),upcoming=events.filter(e=>(e.date||'')>=today),year=viewDate.getFullYear(),yearE=events.filter(e=>String(e.date||'').startsWith(String(year))),rev=yearE.reduce((s,e)=>s+Number(e.fee||0),0);if(sum)sum.innerHTML=`<div class="mini-stat"><div class="mini-stat-label">即將演出</div><div class="mini-stat-value">${upcoming.length}</div></div><div class="mini-stat"><div class="mini-stat-label">${year} 演出</div><div class="mini-stat-value">${yearE.length}</div></div><div class="mini-stat"><div class="mini-stat-label">年度收入</div><div class="mini-stat-value">NT$ ${money(rev)}</div></div>`;list.innerHTML=events.map(e=>`<div class="glass p-4 rounded-xl relative mb-3 cursor-pointer" onclick="openEventModal(${e.id})"><div class="flex justify-between mb-1"><span class="text-[9px] font-bold bg-black/5 px-1.5 py-0.5 rounded">${e.perfType||'演出'}</span><span class="text-[10px] font-num">${e.date}</span></div><h3 class="text-base font-bold font-zh mb-2">${e.title}</h3><div class="flex text-[10px] text-zinc-500"><span>${e.location||''}</span>${Number(e.fee)>0?`<span class="ml-auto font-num">$${money(e.fee)}</span>`:''}</div></div>`).join('');}
+
+        function openTaskModal(id=null){closeActionSheet();const t=id?getTasksArray().find(x=>x.id===id):null;document.getElementById('task-id').value=t?.id||'';document.getElementById('task-title').value=t?.title||'';document.getElementById('task-date').value=t?.dueDate||fmtDate(new Date());document.getElementById('task-note').value=t?.note||'';document.getElementById('task-delete').classList.toggle('hidden',!t);openModal('modal-task');lucide.createIcons();}
+        function saveTask(){const title=document.getElementById('task-title').value.trim();if(!title)return;const id=Number(document.getElementById('task-id').value)||Date.now(),arr=getTasksArray(),idx=arr.findIndex(x=>x.id===id),obj={id,title,dueDate:document.getElementById('task-date').value,note:document.getElementById('task-note').value,done:idx>=0?!!arr[idx].done:false};if(idx>=0)arr[idx]=obj;else arr.push(obj);appData.tasks=arr;saveData();closeModal('modal-task');}
+        function toggleTask(id){const t=getTasksArray().find(x=>x.id===id);if(t){t.done=!t.done;appData.tasks=getTasksArray();saveData();}}
+        function deleteTask(){const id=Number(document.getElementById('task-id').value);if(id&&confirm('刪除此待辦？')){appData.tasks=getTasksArray().filter(x=>x.id!==id);saveData();closeModal('modal-task');}}
+        function openExpenseModal(id=null){closeActionSheet();const e=id?getExpensesArray().find(x=>x.id===id):null;document.getElementById('expense-id').value=e?.id||'';document.getElementById('expense-title').value=e?.title||'';document.getElementById('expense-date').value=e?.date||fmtDate(new Date());document.getElementById('expense-category').value=e?.category||'器材';document.getElementById('expense-amount').value=e?.amount||'';document.getElementById('expense-note').value=e?.note||'';document.getElementById('expense-delete').classList.toggle('hidden',!e);openModal('modal-expense');lucide.createIcons();}
+        function saveExpense(){const title=document.getElementById('expense-title').value.trim(),amount=Number(document.getElementById('expense-amount').value);if(!title||!amount)return alert('請填寫支出項目與金額');const id=Number(document.getElementById('expense-id').value)||Date.now(),arr=getExpensesArray(),idx=arr.findIndex(x=>x.id===id),obj={id,title,date:document.getElementById('expense-date').value,category:document.getElementById('expense-category').value,amount,note:document.getElementById('expense-note').value};if(idx>=0)arr[idx]=obj;else arr.push(obj);appData.expenses=arr;saveData();closeModal('modal-expense');}
+        function deleteExpense(){const id=Number(document.getElementById('expense-id').value);if(id&&confirm('刪除此支出？')){appData.expenses=getExpensesArray().filter(x=>x.id!==id);saveData();closeModal('modal-expense');}}
+        function openSearchModal(){openModal('modal-search');setTimeout(()=>document.getElementById('global-search')?.focus(),100);renderSearchResults();lucide.createIcons();}
+        function renderSearchResults(){const q=(document.getElementById('global-search')?.value||'').trim().toLowerCase(),box=document.getElementById('search-results');if(!box)return;if(!q){box.innerHTML='<div class="text-center py-8 text-zinc-500 text-xs">輸入關鍵字搜尋全部資料</div>';return;}const results=[];(Array.isArray(appData.profiles)?appData.profiles:[]).forEach(p=>{if(`${p.name} ${p.contact||''}`.toLowerCase().includes(q))results.push({type:p.type==='school'?'學校':'學生',title:p.name,meta:p.contact||'',action:`closeModal('modal-search');openProfileDetail(${p.id})`});});getEventsArray().forEach(e=>{if(`${e.title} ${e.location||''} ${e.date||''}`.toLowerCase().includes(q))results.push({type:'行程',title:e.title,meta:`${e.date||''} ${e.startTime||''}`,action:`closeModal('modal-search');openEventModal(${e.id})`});});getTasksArray().forEach(t=>{if(`${t.title} ${t.note||''}`.toLowerCase().includes(q))results.push({type:'待辦',title:t.title,meta:t.dueDate||'',action:`closeModal('modal-search');openTaskModal(${t.id})`});});box.innerHTML=results.slice(0,30).map(r=>`<div class="search-result" onclick="${r.action}"><div class="search-type">${r.type}</div><div class="search-title">${r.title}</div><div class="search-meta">${r.meta}</div></div>`).join('')||'<div class="text-center py-8 text-zinc-500 text-xs">找不到符合資料</div>';}
 
         // Modal Controls
         function openEventModal(id = null, forceType = null, refId = null) {
@@ -556,12 +1540,11 @@
         function renderSubs() { document.getElementById('sub-list').innerHTML = (appData.subs || []).map(s => `<div class="flex justify-between items-center bg-white/5 p-3 rounded-xl"><div><div class="text-white text-sm font-bold">${s.name}</div><div class="text-xs text-zinc-500">${s.phone}</div></div><div class="flex gap-2"><a href="tel:${s.phone}" class="bg-green-600/20 text-green-500 p-2 rounded-lg"><i data-lucide="phone" size="16"></i></a><button onclick="delSub(${s.id})" class="text-red-500 p-2"><i data-lucide="trash-2" size="16"></i></button></div></div>`).join(''); lucide.createIcons(); }
         function addSub() { const n = document.getElementById('sub-name').value, p = document.getElementById('sub-phone').value; if(n) { if(!appData.subs) appData.subs = []; appData.subs.push({ id: Date.now(), name: n, phone: p }); document.getElementById('sub-name').value = ''; document.getElementById('sub-phone').value = ''; saveData(); renderSubs(); } }
         function delSub(id) { appData.subs = appData.subs.filter(s => s.id !== id); saveData(); renderSubs(); }
-        function switchTab(viewId, btn) { ['view-schedule', 'view-teaching', 'view-stage', 'view-finance'].forEach(id => document.getElementById(id).classList.add('hidden-tab')); document.getElementById(viewId).classList.remove('hidden-tab'); document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active')); if(btn) btn.classList.add('active'); }
+        function switchTab(viewId, btn) { ['view-schedule', 'view-teaching', 'view-stage', 'view-finance'].forEach(id => document.getElementById(id).classList.add('hidden-tab')); document.getElementById(viewId).classList.remove('hidden-tab'); document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active')); if(btn) btn.classList.add('active'); const main=document.getElementById('main-container'); if(main) main.scrollTop=0; if(viewId==='view-schedule'){renderDashboard();renderSchedule();renderTaskPreview();} if(viewId==='view-teaching')renderTeaching(); if(viewId==='view-stage')renderStage(); if(viewId==='view-finance'){populateFinanceFilters();renderFinance();} }
         function openActionSheet() { document.getElementById('action-sheet-overlay').classList.remove('hidden','opacity-0'); document.getElementById('action-sheet').classList.remove('translate-y-full'); }
         function closeActionSheet() { document.getElementById('action-sheet-overlay').classList.add('opacity-0'); document.getElementById('action-sheet').classList.add('translate-y-full'); setTimeout(()=>document.getElementById('action-sheet-overlay').classList.add('hidden'),300); }
         function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
         function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
-        function filterTeaching(type, btn) { document.querySelectorAll('.t-filter').forEach(b => b.classList.remove('bg-[#c5a059]','text-[#12100e]')); btn.classList.add('bg-[#c5a059]','text-[#12100e]'); renderTeaching(type); }
         function openSettings() { openModal('modal-settings'); }
         function exportData() { navigator.clipboard.writeText(JSON.stringify(appData)).then(() => alert('已複製資料代碼！')); }
         function setEventType(type) { openEventModal(null, type); }
