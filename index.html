@@ -1260,6 +1260,119 @@
         .schedule-utility-btn{font-size:11px; font-weight:700; color:#7f786f; padding:8px 12px; border-radius:12px; border:1px solid rgba(17,17,17,.08); background:rgba(255,255,255,.48)}
         .schedule-utility-btn:hover{color:#111; background:rgba(255,255,255,.76)}
 
+        /* ===== 2.6 real day timeline ===== */
+        #schedule-list{display:block!important;min-height:0!important}
+        .day-timeline{
+            position:relative;
+            min-height:1152px;
+            margin-top:8px;
+            margin-bottom:16px;
+            background:rgba(255,255,255,.34);
+            border:1px solid rgba(17,17,17,.08);
+            border-radius:20px;
+            overflow:hidden;
+        }
+        .timeline-hour{
+            position:absolute;
+            left:0;right:0;
+            height:64px;
+        }
+        .timeline-hour-label{
+            position:absolute;
+            left:14px;
+            top:-9px;
+            padding:0 5px;
+            background:#f6f3ec;
+            color:#8c857b;
+            font-family:'DM Serif Display',Georgia,serif!important;
+            font-size:12px;
+            line-height:18px;
+            z-index:2;
+        }
+        .timeline-hour-line{
+            position:absolute;
+            left:64px;right:0;top:0;
+            border-top:1px solid rgba(17,17,17,.07);
+        }
+        .timeline-half-line{
+            position:absolute;
+            left:64px;right:0;top:32px;
+            border-top:1px dashed rgba(17,17,17,.035);
+        }
+        .timeline-event{
+            position:absolute;
+            left:72px;right:12px;
+            min-height:40px;
+            border-radius:13px;
+            padding:8px 38px 8px 11px;
+            background:rgba(255,255,255,.94);
+            border:1px solid rgba(17,17,17,.10);
+            box-shadow:0 6px 18px rgba(0,0,0,.07);
+            cursor:grab;
+            user-select:none;
+            touch-action:none;
+            z-index:5;
+        }
+        .timeline-event.dragging{
+            cursor:grabbing;
+            box-shadow:0 16px 34px rgba(0,0,0,.16);
+            transform:scale(1.01);
+            z-index:20;
+        }
+        .timeline-event.type-performance{border-left:4px solid #b18a45}
+        .timeline-event.type-rehearsal{border-left:4px solid #777169}
+        .timeline-event.type-school{border-left:4px solid #373737}
+        .timeline-event.type-lesson{border-left:4px solid #111}
+        .timeline-event-time{
+            font-family:'DM Serif Display',Georgia,serif!important;
+            font-size:13px;
+            color:#161616;
+            margin-bottom:2px;
+        }
+        .timeline-event-title{
+            font-family:'Noto Serif TC','Songti TC','PMingLiU',serif!important;
+            font-size:13px;
+            font-weight:700;
+            color:#111;
+            white-space:nowrap;
+            overflow:hidden;
+            text-overflow:ellipsis;
+        }
+        .timeline-event-meta{
+            margin-top:3px;
+            font-size:10px;
+            color:#7c756c;
+            white-space:nowrap;
+            overflow:hidden;
+            text-overflow:ellipsis;
+        }
+        .timeline-event-handle{
+            position:absolute;
+            right:10px;
+            top:50%;
+            transform:translateY(-50%);
+            width:24px;height:32px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            color:#8d867c;
+            pointer-events:none;
+        }
+        .timeline-empty{
+            position:absolute;
+            left:0;right:0;top:45%;
+            text-align:center;
+            color:#9a938a;
+            font-size:12px;
+            pointer-events:none;
+        }
+        @media(max-width:700px){
+            .day-timeline{min-height:1080px;border-radius:16px}
+            .timeline-event{left:58px;right:8px;padding-right:32px}
+            .timeline-hour-label{left:8px}
+            .timeline-hour-line,.timeline-half-line{left:50px}
+        }
+
     </style>
 </head>
 <body class="flex flex-col">
@@ -1293,11 +1406,7 @@
                 </div>
                 <button onclick="changeViewDate(1)" class="p-2 text-zinc-500 hover:text-[#c5a059] transition"><i data-lucide="chevron-right" size="24"></i></button>
             </div>
-            <div class="schedule-utility-row">
-                <button type="button" class="schedule-utility-btn" onclick="deleteAllEvents()">一鍵刪除全部行程</button>
-            </div>
-
-            <div id="compact-schedule-view">
+<div id="compact-schedule-view">
                 <div id="calendar-grid" class="grid grid-cols-7 gap-1.5 mb-1"></div>
             </div>
 
@@ -1308,7 +1417,7 @@
                 <div id="month-calendar-grid" class="month-grid"></div>
             </div>
 
-            <div id="schedule-list" class="space-y-3 min-h-[50vh] pb-10"></div>
+            <div id="schedule-list" class="pb-10"><div id="day-timeline" class="day-timeline"></div></div>
         </div>
 
         <div id="view-teaching"<div id="view-teaching" class="space-y-5 hidden-tab fade-in">
@@ -1398,7 +1507,6 @@
                 <h4 class="text-[10px] text-[#c5a059] font-zh font-bold mb-3">資料管理</h4>
                 <div class="flex gap-3">
                     <button onclick="exportData()" class="flex-1 py-3 bg-zinc-800 rounded-xl text-xs font-zh text-zinc-400 hover:text-white hover:bg-zinc-700 transition flex items-center justify-center gap-2 font-bold"><i data-lucide="download" size="14"></i> 備份代碼</button>
-                    <button onclick="deleteAllEvents()" class="flex-1 py-3 bg-red-900/10 rounded-xl text-xs font-zh text-red-500 hover:bg-red-900/20 transition flex items-center justify-center gap-2 font-bold border border-red-500/20"><i data-lucide="trash-2" size="14"></i> 清空全部行程</button>
                 </div>
             </div>
             <button onclick="closeModal('modal-settings')" class="w-full mt-6 py-3 text-zinc-500 font-en tracking-[0.2em] font-bold text-[10px] uppercase hover:text-white transition">CLOSE</button>
@@ -1459,7 +1567,8 @@
                     <div class="flex items-center gap-2 transition-opacity duration-300 opacity-50" id="recur-input-group"><span class="text-[10px] text-zinc-500 font-zh font-bold">重複</span><input type="number" id="evt-recur-weeks" value="1" disabled class="input-mini rounded-lg text-xs bg-black/50 text-[#c5a059] font-num" min="1" max="24"><span class="text-[10px] text-zinc-500 font-zh font-bold">週</span></div>
                 </div>
                 <div class="flex gap-3 mt-4 pt-4 border-t border-white/10">
-                    <button id="btn-delete-evt" onclick="deleteEvent()" class="hidden flex-1 py-3 bg-red-900/10 text-red-500 font-bold rounded-xl border border-red-500/30 text-xs">刪除</button>
+                    <button id="btn-delete-evt" onclick="deleteSingleEvent()" class="hidden flex-1 py-3 bg-red-900/10 text-red-500 font-bold rounded-xl border border-red-500/30 text-xs">刪除此筆</button>
+                    <button id="btn-delete-future-evt" onclick="deleteFutureFromEvent()" class="hidden flex-1 py-3 bg-amber-900/10 text-amber-600 font-bold rounded-xl border border-amber-500/30 text-xs">取消後續</button>
                     <button onclick="saveEvent()" class="flex-[3] py-3 btn-gold rounded-xl font-zh text-sm shadow-lg transition">確認儲存</button>
                 </div>
             </div>
@@ -1470,7 +1579,11 @@
         <div class="absolute inset-0 bg-black/90 backdrop-blur-md" onclick="closeModal('modal-detail')"></div>
         <div class="relative bg-[#181614] w-full max-w-md rounded-t-[2rem] sm:rounded-[2rem] p-6 shadow-2xl border border-[#c5a059]/20 max-h-[90vh] overflow-y-auto slide-up">
             <div class="flex justify-between items-start mb-6"><div><h3 id="det-name" class="text-2xl text-white font-bold font-zh">名稱</h3><p id="det-info" class="text-xs text-zinc-500 mt-1 font-zh font-bold">Info</p></div><button onclick="closeModal('modal-detail')" class="text-zinc-500"><i data-lucide="x" size="24"></i></button></div>
-            <div class="grid grid-cols-2 gap-3 mb-6"><button onclick="openEventModalForDetail()" class="bg-[#c5a059] text-[#12100e] py-3 rounded-xl font-bold font-zh text-xs shadow-lg">+ 新增排課</button><button onclick="deleteProfile()" class="bg-zinc-900 text-red-500 py-3 rounded-xl font-bold font-zh text-xs border border-white/5 transition">刪除資料</button></div>
+            <div class="grid grid-cols-2 gap-3 mb-3">
+                <button onclick="openEventModalForDetail()" class="bg-[#c5a059] text-[#12100e] py-3 rounded-xl font-bold font-zh text-xs shadow-lg">+ 新增排課</button>
+                <button onclick="cancelFutureScheduleForProfile()" class="bg-zinc-900 text-amber-500 py-3 rounded-xl font-bold font-zh text-xs border border-amber-500/20 transition">取消後續排程</button>
+            </div>
+            <button onclick="deleteProfile()" class="w-full mb-6 bg-zinc-900 text-red-500 py-3 rounded-xl font-bold font-zh text-xs border border-white/5 transition">刪除整份資料</button>
             <h4 class="text-[10px] text-[#c5a059] font-zh tracking-widest font-bold mb-3 border-b border-white/10 pb-2">上課紀錄</h4>
             <div id="det-history" class="space-y-4 pb-8"></div>
         </div>
@@ -1642,77 +1755,171 @@
             const target = scheduleLayout==='month' ? btns[1] : btns[0];
             if(target) target.classList.add('active');
         }
-        function eventOrderValue(e){
-            const n = Number(e?.sortOrder);
-            return Number.isFinite(n) ? n : null;
+
+        function timeToMinutes(t){
+            if(!t || !/^\d{2}:\d{2}$/.test(t)) return 360;
+            const [h,m]=t.split(':').map(Number);
+            return h*60+m;
         }
-        function sortEventsForDisplay(arr){
-            return [...arr].sort((a,b)=>{
-                const ao = eventOrderValue(a), bo = eventOrderValue(b);
-                if(ao !== null && bo !== null && ao !== bo) return ao - bo;
-                if(ao !== null && bo === null) return -1;
-                if(ao === null && bo !== null) return 1;
-                return (a.startTime||'').localeCompare(b.startTime||'') || Number(a.id||0) - Number(b.id||0);
+        function minutesToTime(total){
+            total=Math.max(0,Math.min(1439,Math.round(total)));
+            const h=Math.floor(total/60),m=total%60;
+            return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+        }
+        function snapMinutes(n,step=15){return Math.round(n/step)*step}
+
+        const TIMELINE_START=360;
+        const TIMELINE_END=1440;
+        const PX_PER_MIN=64/60;
+        let timelineDrag=null;
+
+        function renderDayTimeline(events){
+            const el=document.getElementById('day-timeline');
+            if(!el)return;
+            el.innerHTML='';
+
+            for(let h=6;h<24;h++){
+                const row=document.createElement('div');
+                row.className='timeline-hour';
+                row.style.top=`${(h-6)*64}px`;
+                row.innerHTML=`<div class="timeline-hour-label">${String(h).padStart(2,'0')}:00</div><div class="timeline-hour-line"></div><div class="timeline-half-line"></div>`;
+                el.appendChild(row);
+            }
+
+            const dayEvents=[...events].sort((a,b)=>(a.startTime||'').localeCompare(b.startTime||''));
+            if(!dayEvents.length){
+                const empty=document.createElement('div');
+                empty.className='timeline-empty';
+                empty.textContent='本日無行程';
+                el.appendChild(empty);
+            }
+
+            dayEvents.forEach(e=>{
+                const start=timeToMinutes(e.startTime);
+                const rawEnd=timeToMinutes(e.endTime||'');
+                const end=rawEnd>start?rawEnd:start+60;
+                const clampedStart=Math.max(TIMELINE_START,Math.min(start,TIMELINE_END-30));
+                const clampedEnd=Math.max(clampedStart+30,Math.min(end,TIMELINE_END));
+                const top=(clampedStart-TIMELINE_START)*PX_PER_MIN;
+                const height=Math.max(40,(clampedEnd-clampedStart)*PX_PER_MIN);
+
+                const node=document.createElement('div');
+                node.className=`timeline-event type-${e.type||'event'}`;
+                node.dataset.eventId=e.id;
+                node.style.top=`${top}px`;
+                node.style.height=`${height}px`;
+                node.innerHTML=`<div class="timeline-event-time">${e.startTime||''}${e.endTime?' – '+e.endTime:''}</div><div class="timeline-event-title">${e.title||'未命名行程'}</div><div class="timeline-event-meta">${e.location||''}${Number(e.fee)>0?` · $${money(e.fee)}`:''}</div><div class="timeline-event-handle"><i data-lucide="grip-vertical" size="15"></i></div>`;
+
+                node.addEventListener('pointerdown',ev=>startTimelineDrag(ev,e,node));
+                node.addEventListener('click',ev=>{
+                    if(node.dataset.dragged==='1'){node.dataset.dragged='0';return}
+                    openEventModal(e.id);
+                });
+                el.appendChild(node);
             });
+            lucide.createIcons();
         }
-        function nextSortOrderForDate(date){
-            const nums = getEventsArray().filter(e=>e && e.date===date).map(e=>Number(e.sortOrder)).filter(n=>Number.isFinite(n));
-            return (nums.length ? Math.max(...nums) : 0) + 1;
+
+        function startTimelineDrag(ev,e,node){
+            if(ev.button!==undefined && ev.button!==0)return;
+            const originalStart=timeToMinutes(e.startTime);
+            const originalEnd=Math.max(originalStart+30,timeToMinutes(e.endTime||''));
+            timelineDrag={
+                pointerId:ev.pointerId,
+                event:e,
+                node,
+                startY:ev.clientY,
+                originalTop:parseFloat(node.style.top)||0,
+                originalStart,
+                originalEnd,
+                moved:false
+            };
+            node.setPointerCapture?.(ev.pointerId);
+            node.classList.add('dragging');
+            node.addEventListener('pointermove',moveTimelineDrag);
+            node.addEventListener('pointerup',endTimelineDrag,{once:true});
+            node.addEventListener('pointercancel',endTimelineDrag,{once:true});
         }
-        function handleScheduleCardClick(ev,id){
-            if(isDraggingSchedule){
-                ev.preventDefault();
-                ev.stopPropagation();
-                return;
+
+        function moveTimelineDrag(ev){
+            if(!timelineDrag)return;
+            const dy=ev.clientY-timelineDrag.startY;
+            if(Math.abs(dy)>4)timelineDrag.moved=true;
+            const duration=timelineDrag.originalEnd-timelineDrag.originalStart;
+            let newStart=snapMinutes(timelineDrag.originalStart+dy/PX_PER_MIN,15);
+            newStart=Math.max(TIMELINE_START,Math.min(newStart,TIMELINE_END-duration));
+            timelineDrag.previewStart=newStart;
+            timelineDrag.node.style.top=`${(newStart-TIMELINE_START)*PX_PER_MIN}px`;
+            const t=timelineDrag.node.querySelector('.timeline-event-time');
+            if(t)t.textContent=`${minutesToTime(newStart)} – ${minutesToTime(newStart+duration)}`;
+        }
+
+        function endTimelineDrag(){
+            if(!timelineDrag)return;
+            const d=timelineDrag;
+            d.node.classList.remove('dragging');
+            d.node.removeEventListener('pointermove',moveTimelineDrag);
+
+            if(d.moved && Number.isFinite(d.previewStart)){
+                const duration=d.originalEnd-d.originalStart;
+                d.event.startTime=minutesToTime(d.previewStart);
+                d.event.endTime=minutesToTime(d.previewStart+duration);
+                d.node.dataset.dragged='1';
+                appData.events=getEventsArray();
+                saveData();
+            }else{
+                d.node.style.top=`${d.originalTop}px`;
             }
-            openEventModal(id);
+            timelineDrag=null;
         }
-        function onEventDragStart(ev,id){
-            draggedEventId = id;
-            isDraggingSchedule = true;
-            ev.dataTransfer.effectAllowed = 'move';
-            try{ ev.dataTransfer.setData('text/plain', String(id)); }catch(e){}
-            ev.currentTarget.classList.add('dragging');
-        }
-        function onEventDragOver(ev){
-            ev.preventDefault();
-            ev.dataTransfer.dropEffect = 'move';
-            ev.currentTarget.classList.add('drag-over');
-        }
-        function onEventDragLeave(ev){
-            ev.currentTarget.classList.remove('drag-over');
-        }
-        function onEventDrop(ev,targetId){
-            ev.preventDefault();
-            ev.currentTarget.classList.remove('drag-over');
-            if(!draggedEventId || draggedEventId === targetId) return;
-            const dateStr = fmtDate(viewDate);
-            const dayEvents = sortEventsForDisplay(getEventsArray().filter(e=>e && e.date===dateStr));
-            const fromIdx = dayEvents.findIndex(e=>e.id===draggedEventId);
-            const toIdx = dayEvents.findIndex(e=>e.id===targetId);
-            if(fromIdx < 0 || toIdx < 0) return;
-            const moved = dayEvents.splice(fromIdx,1)[0];
-            dayEvents.splice(toIdx,0,moved);
-            dayEvents.forEach((e,i)=>{ e.sortOrder = i + 1; });
-            appData.events = getEventsArray();
+
+        function cancelFutureScheduleForProfile(){
+            const profile=(Array.isArray(appData.profiles)?appData.profiles:[]).find(p=>p.id===activeProfileId);
+            if(!profile)return;
+            const defaultDate=fmtDate(new Date());
+            const cutoff=prompt(`從哪一天起取消「${profile.name}」的後續排程？\n過去上課紀錄會保留。`,defaultDate);
+            if(!cutoff)return;
+            if(!/^\d{4}-\d{2}-\d{2}$/.test(cutoff))return alert('日期格式請輸入 YYYY-MM-DD');
+
+            const matches=getEventsArray().filter(e=>e.refId===activeProfileId&&(e.date||'')>=cutoff);
+            if(!matches.length)return alert('這個日期之後沒有排程');
+            if(!confirm(`確定取消 ${cutoff} 起的 ${matches.length} 筆「${profile.name}」排程？\n過去紀錄不會刪除。`))return;
+
+            const ids=new Set(matches.map(e=>e.id));
+            appData.events=getEventsArray().filter(e=>!ids.has(e.id));
             saveData();
+            openProfileDetail(activeProfileId);
         }
-        function onEventDragEnd(ev){
-            document.querySelectorAll('.schedule-card').forEach(el=>el.classList.remove('dragging','drag-over'));
-            draggedEventId = null;
-            setTimeout(()=>{ isDraggingSchedule = false; }, 0);
-        }
-        function deleteAllEvents(){
-            if(!getEventsArray().length){
-                alert('目前沒有任何行程資料');
-                return;
-            }
-            if(!confirm('確定要一鍵刪除全部行程嗎？此動作無法復原。')) return;
-            appData.events = [];
+
+        function deleteSingleEvent(){
+            const ev=getEventsArray().find(e=>e.id===editingEventId);
+            if(!ev)return;
+            if(!confirm(`確定只刪除「${ev.title}」這一筆 ${ev.date} 的行程？`))return;
+            appData.events=getEventsArray().filter(e=>e.id!==editingEventId);
             saveData();
             closeModal('modal-event');
-            closeModal('modal-detail');
-            closeModal('modal-settings');
+        }
+
+        function deleteFutureFromEvent(){
+            const ev=getEventsArray().find(e=>e.id===editingEventId);
+            if(!ev)return;
+
+            let matches=[];
+            if(ev.refId){
+                matches=getEventsArray().filter(e=>e.refId===ev.refId&&(e.date||'')>=ev.date);
+            }else if(ev.groupId){
+                matches=getEventsArray().filter(e=>e.groupId===ev.groupId&&(e.date||'')>=ev.date);
+            }else{
+                matches=[ev];
+            }
+
+            if(!matches.length)return;
+            if(!confirm(`確定從 ${ev.date} 起取消 ${matches.length} 筆後續排程？\n之前的紀錄會保留。`))return;
+
+            const ids=new Set(matches.map(e=>e.id));
+            appData.events=getEventsArray().filter(e=>!ids.has(e.id));
+            saveData();
+            closeModal('modal-event');
         }
 
         function renderDashboard(){
@@ -1732,110 +1939,97 @@
             return `<div class="glass p-4 rounded-xl relative group active:scale-[0.98] transition cursor-pointer schedule-card" draggable="true" data-event-id="${e.id}" onclick="handleScheduleCardClick(event, ${e.id})" ondragstart="onEventDragStart(event, ${e.id})" ondragover="onEventDragOver(event)" ondragleave="onEventDragLeave(event)" ondrop="onEventDrop(event, ${e.id})" ondragend="onEventDragEnd(event)"><div class="schedule-card-head"><div class="schedule-card-content"><div class="flex items-center gap-2 mb-1.5"><span class="text-[9px] font-zh font-bold bg-black/5 px-1.5 py-0.5 rounded text-zinc-500">${typeLabel}</span><span class="text-xs font-num font-bold">${e.startTime||''}${e.endTime?' - '+e.endTime:''}</span></div><h3 class="text-base font-bold font-zh mb-1 leading-snug">${e.title||'未命名行程'}</h3><div class="flex gap-2 text-[10px] text-zinc-500">${e.location?`<span>${e.location}</span>`:''}${Number(e.fee)>0?`<span class="ml-auto font-num">$${money(e.fee)}</span>`:''}</div></div><div class="schedule-drag-handle" title="拖曳排序"><i data-lucide="grip-vertical" size="15"></i></div></div></div>`;
         }
         function renderSchedule() {
-            const gridEl = document.getElementById('calendar-grid');
-            const monthGridEl = document.getElementById('month-calendar-grid');
-            const listEl = document.getElementById('schedule-list');
-            const compactView = document.getElementById('compact-schedule-view');
-            const monthView = document.getElementById('month-schedule-view');
-            if (!gridEl || !listEl || !compactView || !monthView || !monthGridEl) return;
+            const gridEl=document.getElementById('calendar-grid');
+            const monthGridEl=document.getElementById('month-calendar-grid');
+            const listEl=document.getElementById('schedule-list');
+            const compactView=document.getElementById('compact-schedule-view');
+            const monthView=document.getElementById('month-schedule-view');
+            if(!gridEl||!listEl||!compactView||!monthView||!monthGridEl)return;
 
             syncScheduleLayoutButtons();
-            const events = getEventsArray();
+            const events=getEventsArray();
 
-            if (scheduleLayout === 'month') {
+            if(scheduleLayout==='month'){
                 compactView.classList.add('hidden');
                 monthView.classList.remove('hidden');
                 listEl.classList.add('hidden');
-                listEl.innerHTML = '';
 
-                const monthStart = new Date(viewDate.getFullYear(), viewDate.getMonth(), 1);
-                const monthEnd = new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 0);
-                document.getElementById('cal-range').innerText =
-                    monthStart.toLocaleDateString('en-US', { month: 'long' });
-                document.getElementById('cal-mode').innerText = monthStart.getFullYear();
+                const monthStart=new Date(viewDate.getFullYear(),viewDate.getMonth(),1);
+                const monthEnd=new Date(viewDate.getFullYear(),viewDate.getMonth()+1,0);
+                document.getElementById('cal-range').innerText=monthStart.toLocaleDateString('en-US',{month:'long'});
+                document.getElementById('cal-mode').innerText=monthStart.getFullYear();
 
-                const gridStart = new Date(monthStart);
-                gridStart.setDate(monthStart.getDate() - monthStart.getDay());
-                const gridEnd = new Date(monthEnd);
-                gridEnd.setDate(monthEnd.getDate() + (6 - monthEnd.getDay()));
+                const gridStart=new Date(monthStart);
+                gridStart.setDate(monthStart.getDate()-monthStart.getDay());
+                const gridEnd=new Date(monthEnd);
+                gridEnd.setDate(monthEnd.getDate()+(6-monthEnd.getDay()));
 
-                monthGridEl.innerHTML = '';
-                for (let d = new Date(gridStart); d <= gridEnd; d.setDate(d.getDate() + 1)) {
-                    const current = new Date(d);
-                    const dateStr = fmtDate(current);
-                    const dayEvents = sortEventsForDisplay(events.filter(e => e && e.date === dateStr));
-                    const isOtherMonth = current.getMonth() !== viewDate.getMonth();
-                    const isSelected = dateStr === fmtDate(viewDate);
-                    const isToday = dateStr === fmtDate(new Date());
+                monthGridEl.innerHTML='';
+                for(let d=new Date(gridStart);d<=gridEnd;d.setDate(d.getDate()+1)){
+                    const current=new Date(d);
+                    const dateStr=fmtDate(current);
+                    const dayEvents=[...events.filter(e=>e&&e.date===dateStr)].sort((a,b)=>(a.startTime||'').localeCompare(b.startTime||''));
+                    const isOtherMonth=current.getMonth()!==viewDate.getMonth();
+                    const isSelected=dateStr===fmtDate(viewDate);
+                    const isToday=dateStr===fmtDate(new Date());
 
-                    const cell = document.createElement('div');
-                    cell.className = `month-day${isOtherMonth ? ' is-other' : ''}${isSelected ? ' is-selected' : ''}${isToday ? ' is-today' : ''}`;
-                    cell.onclick = () => {
-                        viewDate = new Date(current);
-                        scheduleLayout = 'compact';
+                    const cell=document.createElement('div');
+                    cell.className=`month-day${isOtherMonth?' is-other':''}${isSelected?' is-selected':''}${isToday?' is-today':''}`;
+                    cell.onclick=()=>{
+                        viewDate=new Date(current);
+                        scheduleLayout='compact';
                         syncScheduleLayoutButtons();
                         renderSchedule();
                         renderFinance();
                     };
 
-                    const visible = dayEvents.slice(0, 3).map(e => {
-                        const time = e.startTime ? `<span class="evt-time">${e.startTime}</span>` : '';
-                        const title = e.title || '未命名行程';
-                        const typeClass = e.type ? `type-${e.type}` : '';
+                    const visible=dayEvents.slice(0,3).map(e=>{
+                        const time=e.startTime?`<span class="evt-time">${e.startTime}</span>`:'';
+                        const title=e.title||'未命名行程';
+                        const typeClass=e.type?`type-${e.type}`:'';
                         return `<div class="month-event-row ${typeClass}" title="${title}">${time}${title}</div>`;
                     }).join('');
-                    const more = dayEvents.length > 3 ? `<div class="month-more">+${dayEvents.length - 3} more</div>` : '';
+                    const more=dayEvents.length>3?`<div class="month-more">+${dayEvents.length-3} more</div>`:'';
 
-                    cell.innerHTML = `
-                        <div class="month-day-head">
-                            <span class="month-day-num">${current.getDate()}</span>
-                        </div>
-                        <div class="month-day-meta">
-                            <div class="month-event-list">${visible}${more}</div>
-                        </div>`;
+                    cell.innerHTML=`<div class="month-day-head"><span class="month-day-num">${current.getDate()}</span></div><div class="month-day-meta"><div class="month-event-list">${visible}${more}</div></div>`;
                     monthGridEl.appendChild(cell);
                 }
-            } else {
+            }else{
                 compactView.classList.remove('hidden');
                 monthView.classList.add('hidden');
                 listEl.classList.remove('hidden');
 
-                const day = viewDate.getDay();
-                const diff = viewDate.getDate() - day + (day === 0 ? -6 : 1);
-                const monday = new Date(viewDate);
+                const day=viewDate.getDay();
+                const diff=viewDate.getDate()-day+(day===0?-6:1);
+                const monday=new Date(viewDate);
                 monday.setDate(diff);
-                const sunday = new Date(monday);
-                sunday.setDate(monday.getDate() + 6);
+                const sunday=new Date(monday);
+                sunday.setDate(monday.getDate()+6);
 
-                document.getElementById('cal-range').innerText =
-                    `${monday.toLocaleDateString('en-US',{month:'short',day:'numeric'})} - ${sunday.toLocaleDateString('en-US',{month:'short',day:'numeric'})}`;
-                document.getElementById('cal-mode').innerText = monday.getFullYear();
+                document.getElementById('cal-range').innerText=`${monday.toLocaleDateString('en-US',{month:'short',day:'numeric'})} - ${sunday.toLocaleDateString('en-US',{month:'short',day:'numeric'})}`;
+                document.getElementById('cal-mode').innerText=monday.getFullYear();
 
-                gridEl.innerHTML = '';
-                for (let i = 0; i < 7; i++) {
-                    const d = new Date(monday);
-                    d.setDate(monday.getDate() + i);
-                    const dateStr = fmtDate(d);
-                    const isSelected = dateStr === fmtDate(viewDate);
-                    const hasEvent = events.some(e => e && e.date === dateStr);
+                gridEl.innerHTML='';
+                for(let i=0;i<7;i++){
+                    const d=new Date(monday);
+                    d.setDate(monday.getDate()+i);
+                    const dateStr=fmtDate(d);
+                    const isSelected=dateStr===fmtDate(viewDate);
+                    const hasEvent=events.some(e=>e&&e.date===dateStr);
 
-                    const btn = document.createElement('div');
-                    btn.className = `h-14 rounded-xl flex flex-col items-center justify-center cursor-pointer border transition-all duration-300 ${isSelected ? 'bg-[#111] border-[#111] text-white shadow-md' : 'bg-white/5 border-white/5 text-zinc-500 hover:bg-white/10'}`;
-                    btn.onclick = () => {
-                        viewDate = new Date(d);
+                    const btn=document.createElement('div');
+                    btn.className=`h-14 rounded-xl flex flex-col items-center justify-center cursor-pointer border transition-all duration-300 ${isSelected?'bg-[#111] border-[#111] text-white shadow-md':'bg-white/5 border-white/5 text-zinc-500 hover:bg-white/10'}`;
+                    btn.onclick=()=>{
+                        viewDate=new Date(d);
                         renderSchedule();
                         renderFinance();
                     };
-                    btn.innerHTML = `<span class="text-[9px] font-en tracking-widest font-bold opacity-80">${d.toLocaleDateString('en-US',{weekday:'short'})}</span><span class="text-base font-bold font-en leading-none mt-0.5">${d.getDate()}</span>${hasEvent ? `<div class="w-1 h-1 rounded-full ${isSelected ? 'bg-white' : 'bg-black'} mt-1"></div>` : ''}`;
+                    btn.innerHTML=`<span class="text-[9px] font-en tracking-widest font-bold opacity-80">${d.toLocaleDateString('en-US',{weekday:'short'})}</span><span class="text-base font-bold font-en leading-none mt-0.5">${d.getDate()}</span>${hasEvent?`<div class="w-1 h-1 rounded-full ${isSelected?'bg-white':'bg-black'} mt-1"></div>`:''}`;
                     gridEl.appendChild(btn);
                 }
 
-                const dateStr = fmtDate(viewDate);
-                const dayEvents = sortEventsForDisplay(events.filter(e => e && e.date === dateStr));
-                const selectedLabel = new Date(viewDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', weekday: 'short' });
-                listEl.innerHTML = `<div class="schedule-day-caption">${selectedLabel}</div>` + (dayEvents.length
-                    ? dayEvents.map(renderEventCard).join('')
-                    : `<div class="flex flex-col items-center justify-center py-16 text-zinc-500 opacity-60"><i data-lucide="coffee" size="26" class="mb-2"></i><span class="font-zh text-xs">本日無行程</span></div>`);
+                const dateStr=fmtDate(viewDate);
+                renderDayTimeline(events.filter(e=>e&&e.date===dateStr));
             }
 
             lucide.createIcons();
@@ -1914,26 +2108,7 @@
             }
             saveData(); closeModal('modal-event');
         }
-
-        // --- 修復：強化刪除判斷 (整筆或單筆) ---
-        function deleteEvent() {
-            const ev = appData.events.find(e => e.id === editingEventId);
-            if(!ev) return;
-            const related = ev.groupId ? appData.events.filter(e => e.groupId === ev.groupId) : [];
-            if (related.length > 1) {
-                if (confirm(`這是一筆連動行程(共 ${related.length} 筆)。\n按「確定」一鍵全部刪除，按「取消」僅刪除這單項。`)) {
-                    appData.events = appData.events.filter(e => e.groupId !== ev.groupId);
-                } else if (confirm('確定僅刪除這一單筆嗎？')) {
-                    appData.events = appData.events.filter(e => e.id !== editingEventId);
-                } else return;
-            } else {
-                if (!confirm('確定刪除此行程？')) return;
-                appData.events = appData.events.filter(e => e.id !== editingEventId);
-            }
-            saveData(); closeModal('modal-event');
-        }
-
-        // 其餘功能 (Teaching/Finance/Stage/Modals) 保持最原始邏輯
+// 其餘功能 (Teaching/Finance/Stage/Modals) 保持最原始邏輯
         function renderTeaching(filterType = 'student') {
             const list=document.getElementById('teaching-list'); const summary=document.getElementById('teaching-summary'); const profiles=Array.isArray(appData.profiles)?appData.profiles:[]; const events=getEventsArray(); const data=profiles.filter(p=>p.type===filterType); const year=viewDate.getFullYear();
             const related=events.filter(e=>e.refId && data.some(p=>p.id===e.refId)); const yearRelated=related.filter(e=>String(e.date||'').startsWith(String(year))); const rev=yearRelated.reduce((s,e)=>s+Number(e.fee||0),0);
@@ -2005,7 +2180,22 @@
             lucide.createIcons();
         }
         function togglePaid(id){const ev=getEventsArray().find(x=>x.id===id);if(ev){ev.isPaid=!ev.isPaid;saveData();}}
-        function renderStage(){const list=document.getElementById('stage-list'),sum=document.getElementById('stage-summary'),events=getEventsArray().filter(e=>e.type==='performance').sort((a,b)=>(b.date||'').localeCompare(a.date||''));const today=fmtDate(new Date()),upcoming=events.filter(e=>(e.date||'')>=today),year=viewDate.getFullYear(),yearE=events.filter(e=>String(e.date||'').startsWith(String(year))),rev=yearE.reduce((s,e)=>s+Number(e.fee||0),0);if(sum)sum.innerHTML=`<div class="mini-stat"><div class="mini-stat-label">即將演出</div><div class="mini-stat-value">${upcoming.length}</div></div><div class="mini-stat"><div class="mini-stat-label">${year} 演出</div><div class="mini-stat-value">${yearE.length}</div></div><div class="mini-stat"><div class="mini-stat-label">年度收入</div><div class="mini-stat-value">NT$ ${money(rev)}</div></div>`;list.innerHTML=events.map(e=>`<div class="glass p-4 rounded-xl relative mb-3 cursor-pointer" onclick="openEventModal(${e.id})"><div class="flex justify-between mb-1"><span class="text-[9px] font-bold bg-black/5 px-1.5 py-0.5 rounded">${e.perfType||'演出'}</span><span class="text-[10px] font-num">${e.date}</span></div><h3 class="text-base font-bold font-zh mb-2">${e.title}</h3><div class="flex text-[10px] text-zinc-500"><span>${e.location||''}</span>${Number(e.fee)>0?`<span class="ml-auto font-num">$${money(e.fee)}</span>`:''}</div></div>`).join('');}
+        function renderStage(){
+            const list=document.getElementById('stage-list'),sum=document.getElementById('stage-summary');
+            const today=fmtDate(new Date());
+            const all=getEventsArray().filter(e=>e.type==='performance');
+            const upcoming=all.filter(e=>(e.date||'')>=today).sort((a,b)=>(a.date||'').localeCompare(b.date||'')||(a.startTime||'').localeCompare(b.startTime||''));
+            const past=all.filter(e=>(e.date||'')<today).sort((a,b)=>(b.date||'').localeCompare(a.date||'')||(b.startTime||'').localeCompare(a.startTime||''));
+            const events=[...upcoming,...past];
+
+            const year=viewDate.getFullYear();
+            const yearE=all.filter(e=>String(e.date||'').startsWith(String(year)));
+            const rev=yearE.reduce((s,e)=>s+Number(e.fee||0),0);
+
+            if(sum)sum.innerHTML=`<div class="mini-stat"><div class="mini-stat-label">即將演出</div><div class="mini-stat-value">${upcoming.length}</div></div><div class="mini-stat"><div class="mini-stat-label">${year} 演出</div><div class="mini-stat-value">${yearE.length}</div></div><div class="mini-stat"><div class="mini-stat-label">年度收入</div><div class="mini-stat-value">NT$ ${money(rev)}</div></div>`;
+
+            list.innerHTML=events.map(e=>`<div class="glass p-4 rounded-xl relative mb-3 cursor-pointer ${(e.date||'')<today?'opacity-55':''}" onclick="openEventModal(${e.id})"><div class="flex justify-between mb-1"><span class="text-[9px] font-bold bg-black/5 px-1.5 py-0.5 rounded">${e.perfType||'演出'}</span><span class="text-[10px] font-num">${e.date}</span></div><h3 class="text-base font-bold font-zh mb-2">${e.title}</h3><div class="flex text-[10px] text-zinc-500"><span>${e.location||''}</span>${Number(e.fee)>0?`<span class="ml-auto font-num">$${money(e.fee)}</span>`:''}</div></div>`).join('');
+        }
 
         function openTaskModal(id=null){closeActionSheet();const t=id?getTasksArray().find(x=>x.id===id):null;document.getElementById('task-id').value=t?.id||'';document.getElementById('task-title').value=t?.title||'';document.getElementById('task-date').value=t?.dueDate||fmtDate(new Date());document.getElementById('task-note').value=t?.note||'';document.getElementById('task-delete').classList.toggle('hidden',!t);openModal('modal-task');lucide.createIcons();}
         function saveTask(){const title=document.getElementById('task-title').value.trim();if(!title)return;const id=Number(document.getElementById('task-id').value)||Date.now(),arr=getTasksArray(),idx=arr.findIndex(x=>x.id===id),obj={id,title,dueDate:document.getElementById('task-date').value,note:document.getElementById('task-note').value,done:idx>=0?!!arr[idx].done:false};if(idx>=0)arr[idx]=obj;else arr.push(obj);appData.tasks=arr;saveData();closeModal('modal-task');}
@@ -2047,9 +2237,9 @@
                 document.getElementById('evt-start').value = e.startTime; document.getElementById('evt-end').value = e.endTime;
                 document.getElementById('evt-location').value = e.location; document.getElementById('evt-fee').value = e.fee;
                 document.getElementById('evt-fin-note').value = e.finNote || ''; document.getElementById('evt-dress').value = e.dressCode || '';
-                document.getElementById('btn-delete-evt').classList.remove('hidden'); document.getElementById('section-recur').classList.add('hidden');
+                document.getElementById('btn-delete-evt').classList.remove('hidden'); document.getElementById('btn-delete-future-evt').classList.remove('hidden'); document.getElementById('section-recur').classList.add('hidden');
             } else {
-                document.getElementById('btn-delete-evt').classList.add('hidden');
+                document.getElementById('btn-delete-evt').classList.add('hidden'); document.getElementById('btn-delete-future-evt').classList.add('hidden');
                 if(refId) { const p = appData.profiles.find(x => x.id === refId); if(p) document.getElementById('evt-title').value = p.name + (p.type==='school'?' 分部課':' 大提琴課'); }
             }
             document.getElementById('evt-type').value = type; document.getElementById('evt-ref-id').value = refId || '';
