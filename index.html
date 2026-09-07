@@ -1373,6 +1373,58 @@
             .timeline-hour-line,.timeline-half-line{left:50px}
         }
 
+        /* ===== 2.7 finance row actions ===== */
+        .finance-row{
+            cursor:default !important;
+        }
+        .finance-paid-toggle{
+            width:26px;
+            height:26px;
+            border-radius:9px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            flex:none;
+            border:1px solid rgba(17,17,17,.18);
+            background:rgba(255,255,255,.45);
+            transition:.18s ease;
+        }
+        .finance-paid-toggle.is-paid{
+            background:#111;
+            border-color:#111;
+            color:#fff;
+        }
+        .finance-row-actions{
+            display:flex;
+            align-items:center;
+            gap:5px;
+            margin-left:10px;
+            flex:none;
+        }
+        .finance-row-action{
+            width:30px;
+            height:30px;
+            border-radius:10px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            background:rgba(17,17,17,.035);
+            color:#6f685f;
+            border:1px solid rgba(17,17,17,.07);
+        }
+        .finance-row-action:hover{
+            background:rgba(17,17,17,.075);
+            color:#111;
+        }
+        .finance-row-action.delete{
+            color:#a64c47;
+        }
+        #modal-batch-delete select,
+        #modal-batch-delete input{
+            background:#fff !important;
+            color:#111 !important;
+        }
+
     </style>
 </head>
 <body class="flex flex-col">
@@ -1513,7 +1565,50 @@
         </div>
     </div>
 
-    <div id="modal-event" class="fixed inset-0 z-[60] hidden flex items-end sm:items-center justify-center px-0 sm:px-4 pb-0 sm:pb-4">
+    
+    <div id="modal-batch-delete" class="fixed inset-0 z-[75] hidden flex items-center justify-center px-6 bg-black/70 backdrop-blur-md">
+        <div class="bg-[#f8f7f3] w-full max-w-md rounded-[2rem] p-6 border border-black/10 shadow-2xl slide-up">
+            <div class="flex justify-between items-center mb-5">
+                <div>
+                    <h3 class="text-lg font-bold font-zh text-[#171717]">批次取消排程</h3>
+                    <p class="text-[11px] text-zinc-500 mt-1">保留過去紀錄，只取消指定日期之後的資料</p>
+                </div>
+                <button onclick="closeModal('modal-batch-delete')" class="text-zinc-500"><i data-lucide="x" size="20"></i></button>
+            </div>
+
+            <div class="space-y-4">
+                <div>
+                    <label class="text-[10px] text-zinc-500 font-bold block mb-1.5">類型</label>
+                    <select id="batch-delete-type" onchange="populateBatchDeleteTargets()">
+                        <option value="student">學生</option>
+                        <option value="school">學校</option>
+                        <option value="performance">演出</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="text-[10px] text-zinc-500 font-bold block mb-1.5">選擇對象</label>
+                    <select id="batch-delete-target"></select>
+                </div>
+
+                <div>
+                    <label class="text-[10px] text-zinc-500 font-bold block mb-1.5">從這一天起取消</label>
+                    <input id="batch-delete-date" type="date">
+                </div>
+
+                <div id="batch-delete-preview" class="rounded-xl border border-black/8 bg-black/[0.025] p-3 text-xs text-zinc-500">
+                    選好條件後，會顯示將取消的筆數。
+                </div>
+            </div>
+
+            <div class="flex gap-2 mt-5">
+                <button onclick="previewBatchDelete()" class="flex-1 py-3 rounded-xl border border-black/10 text-xs font-bold text-zinc-600">預覽</button>
+                <button onclick="confirmBatchDelete()" class="flex-[1.4] py-3 rounded-xl bg-[#111] text-white text-xs font-bold">確認取消後續</button>
+            </div>
+        </div>
+    </div>
+
+<div id="modal-event" class="fixed inset-0 z-[60] hidden flex items-end sm:items-center justify-center px-0 sm:px-4 pb-0 sm:pb-4">
         <div class="absolute inset-0 bg-black/90 backdrop-blur-md" onclick="closeModal('modal-event')"></div>
         <div class="relative bg-[#181614] w-full max-w-md rounded-t-[2rem] sm:rounded-[2rem] p-5 shadow-2xl border border-[#c5a059]/20 max-h-[90vh] overflow-y-auto slide-up">
             <div class="flex justify-between items-center mb-5 border-b border-white/5 pb-3">
@@ -1689,7 +1784,12 @@
         let currentReportEventId = null;
         const statusEl = document.getElementById('cloud-status');
 
-        document.addEventListener('DOMContentLoaded', () => { initRealtimeListener(); lucide.createIcons(); });
+        document.addEventListener('DOMContentLoaded', () => {
+            initRealtimeListener();
+            lucide.createIcons();
+            document.getElementById('batch-delete-target')?.addEventListener('change', updateBatchDeletePreview);
+            document.getElementById('batch-delete-date')?.addEventListener('change', updateBatchDeletePreview);
+        });
 
         function initRealtimeListener() {
             statusEl.className = 'syncing';
@@ -2147,38 +2247,77 @@
         function renderFinance() {
             const list=document.getElementById('finance-list');
             if(!list) return;
+
             const period=financePeriod();
-            const incomes=getEventsArray().filter(e=>Number(e.fee)>0).filter(period.incomeFilter);
+            const incomes=getEventsArray()
+                .filter(e=>Number(e.fee)>0)
+                .filter(period.incomeFilter);
+
             const gross=incomes.reduce((s,e)=>s+Number(e.fee||0),0);
             const received=incomes.filter(e=>e.isPaid).reduce((s,e)=>s+Number(e.fee||0),0);
             const pending=incomes.filter(e=>!e.isPaid).reduce((s,e)=>s+Number(e.fee||0),0);
 
             document.getElementById('fin-pending').textContent=`NT$ ${money(pending)}`;
             document.getElementById('fin-received').textContent=`NT$ ${money(received)}`;
+
             const badge=document.querySelector('[data-finance-month]');
             if(badge) badge.textContent=period.label;
 
             const k=document.getElementById('finance-kpis');
-            if(k)k.innerHTML=`<div class="finance-kpi"><div class="finance-kpi-label">預計收入</div><div class="finance-kpi-value">NT$ ${money(gross)}</div></div><div class="finance-kpi"><div class="finance-kpi-label">已收款</div><div class="finance-kpi-value">NT$ ${money(received)}</div></div><div class="finance-kpi"><div class="finance-kpi-label">未收款</div><div class="finance-kpi-value">NT$ ${money(pending)}</div></div>`;
+            if(k) k.innerHTML=`
+                <div class="finance-kpi"><div class="finance-kpi-label">預計收入</div><div class="finance-kpi-value">NT$ ${money(gross)}</div></div>
+                <div class="finance-kpi"><div class="finance-kpi-label">已收款</div><div class="finance-kpi-value">NT$ ${money(received)}</div></div>
+                <div class="finance-kpi"><div class="finance-kpi-label">未收款</div><div class="finance-kpi-value">NT$ ${money(pending)}</div></div>`;
 
-            const rows=[];
-            incomes.forEach(e=>rows.push({date:e.date||'',item:e}));
-            rows.sort((a,b)=> b.date.localeCompare(a.date) || (a.item.startTime||'').localeCompare(b.item.startTime||''));
+            const rows=[...incomes].sort((a,b)=>
+                (b.date||'').localeCompare(a.date||'') ||
+                (a.startTime||'').localeCompare(b.startTime||'')
+            );
 
             const title=document.getElementById('finance-list-title');
             if(title){
-                const label = financeStatus==='paid' ? '已收款' : financeStatus==='unpaid' ? '尚未收到款' : '帳務明細';
+                const label=financeStatus==='paid'?'已收款':financeStatus==='unpaid'?'尚未收到款':'帳務明細';
                 title.innerHTML=`<i data-lucide="list-checks" size="16"></i> ${label}`;
             }
 
-            list.innerHTML = rows.length
-                ? rows.map(r=>{
-                    const e=r.item;
-                    return `<div class="finance-row flex justify-between items-center p-3 rounded-xl border cursor-pointer" onclick="togglePaid(${e.id})"><div class="flex items-center gap-3 min-w-0"><div class="w-5 h-5 rounded border ${e.isPaid?'bg-black border-black':'border-zinc-400'} flex items-center justify-center flex-none">${e.isPaid?'<i data-lucide="check" size="12" class="text-white"></i>':''}</div><div class="min-w-0"><div class="finance-title font-bold truncate">${e.title}</div><div class="finance-date">${e.date} · ${e.isPaid?'已收':'待收'}</div></div></div><div class="finance-amount">$${money(e.fee)}</div></div>`;
-                }).join('')
-                : `<div class="finance-empty">${financeStatus==='paid'?'目前沒有已收款':financeStatus==='unpaid'?'目前沒有未收款':'此期間尚無帳務資料'}</div>`;
+            list.innerHTML = rows.length ? rows.map(e=>`
+                <div class="finance-row flex justify-between items-center p-3 rounded-xl border">
+                    <div class="flex items-center gap-3 min-w-0 flex-1">
+                        <button class="finance-paid-toggle ${e.isPaid?'is-paid':''}" onclick="togglePaid(${e.id})" title="${e.isPaid?'改為未收款':'標記已收款'}">
+                            ${e.isPaid?'<i data-lucide="check" size="13"></i>':''}
+                        </button>
+                        <div class="min-w-0 flex-1">
+                            <div class="finance-title font-bold truncate">${e.title||'未命名行程'}</div>
+                            <div class="finance-date">${e.date||''}${e.startTime?' · '+e.startTime:''} · ${e.isPaid?'已收':'待收'}</div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center flex-none">
+                        <div class="finance-amount">$${money(e.fee)}</div>
+                        <div class="finance-row-actions">
+                            <button class="finance-row-action" onclick="editFinanceEvent(${e.id})" title="編輯"><i data-lucide="pencil" size="14"></i></button>
+                            <button class="finance-row-action delete" onclick="deleteFinanceEvent(${e.id})" title="刪除"><i data-lucide="trash-2" size="14"></i></button>
+                        </div>
+                    </div>
+                </div>
+            `).join('') : `<div class="finance-empty">${financeStatus==='paid'?'目前沒有已收款':financeStatus==='unpaid'?'目前沒有未收款':'此期間尚無帳務資料'}</div>`;
+
             lucide.createIcons();
         }
+
+        function editFinanceEvent(id){
+            openEventModal(id);
+        }
+
+        function deleteFinanceEvent(id){
+            const ev=getEventsArray().find(e=>e.id===id);
+            if(!ev) return;
+            if(!confirm(`確定刪除「${ev.title}」這一筆帳務與對應行程？\n${ev.date||''} ${ev.startTime||''}\nNT$ ${money(ev.fee)}`)) return;
+
+            appData.events=getEventsArray().filter(e=>e.id!==id);
+            saveData();
+        }
+
         function togglePaid(id){const ev=getEventsArray().find(x=>x.id===id);if(ev){ev.isPaid=!ev.isPaid;saveData();}}
         function renderStage(){
             const list=document.getElementById('stage-list'),sum=document.getElementById('stage-summary');
@@ -2221,6 +2360,136 @@
             });
             box.innerHTML = results.slice(0,30).map(r=>`<div class="search-result" onclick="${r.action}"><div class="search-type">${r.type}</div><div class="search-title">${r.title}</div><div class="search-meta">${r.meta}</div></div>`).join('') || '<div class="text-center py-8 text-zinc-500 text-xs">找不到符合資料</div>';
         }
+
+        
+        function openBatchDeleteModal(){
+            closeModal('modal-settings');
+            const date=document.getElementById('batch-delete-date');
+            if(date) date.value=fmtDate(new Date());
+            const type=document.getElementById('batch-delete-type');
+            if(type) type.value='student';
+            populateBatchDeleteTargets();
+            updateBatchDeletePreview();
+            openModal('modal-batch-delete');
+            lucide.createIcons();
+        }
+
+        function populateBatchDeleteTargets(){
+            const type=document.getElementById('batch-delete-type')?.value || 'student';
+            const sel=document.getElementById('batch-delete-target');
+            if(!sel) return;
+
+            if(type==='student' || type==='school'){
+                const profiles=(Array.isArray(appData.profiles)?appData.profiles:[])
+                    .filter(p=>p.type===type)
+                    .sort((a,b)=>(a.name||'').localeCompare(b.name||'','zh-Hant'));
+
+                sel.innerHTML = profiles.length
+                    ? profiles.map(p=>`<option value="${p.id}">${p.name}</option>`).join('')
+                    : '<option value="">沒有資料</option>';
+            }else{
+                const performances=getEventsArray()
+                    .filter(e=>e.type==='performance')
+                    .sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+
+                // Group performances by groupId when possible; otherwise by event id.
+                const groups=new Map();
+                performances.forEach(e=>{
+                    const key=e.groupId ? `g:${e.groupId}` : `e:${e.id}`;
+                    if(!groups.has(key)){
+                        groups.set(key,{
+                            key,
+                            id:e.id,
+                            groupId:e.groupId||null,
+                            title:e.title||'未命名演出',
+                            date:e.date||''
+                        });
+                    }
+                });
+
+                const arr=[...groups.values()];
+                sel.innerHTML = arr.length
+                    ? arr.map(g=>`<option value="${g.key}">${g.date}｜${g.title}</option>`).join('')
+                    : '<option value="">沒有演出資料</option>';
+            }
+
+            updateBatchDeletePreview();
+        }
+
+        function getBatchDeleteMatches(){
+            const type=document.getElementById('batch-delete-type')?.value;
+            const target=document.getElementById('batch-delete-target')?.value;
+            const cutoff=document.getElementById('batch-delete-date')?.value;
+            if(!type || !target || !cutoff) return [];
+
+            const events=getEventsArray();
+
+            if(type==='student' || type==='school'){
+                const profileId=Number(target);
+                return events.filter(e=>e.refId===profileId && (e.date||'')>=cutoff);
+            }
+
+            if(type==='performance'){
+                if(target.startsWith('g:')){
+                    const groupId=Number(target.slice(2));
+                    return events.filter(e=>e.groupId===groupId && (e.date||'')>=cutoff);
+                }
+                if(target.startsWith('e:')){
+                    const id=Number(target.slice(2));
+                    const ev=events.find(e=>e.id===id);
+                    if(!ev) return [];
+                    return events.filter(e=>{
+                        if(ev.groupId) return e.groupId===ev.groupId && (e.date||'')>=cutoff;
+                        return e.id===id && (e.date||'')>=cutoff;
+                    });
+                }
+            }
+
+            return [];
+        }
+
+        function updateBatchDeletePreview(){
+            const box=document.getElementById('batch-delete-preview');
+            if(!box) return;
+            const matches=getBatchDeleteMatches();
+
+            if(!matches.length){
+                box.innerHTML='<span class="text-zinc-500">目前條件下沒有會被取消的排程。</span>';
+                return;
+            }
+
+            const sample=[...matches]
+                .sort((a,b)=>(a.date||'').localeCompare(b.date||''))
+                .slice(0,4)
+                .map(e=>`${e.date} ${e.startTime||''}｜${e.title||''}`)
+                .join('<br>');
+
+            box.innerHTML=`<strong class="text-[#171717]">將取消 ${matches.length} 筆排程</strong><div class="mt-2 leading-relaxed">${sample}${matches.length>4?'<br>…':''}</div>`;
+        }
+
+        function previewBatchDelete(){
+            updateBatchDeletePreview();
+        }
+
+        function confirmBatchDelete(){
+            const type=document.getElementById('batch-delete-type')?.value;
+            const targetSel=document.getElementById('batch-delete-target');
+            const targetLabel=targetSel?.selectedOptions?.[0]?.textContent || '';
+            const cutoff=document.getElementById('batch-delete-date')?.value;
+            const matches=getBatchDeleteMatches();
+
+            if(!cutoff) return alert('請先選擇日期');
+            if(!matches.length) return alert('目前條件下沒有可取消的排程');
+
+            const typeLabel=type==='student'?'學生':type==='school'?'學校':'演出';
+            if(!confirm(`確定取消「${targetLabel}」從 ${cutoff} 起的 ${matches.length} 筆排程？\n\n類型：${typeLabel}\n過去資料會保留，這個動作無法復原。`)) return;
+
+            const ids=new Set(matches.map(e=>e.id));
+            appData.events=getEventsArray().filter(e=>!ids.has(e.id));
+            saveData();
+            closeModal('modal-batch-delete');
+        }
+
 
         // Modal Controls
         function openEventModal(id = null, forceType = null, refId = null) {
