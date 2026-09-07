@@ -858,11 +858,11 @@
         .finance-filter-panel{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding:13px 14px;background:rgba(255,255,255,.58);border:1px solid rgba(17,17,17,.07);border-radius:16px}
         .finance-filter-main{display:flex;gap:10px;align-items:flex-end}.finance-select-wrap{display:flex;flex-direction:column;gap:5px}.finance-select-wrap>span{font-size:9px;color:#8e877e;letter-spacing:.08em}.finance-select-wrap select{height:38px!important;min-width:112px!important;padding:0 30px 0 12px!important;border-radius:10px!important;background:#f8f6f1!important;border:1px solid rgba(17,17,17,.09)!important;color:#111!important;font-family:'DM Serif Display',Georgia,serif!important;font-size:13px!important}
         .finance-status-tabs{display:flex;padding:3px;background:rgba(17,17,17,.045);border-radius:11px}.finance-status-btn{border:0!important;background:transparent!important;color:#827c73!important;padding:8px 12px!important;border-radius:8px!important;font-size:10px!important}.finance-status-btn.active{background:#111!important;color:#fff!important}
-        .quick-add-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:22px}
+        .quick-add-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:22px}
         .quick-add-item{display:flex;flex-direction:column;align-items:center;gap:8px;padding:8px 4px!important;background:transparent!important;border:0!important;color:#171717!important}
         .quick-add-icon{width:52px;height:52px;border-radius:16px;background:linear-gradient(180deg,#fffdf8,#ede8df);border:1px solid rgba(17,17,17,.09);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(0,0,0,.05)}
         .quick-add-icon svg{color:#111!important;stroke:#111!important;stroke-width:1.6!important}.quick-add-item span{font-size:10px!important;color:#3e3933!important;font-weight:700!important}
-        @media(max-width:700px){.finance-filter-panel{align-items:stretch;flex-direction:column}.finance-filter-main{width:100%}.finance-select-wrap{flex:1}.finance-select-wrap select{width:100%!important;min-width:0!important}.finance-status-tabs{align-self:flex-start}.quick-add-grid{grid-template-columns:repeat(5,1fr);gap:4px}.quick-add-icon{width:46px;height:46px;border-radius:14px}.quick-add-item span{font-size:9px!important}.schedule-view-tabs{max-width:none}}
+        @media(max-width:700px){.finance-filter-panel{align-items:stretch;flex-direction:column}.finance-filter-main{width:100%}.finance-select-wrap{flex:1}.finance-select-wrap select{width:100%!important;min-width:0!important}.finance-status-tabs{align-self:flex-start}.quick-add-grid{grid-template-columns:repeat(3,1fr);gap:8px}.quick-add-icon{width:46px;height:46px;border-radius:14px}.quick-add-item span{font-size:9px!important}.schedule-view-tabs{max-width:none}}
 
         /* 2.1 simple schedule: the original weekly view is the only primary calendar UI */
         .schedule-control-bar,
@@ -1248,6 +1248,18 @@
             }
         }
 
+        /* ===== 2.5 schedule UX cleanup ===== */
+        .schedule-card{position:relative}
+        .schedule-card.dragging{opacity:.45; transform:scale(.985)}
+        .schedule-card.drag-over{outline:1px dashed rgba(17,17,17,.28); outline-offset:2px}
+        .schedule-card-head{display:flex; align-items:flex-start; gap:10px}
+        .schedule-card-content{flex:1; min-width:0}
+        .schedule-drag-handle{width:28px; height:28px; border-radius:10px; display:flex; align-items:center; justify-content:center; color:#8c857b; background:rgba(17,17,17,.04); flex:none; cursor:grab}
+        .schedule-drag-handle:active{cursor:grabbing}
+        .schedule-utility-row{display:flex; justify-content:flex-end; margin:-4px 0 12px}
+        .schedule-utility-btn{font-size:11px; font-weight:700; color:#7f786f; padding:8px 12px; border-radius:12px; border:1px solid rgba(17,17,17,.08); background:rgba(255,255,255,.48)}
+        .schedule-utility-btn:hover{color:#111; background:rgba(255,255,255,.76)}
+
     </style>
 </head>
 <body class="flex flex-col">
@@ -1280,6 +1292,9 @@
                     <div id="cal-mode" class="text-[12px] text-zinc-600 font-num font-bold mt-0.5">2026</div>
                 </div>
                 <button onclick="changeViewDate(1)" class="p-2 text-zinc-500 hover:text-[#c5a059] transition"><i data-lucide="chevron-right" size="24"></i></button>
+            </div>
+            <div class="schedule-utility-row">
+                <button type="button" class="schedule-utility-btn" onclick="deleteAllEvents()">一鍵刪除全部行程</button>
             </div>
 
             <div id="compact-schedule-view">
@@ -1366,8 +1381,6 @@
             <button onclick="openProfileModal('student')" class="quick-add-item"><div class="quick-add-icon"><i data-lucide="user-round-plus" size="22"></i></div><span>學生</span></button>
             <button onclick="openProfileModal('school')" class="quick-add-item"><div class="quick-add-icon"><i data-lucide="building-2" size="22"></i></div><span>學校</span></button>
             <button onclick="openEventModal()" class="quick-add-item"><div class="quick-add-icon"><i data-lucide="calendar-plus-2" size="22"></i></div><span>行程</span></button>
-            <button onclick="openTaskModal()" class="quick-add-item"><div class="quick-add-icon"><i data-lucide="list-todo" size="22"></i></div><span>待辦</span></button>
-            <button onclick="openExpenseModal()" class="quick-add-item"><div class="quick-add-icon"><i data-lucide="wallet-cards" size="22"></i></div><span>支出</span></button>
         </div>
         <button onclick="closeActionSheet()" class="w-full py-3 text-zinc-500 font-en tracking-[0.2em] font-bold text-[10px] uppercase hover:text-white transition">CLOSE</button>
     </div>
@@ -1383,7 +1396,10 @@
             </div>
             <div class="border-t border-white/5 pt-4">
                 <h4 class="text-[10px] text-[#c5a059] font-zh font-bold mb-3">資料管理</h4>
-                <div class="flex gap-3"><button onclick="exportData()" class="flex-1 py-3 bg-zinc-800 rounded-xl text-xs font-zh text-zinc-400 hover:text-white hover:bg-zinc-700 transition flex items-center justify-center gap-2 font-bold"><i data-lucide="download" size="14"></i> 備份代碼</button></div>
+                <div class="flex gap-3">
+                    <button onclick="exportData()" class="flex-1 py-3 bg-zinc-800 rounded-xl text-xs font-zh text-zinc-400 hover:text-white hover:bg-zinc-700 transition flex items-center justify-center gap-2 font-bold"><i data-lucide="download" size="14"></i> 備份代碼</button>
+                    <button onclick="deleteAllEvents()" class="flex-1 py-3 bg-red-900/10 rounded-xl text-xs font-zh text-red-500 hover:bg-red-900/20 transition flex items-center justify-center gap-2 font-bold border border-red-500/20"><i data-lucide="trash-2" size="14"></i> 清空全部行程</button>
+                </div>
             </div>
             <button onclick="closeModal('modal-settings')" class="w-full mt-6 py-3 text-zinc-500 font-en tracking-[0.2em] font-bold text-[10px] uppercase hover:text-white transition">CLOSE</button>
         </div>
@@ -1547,6 +1563,8 @@
         const DATA_PATH = 'cello_data'; 
 
         let appData = { events: [], profiles: [], subs: [], tasks: [], expenses: [] };
+        let draggedEventId = null;
+        let isDraggingSchedule = false;
         let calendarMode = 'week';
         let scheduleLayout = 'compact';
         let financeStatus = 'all';
@@ -1594,8 +1612,11 @@
         function goToday(){ viewDate = new Date(); renderSchedule(); renderDashboard(); renderFinance(); }
         function setScheduleLayout(mode, btn){
             scheduleLayout = mode;
-            document.querySelectorAll('#schedule-layout-tabs .schedule-layout-btn').forEach(b => b.classList.remove('active'));
-            if(btn) btn.classList.add('active');
+            syncScheduleLayoutButtons();
+            if(btn){
+                document.querySelectorAll('#schedule-layout-tabs .schedule-layout-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            }
             renderSchedule();
         }
         function setCalendarMode(mode, btn){
@@ -1614,6 +1635,86 @@
             renderSchedule();
             renderFinance();
         }
+        
+        function syncScheduleLayoutButtons(){
+            document.querySelectorAll('#schedule-layout-tabs .schedule-layout-btn').forEach(b=>b.classList.remove('active'));
+            const btns=[...document.querySelectorAll('#schedule-layout-tabs .schedule-layout-btn')];
+            const target = scheduleLayout==='month' ? btns[1] : btns[0];
+            if(target) target.classList.add('active');
+        }
+        function eventOrderValue(e){
+            const n = Number(e?.sortOrder);
+            return Number.isFinite(n) ? n : null;
+        }
+        function sortEventsForDisplay(arr){
+            return [...arr].sort((a,b)=>{
+                const ao = eventOrderValue(a), bo = eventOrderValue(b);
+                if(ao !== null && bo !== null && ao !== bo) return ao - bo;
+                if(ao !== null && bo === null) return -1;
+                if(ao === null && bo !== null) return 1;
+                return (a.startTime||'').localeCompare(b.startTime||'') || Number(a.id||0) - Number(b.id||0);
+            });
+        }
+        function nextSortOrderForDate(date){
+            const nums = getEventsArray().filter(e=>e && e.date===date).map(e=>Number(e.sortOrder)).filter(n=>Number.isFinite(n));
+            return (nums.length ? Math.max(...nums) : 0) + 1;
+        }
+        function handleScheduleCardClick(ev,id){
+            if(isDraggingSchedule){
+                ev.preventDefault();
+                ev.stopPropagation();
+                return;
+            }
+            openEventModal(id);
+        }
+        function onEventDragStart(ev,id){
+            draggedEventId = id;
+            isDraggingSchedule = true;
+            ev.dataTransfer.effectAllowed = 'move';
+            try{ ev.dataTransfer.setData('text/plain', String(id)); }catch(e){}
+            ev.currentTarget.classList.add('dragging');
+        }
+        function onEventDragOver(ev){
+            ev.preventDefault();
+            ev.dataTransfer.dropEffect = 'move';
+            ev.currentTarget.classList.add('drag-over');
+        }
+        function onEventDragLeave(ev){
+            ev.currentTarget.classList.remove('drag-over');
+        }
+        function onEventDrop(ev,targetId){
+            ev.preventDefault();
+            ev.currentTarget.classList.remove('drag-over');
+            if(!draggedEventId || draggedEventId === targetId) return;
+            const dateStr = fmtDate(viewDate);
+            const dayEvents = sortEventsForDisplay(getEventsArray().filter(e=>e && e.date===dateStr));
+            const fromIdx = dayEvents.findIndex(e=>e.id===draggedEventId);
+            const toIdx = dayEvents.findIndex(e=>e.id===targetId);
+            if(fromIdx < 0 || toIdx < 0) return;
+            const moved = dayEvents.splice(fromIdx,1)[0];
+            dayEvents.splice(toIdx,0,moved);
+            dayEvents.forEach((e,i)=>{ e.sortOrder = i + 1; });
+            appData.events = getEventsArray();
+            saveData();
+        }
+        function onEventDragEnd(ev){
+            document.querySelectorAll('.schedule-card').forEach(el=>el.classList.remove('dragging','drag-over'));
+            draggedEventId = null;
+            setTimeout(()=>{ isDraggingSchedule = false; }, 0);
+        }
+        function deleteAllEvents(){
+            if(!getEventsArray().length){
+                alert('目前沒有任何行程資料');
+                return;
+            }
+            if(!confirm('確定要一鍵刪除全部行程嗎？此動作無法復原。')) return;
+            appData.events = [];
+            saveData();
+            closeModal('modal-event');
+            closeModal('modal-detail');
+            closeModal('modal-settings');
+        }
+
         function renderDashboard(){
             const el=document.getElementById('work-dashboard'); if(!el) return;
             const events=getEventsArray(); const y=viewDate.getFullYear(), m=viewDate.getMonth();
@@ -1628,7 +1729,7 @@
         }
         function renderEventCard(e){
             let typeLabel='演出'; if(e.type==='lesson')typeLabel='家教'; if(e.type==='school')typeLabel='學校'; if(e.type==='rehearsal')typeLabel='彩排';
-            return `<div class="glass p-4 rounded-xl relative group active:scale-[0.98] transition cursor-pointer" onclick="openEventModal(${e.id})"><div class="flex items-center gap-2 mb-1.5"><span class="text-[9px] font-zh font-bold bg-black/5 px-1.5 py-0.5 rounded text-zinc-500">${typeLabel}</span><span class="text-xs font-num font-bold">${e.startTime||''}${e.endTime?' - '+e.endTime:''}</span></div><h3 class="text-base font-bold font-zh mb-1 leading-snug">${e.title||'未命名行程'}</h3><div class="flex gap-2 text-[10px] text-zinc-500">${e.location?`<span>${e.location}</span>`:''}${Number(e.fee)>0?`<span class="ml-auto font-num">$${money(e.fee)}</span>`:''}</div></div>`;
+            return `<div class="glass p-4 rounded-xl relative group active:scale-[0.98] transition cursor-pointer schedule-card" draggable="true" data-event-id="${e.id}" onclick="handleScheduleCardClick(event, ${e.id})" ondragstart="onEventDragStart(event, ${e.id})" ondragover="onEventDragOver(event)" ondragleave="onEventDragLeave(event)" ondrop="onEventDrop(event, ${e.id})" ondragend="onEventDragEnd(event)"><div class="schedule-card-head"><div class="schedule-card-content"><div class="flex items-center gap-2 mb-1.5"><span class="text-[9px] font-zh font-bold bg-black/5 px-1.5 py-0.5 rounded text-zinc-500">${typeLabel}</span><span class="text-xs font-num font-bold">${e.startTime||''}${e.endTime?' - '+e.endTime:''}</span></div><h3 class="text-base font-bold font-zh mb-1 leading-snug">${e.title||'未命名行程'}</h3><div class="flex gap-2 text-[10px] text-zinc-500">${e.location?`<span>${e.location}</span>`:''}${Number(e.fee)>0?`<span class="ml-auto font-num">$${money(e.fee)}</span>`:''}</div></div><div class="schedule-drag-handle" title="拖曳排序"><i data-lucide="grip-vertical" size="15"></i></div></div></div>`;
         }
         function renderSchedule() {
             const gridEl = document.getElementById('calendar-grid');
@@ -1638,8 +1739,8 @@
             const monthView = document.getElementById('month-schedule-view');
             if (!gridEl || !listEl || !compactView || !monthView || !monthGridEl) return;
 
+            syncScheduleLayoutButtons();
             const events = getEventsArray();
-            const sortedByTime = arr => [...arr].sort((a,b) => (a.startTime || '').localeCompare(b.startTime || ''));
 
             if (scheduleLayout === 'month') {
                 compactView.classList.add('hidden');
@@ -1662,7 +1763,7 @@
                 for (let d = new Date(gridStart); d <= gridEnd; d.setDate(d.getDate() + 1)) {
                     const current = new Date(d);
                     const dateStr = fmtDate(current);
-                    const dayEvents = sortedByTime(events.filter(e => e && e.date === dateStr));
+                    const dayEvents = sortEventsForDisplay(events.filter(e => e && e.date === dateStr));
                     const isOtherMonth = current.getMonth() !== viewDate.getMonth();
                     const isSelected = dateStr === fmtDate(viewDate);
                     const isToday = dateStr === fmtDate(new Date());
@@ -1671,6 +1772,8 @@
                     cell.className = `month-day${isOtherMonth ? ' is-other' : ''}${isSelected ? ' is-selected' : ''}${isToday ? ' is-today' : ''}`;
                     cell.onclick = () => {
                         viewDate = new Date(current);
+                        scheduleLayout = 'compact';
+                        syncScheduleLayoutButtons();
                         renderSchedule();
                         renderFinance();
                     };
@@ -1728,7 +1831,7 @@
                 }
 
                 const dateStr = fmtDate(viewDate);
-                const dayEvents = sortedByTime(events.filter(e => e && e.date === dateStr));
+                const dayEvents = sortEventsForDisplay(events.filter(e => e && e.date === dateStr));
                 const selectedLabel = new Date(viewDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', weekday: 'short' });
                 listEl.innerHTML = `<div class="schedule-day-caption">${selectedLabel}</div>` + (dayEvents.length
                     ? dayEvents.map(renderEventCard).join('')
@@ -1762,12 +1865,18 @@
             if(!title || !date) return alert('請填寫完整');
             
             const type = document.getElementById('evt-type').value;
-            let existingGroupId = null;
+            let existingGroupId = null, existingEvent = null;
             if (editingEventId) {
                 const idx = appData.events.findIndex(e => e.id === editingEventId);
-                if(idx !== -1) existingGroupId = appData.events[idx].groupId;
+                if(idx !== -1) {
+                    existingEvent = appData.events[idx];
+                    existingGroupId = existingEvent.groupId;
+                }
             }
-            const groupId = existingGroupId || Date.now(); 
+            const groupId = existingGroupId || Date.now();
+            const computedSortOrder = editingEventId
+                ? ((existingEvent && existingEvent.date === date && Number.isFinite(Number(existingEvent.sortOrder))) ? Number(existingEvent.sortOrder) : nextSortOrderForDate(date))
+                : nextSortOrderForDate(date);
 
             const base = {
                 title, date, type,
@@ -1780,7 +1889,8 @@
                 dressCode: document.getElementById('evt-dress').value,
                 perfType: type === 'performance' ? document.getElementById('evt-perf-type').value : null,
                 groupId: groupId,
-                isPaid: false
+                isPaid: existingEvent ? !!existingEvent.isPaid : false,
+                sortOrder: computedSortOrder
             };
 
             if (editingEventId) {
@@ -1791,13 +1901,14 @@
                 if (type === 'performance') {
                     const rehDates = document.querySelectorAll('.reh-date'), rehTimes = document.querySelectorAll('.reh-time'), rehEnds = document.querySelectorAll('.reh-end');
                     rehDates.forEach((d, idx) => {
-                        if(d.value) appData.events.push({ ...base, id: Date.now()+idx+1, title: `${title}(彩排${idx+1})`, type: 'rehearsal', date: d.value, startTime: rehTimes[idx].value, endTime: rehEnds[idx].value, fee: 0, groupId: groupId });
+                        if(d.value) appData.events.push({ ...base, id: Date.now()+idx+1, title: `${title}(彩排${idx+1})`, type: 'rehearsal', date: d.value, startTime: rehTimes[idx].value, endTime: rehEnds[idx].value, fee: 0, groupId: groupId, sortOrder: nextSortOrderForDate(d.value) });
                     });
                 } else if (document.getElementById('evt-recur-check').checked) {
                     const weeks = parseInt(document.getElementById('evt-recur-weeks').value) || 1;
                     for(let i=1; i<weeks; i++) {
                         const d = new Date(date); d.setDate(d.getDate() + (i*7));
-                        appData.events.push({ ...base, id: Date.now()+i, date: d.toISOString().split('T')[0], groupId: groupId });
+                        const clonedDate = d.toISOString().split('T')[0];
+                        appData.events.push({ ...base, id: Date.now()+i, date: clonedDate, groupId: groupId, sortOrder: nextSortOrderForDate(clonedDate) });
                     }
                 }
             }
@@ -1834,7 +1945,7 @@
         function populateFinanceFilters(){
             const years=new Set([new Date().getFullYear(), viewDate.getFullYear()]);
             getEventsArray().forEach(e=>{const y=Number(String(e.date||'').slice(0,4));if(y)years.add(y);});
-            getExpensesArray().forEach(e=>{const y=Number(String(e.date||'').slice(0,4));if(y)years.add(y);});
+            
             const ySel=document.getElementById('finance-year'),mSel=document.getElementById('finance-month');
             if(ySel){ySel.innerHTML=[...years].sort((a,b)=>b-a).map(y=>`<option value="${y}">${y}</option>`).join('');ySel.value=String(financeSelectedYear);}
             if(mSel)mSel.value=String(financeSelectedMonth);
@@ -1856,21 +1967,42 @@
                 if(financeStatus==='unpaid') return !e.isPaid;
                 return true;
             };
-            const expenseFilter=e=>dateMatch(e) && financeStatus==='all';
-            return {label,incomeFilter,expenseFilter};
+            return {label,incomeFilter};
         }
         function renderFinance() {
-            const list=document.getElementById('finance-list');if(!list)return;const period=financePeriod(), incomes=getEventsArray().filter(e=>Number(e.fee)>0).filter(period.incomeFilter), expenses=getExpensesArray().filter(period.expenseFilter);
-            const gross=incomes.reduce((s,e)=>s+Number(e.fee||0),0),received=incomes.filter(e=>e.isPaid).reduce((s,e)=>s+Number(e.fee||0),0),pending=incomes.filter(e=>!e.isPaid).reduce((s,e)=>s+Number(e.fee||0),0),expenseTotal=expenses.reduce((s,e)=>s+Number(e.amount||0),0),net=gross-expenseTotal;
-            document.getElementById('fin-pending').textContent=`NT$ ${money(pending)}`;document.getElementById('fin-received').textContent=`NT$ ${money(received)}`;const badge=document.querySelector('[data-finance-month]');if(badge)badge.textContent=period.label;
-            const k=document.getElementById('finance-kpis');if(k)k.innerHTML=`<div class="finance-kpi"><div class="finance-kpi-label">預計收入</div><div class="finance-kpi-value">NT$ ${money(gross)}</div></div><div class="finance-kpi"><div class="finance-kpi-label">支出</div><div class="finance-kpi-value">NT$ ${money(expenseTotal)}</div></div><div class="finance-kpi"><div class="finance-kpi-label">淨額</div><div class="finance-kpi-value">NT$ ${money(net)}</div></div>`;
-            const rows=[];incomes.forEach(e=>rows.push({kind:'income',date:e.date||'',item:e}));if(financeStatus==='all')expenses.forEach(e=>rows.push({kind:'expense',date:e.date||'',item:e}));rows.sort((a,b)=>b.date.localeCompare(a.date));
+            const list=document.getElementById('finance-list');
+            if(!list) return;
+            const period=financePeriod();
+            const incomes=getEventsArray().filter(e=>Number(e.fee)>0).filter(period.incomeFilter);
+            const gross=incomes.reduce((s,e)=>s+Number(e.fee||0),0);
+            const received=incomes.filter(e=>e.isPaid).reduce((s,e)=>s+Number(e.fee||0),0);
+            const pending=incomes.filter(e=>!e.isPaid).reduce((s,e)=>s+Number(e.fee||0),0);
+
+            document.getElementById('fin-pending').textContent=`NT$ ${money(pending)}`;
+            document.getElementById('fin-received').textContent=`NT$ ${money(received)}`;
+            const badge=document.querySelector('[data-finance-month]');
+            if(badge) badge.textContent=period.label;
+
+            const k=document.getElementById('finance-kpis');
+            if(k)k.innerHTML=`<div class="finance-kpi"><div class="finance-kpi-label">預計收入</div><div class="finance-kpi-value">NT$ ${money(gross)}</div></div><div class="finance-kpi"><div class="finance-kpi-label">已收款</div><div class="finance-kpi-value">NT$ ${money(received)}</div></div><div class="finance-kpi"><div class="finance-kpi-label">未收款</div><div class="finance-kpi-value">NT$ ${money(pending)}</div></div>`;
+
+            const rows=[];
+            incomes.forEach(e=>rows.push({date:e.date||'',item:e}));
+            rows.sort((a,b)=> b.date.localeCompare(a.date) || (a.item.startTime||'').localeCompare(b.item.startTime||''));
+
             const title=document.getElementById('finance-list-title');
             if(title){
                 const label = financeStatus==='paid' ? '已收款' : financeStatus==='unpaid' ? '尚未收到款' : '帳務明細';
                 title.innerHTML=`<i data-lucide="list-checks" size="16"></i> ${label}`;
             }
-            list.innerHTML=rows.length?rows.map(r=>{if(r.kind==='income'){const e=r.item;return `<div class="finance-row flex justify-between items-center p-3 rounded-xl border cursor-pointer" onclick="togglePaid(${e.id})"><div class="flex items-center gap-3 min-w-0"><div class="w-5 h-5 rounded border ${e.isPaid?'bg-black border-black':'border-zinc-400'} flex items-center justify-center flex-none">${e.isPaid?'<i data-lucide="check" size="12" class="text-white"></i>':''}</div><div class="min-w-0"><div class="finance-title font-bold truncate">${e.title}</div><div class="finance-date">${e.date} · ${e.isPaid?'已收':'待收'}</div></div></div><div class="finance-amount">$${money(e.fee)}</div></div>`;}const e=r.item;return `<div class="finance-row finance-expense-row flex justify-between items-center p-3 rounded-xl border cursor-pointer" onclick="openExpenseModal(${e.id})"><div class="flex items-center gap-3 min-w-0"><div class="w-5 h-5 flex items-center justify-center"><i data-lucide="receipt" size="15"></i></div><div class="min-w-0"><div class="finance-title font-bold truncate">${e.title}</div><div class="finance-date">${e.date} · ${e.category||'支出'}</div></div></div><div class="finance-amount">-$${money(e.amount)}</div></div>`;}).join(''):`<div class="finance-empty">${financeStatus==='paid'?'目前沒有已收款':financeStatus==='unpaid'?'目前沒有未收款':'此期間尚無帳務資料'}</div>`;lucide.createIcons();
+
+            list.innerHTML = rows.length
+                ? rows.map(r=>{
+                    const e=r.item;
+                    return `<div class="finance-row flex justify-between items-center p-3 rounded-xl border cursor-pointer" onclick="togglePaid(${e.id})"><div class="flex items-center gap-3 min-w-0"><div class="w-5 h-5 rounded border ${e.isPaid?'bg-black border-black':'border-zinc-400'} flex items-center justify-center flex-none">${e.isPaid?'<i data-lucide="check" size="12" class="text-white"></i>':''}</div><div class="min-w-0"><div class="finance-title font-bold truncate">${e.title}</div><div class="finance-date">${e.date} · ${e.isPaid?'已收':'待收'}</div></div></div><div class="finance-amount">$${money(e.fee)}</div></div>`;
+                }).join('')
+                : `<div class="finance-empty">${financeStatus==='paid'?'目前沒有已收款':financeStatus==='unpaid'?'目前沒有未收款':'此期間尚無帳務資料'}</div>`;
+            lucide.createIcons();
         }
         function togglePaid(id){const ev=getEventsArray().find(x=>x.id===id);if(ev){ev.isPaid=!ev.isPaid;saveData();}}
         function renderStage(){const list=document.getElementById('stage-list'),sum=document.getElementById('stage-summary'),events=getEventsArray().filter(e=>e.type==='performance').sort((a,b)=>(b.date||'').localeCompare(a.date||''));const today=fmtDate(new Date()),upcoming=events.filter(e=>(e.date||'')>=today),year=viewDate.getFullYear(),yearE=events.filter(e=>String(e.date||'').startsWith(String(year))),rev=yearE.reduce((s,e)=>s+Number(e.fee||0),0);if(sum)sum.innerHTML=`<div class="mini-stat"><div class="mini-stat-label">即將演出</div><div class="mini-stat-value">${upcoming.length}</div></div><div class="mini-stat"><div class="mini-stat-label">${year} 演出</div><div class="mini-stat-value">${yearE.length}</div></div><div class="mini-stat"><div class="mini-stat-label">年度收入</div><div class="mini-stat-value">NT$ ${money(rev)}</div></div>`;list.innerHTML=events.map(e=>`<div class="glass p-4 rounded-xl relative mb-3 cursor-pointer" onclick="openEventModal(${e.id})"><div class="flex justify-between mb-1"><span class="text-[9px] font-bold bg-black/5 px-1.5 py-0.5 rounded">${e.perfType||'演出'}</span><span class="text-[10px] font-num">${e.date}</span></div><h3 class="text-base font-bold font-zh mb-2">${e.title}</h3><div class="flex text-[10px] text-zinc-500"><span>${e.location||''}</span>${Number(e.fee)>0?`<span class="ml-auto font-num">$${money(e.fee)}</span>`:''}</div></div>`).join('');}
@@ -1883,7 +2015,22 @@
         function saveExpense(){const title=document.getElementById('expense-title').value.trim(),amount=Number(document.getElementById('expense-amount').value);if(!title||!amount)return alert('請填寫支出項目與金額');const id=Number(document.getElementById('expense-id').value)||Date.now(),arr=getExpensesArray(),idx=arr.findIndex(x=>x.id===id),obj={id,title,date:document.getElementById('expense-date').value,category:document.getElementById('expense-category').value,amount,note:document.getElementById('expense-note').value};if(idx>=0)arr[idx]=obj;else arr.push(obj);appData.expenses=arr;saveData();closeModal('modal-expense');}
         function deleteExpense(){const id=Number(document.getElementById('expense-id').value);if(id&&confirm('刪除此支出？')){appData.expenses=getExpensesArray().filter(x=>x.id!==id);saveData();closeModal('modal-expense');}}
         function openSearchModal(){openModal('modal-search');setTimeout(()=>document.getElementById('global-search')?.focus(),100);renderSearchResults();lucide.createIcons();}
-        function renderSearchResults(){const q=(document.getElementById('global-search')?.value||'').trim().toLowerCase(),box=document.getElementById('search-results');if(!box)return;if(!q){box.innerHTML='<div class="text-center py-8 text-zinc-500 text-xs">輸入關鍵字搜尋全部資料</div>';return;}const results=[];(Array.isArray(appData.profiles)?appData.profiles:[]).forEach(p=>{if(`${p.name} ${p.contact||''}`.toLowerCase().includes(q))results.push({type:p.type==='school'?'學校':'學生',title:p.name,meta:p.contact||'',action:`closeModal('modal-search');openProfileDetail(${p.id})`});});getEventsArray().forEach(e=>{if(`${e.title} ${e.location||''} ${e.date||''}`.toLowerCase().includes(q))results.push({type:'行程',title:e.title,meta:`${e.date||''} ${e.startTime||''}`,action:`closeModal('modal-search');openEventModal(${e.id})`});});getTasksArray().forEach(t=>{if(`${t.title} ${t.note||''}`.toLowerCase().includes(q))results.push({type:'待辦',title:t.title,meta:t.dueDate||'',action:`closeModal('modal-search');openTaskModal(${t.id})`});});box.innerHTML=results.slice(0,30).map(r=>`<div class="search-result" onclick="${r.action}"><div class="search-type">${r.type}</div><div class="search-title">${r.title}</div><div class="search-meta">${r.meta}</div></div>`).join('')||'<div class="text-center py-8 text-zinc-500 text-xs">找不到符合資料</div>';}
+        function renderSearchResults(){
+            const q=(document.getElementById('global-search')?.value||'').trim().toLowerCase(), box=document.getElementById('search-results');
+            if(!box) return;
+            if(!q){
+                box.innerHTML='<div class="text-center py-8 text-zinc-500 text-xs">輸入關鍵字搜尋全部資料</div>';
+                return;
+            }
+            const results=[];
+            (Array.isArray(appData.profiles)?appData.profiles:[]).forEach(p=>{
+                if(`${p.name} ${p.contact||''}`.toLowerCase().includes(q)) results.push({type:p.type==='school'?'學校':'學生', title:p.name, meta:p.contact||'', action:`closeModal('modal-search');openProfileDetail(${p.id})`});
+            });
+            getEventsArray().forEach(e=>{
+                if(`${e.title} ${e.location||''} ${e.date||''}`.toLowerCase().includes(q)) results.push({type:'行程', title:e.title, meta:`${e.date||''} ${e.startTime||''}`, action:`closeModal('modal-search');openEventModal(${e.id})`});
+            });
+            box.innerHTML = results.slice(0,30).map(r=>`<div class="search-result" onclick="${r.action}"><div class="search-type">${r.type}</div><div class="search-title">${r.title}</div><div class="search-meta">${r.meta}</div></div>`).join('') || '<div class="text-center py-8 text-zinc-500 text-xs">找不到符合資料</div>';
+        }
 
         // Modal Controls
         function openEventModal(id = null, forceType = null, refId = null) {
