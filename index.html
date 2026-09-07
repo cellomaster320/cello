@@ -1425,6 +1425,39 @@
             color:#111 !important;
         }
 
+        /* ===== 2.8 batch cancel entry in finance ===== */
+        .finance-batch-btn{
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            gap:7px;
+            min-height:38px;
+            padding:0 14px;
+            border-radius:12px;
+            border:1px solid rgba(17,17,17,.10);
+            background:rgba(255,255,255,.55);
+            color:#6f685f;
+            font-family:'Noto Serif TC','Songti TC','PMingLiU',serif!important;
+            font-size:11px;
+            font-weight:700;
+            white-space:nowrap;
+            transition:all .18s ease;
+        }
+        .finance-batch-btn:hover{
+            color:#111;
+            background:rgba(255,255,255,.82);
+            border-color:rgba(17,17,17,.16);
+        }
+        .finance-batch-btn svg{
+            stroke-width:1.5!important;
+        }
+        @media(max-width:700px){
+            .finance-batch-btn{
+                width:100%;
+                margin-top:2px;
+            }
+        }
+
     </style>
 </head>
 <body class="flex flex-col">
@@ -1505,6 +1538,10 @@
                     <button onclick="setFinanceStatus('paid',this)" class="finance-status-btn">已收款</button>
                     <button onclick="setFinanceStatus('unpaid',this)" class="finance-status-btn">未收款</button>
                 </div>
+                <button onclick="openBatchDeleteModal()" class="finance-batch-btn">
+                    <i data-lucide="calendar-x-2" size="15"></i>
+                    <span>批次取消排程</span>
+                </button>
             </div>
             <div class="w-full aspect-[2.5/1] rounded-2xl bg-gradient-to-br from-[#29221b] to-[#12100e] border border-[#c5a059]/20 p-5 relative overflow-hidden shadow-lg flex flex-col justify-between">
                 <div class="absolute -right-6 -top-6 w-28 h-28 bg-[#c5a059]/10 rounded-full blur-[30px]"></div>
