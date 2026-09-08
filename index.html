@@ -1458,6 +1458,68 @@
             }
         }
 
+        /* ===== 2.9 quick add: same minimal line language as bottom nav ===== */
+        .quick-add-grid{
+            gap:18px !important;
+            padding:4px 10px 2px !important;
+        }
+        .quick-add-item{
+            gap:7px !important;
+            padding:10px 4px !important;
+        }
+        .quick-add-icon{
+            width:38px !important;
+            height:38px !important;
+            border-radius:0 !important;
+            background:transparent !important;
+            border:0 !important;
+            box-shadow:none !important;
+        }
+        .quick-add-icon svg{
+            width:24px !important;
+            height:24px !important;
+            color:#171717 !important;
+            stroke:#171717 !important;
+            stroke-width:1.25 !important;
+        }
+        .quick-add-item span{
+            font-size:10px !important;
+            color:#6f6961 !important;
+            font-weight:600 !important;
+            letter-spacing:.03em !important;
+        }
+        .quick-add-item:active .quick-add-icon{
+            transform:scale(.94);
+        }
+
+        /* long-press drag feedback */
+        .timeline-event{
+            cursor:pointer !important;
+            touch-action:pan-y !important;
+        }
+        .timeline-event.longpress-ready{
+            box-shadow:0 10px 26px rgba(0,0,0,.12) !important;
+        }
+        .timeline-event.dragging{
+            cursor:grabbing !important;
+            touch-action:none !important;
+        }
+        .timeline-event-handle{
+            opacity:.42 !important;
+        }
+        .timeline-event.longpress-ready .timeline-event-handle,
+        .timeline-event.dragging .timeline-event-handle{
+            opacity:1 !important;
+        }
+
+        .batch-mode-tabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;border-radius:14px;background:rgba(17,17,17,.045)}
+        .batch-mode-btn{min-height:36px;border-radius:10px;background:transparent;color:#7a746c;font-size:11px;font-weight:700}
+        .batch-mode-btn.active{background:#111;color:#fff;box-shadow:0 6px 14px rgba(0,0,0,.10)}
+        .batch-search-btn{flex:none;padding:0 14px;border-radius:12px;border:1px solid rgba(17,17,17,.10);background:#fff;color:#555049;font-size:11px;font-weight:700}
+        .batch-title-suggestions{max-height:160px;overflow:auto;border:1px solid rgba(17,17,17,.08);border-radius:12px;background:#fff}
+        .batch-title-suggestion{width:100%;text-align:left;padding:10px 12px;border-bottom:1px solid rgba(17,17,17,.06);color:#4f4a44;font-size:11px}
+        .batch-title-suggestion:last-child{border-bottom:0}.batch-title-suggestion strong{color:#111}
+
     </style>
 </head>
 <body class="flex flex-col">
@@ -1606,46 +1668,30 @@
     <div id="modal-batch-delete" class="fixed inset-0 z-[75] hidden flex items-center justify-center px-6 bg-black/70 backdrop-blur-md">
         <div class="bg-[#f8f7f3] w-full max-w-md rounded-[2rem] p-6 border border-black/10 shadow-2xl slide-up">
             <div class="flex justify-between items-center mb-5">
-                <div>
-                    <h3 class="text-lg font-bold font-zh text-[#171717]">批次取消排程</h3>
-                    <p class="text-[11px] text-zinc-500 mt-1">保留過去紀錄，只取消指定日期之後的資料</p>
-                </div>
+                <div><h3 class="text-lg font-bold font-zh text-[#171717]">批次取消排程</h3><p class="text-[11px] text-zinc-500 mt-1">保留過去紀錄，只取消指定日期之後的資料</p></div>
                 <button onclick="closeModal('modal-batch-delete')" class="text-zinc-500"><i data-lucide="x" size="20"></i></button>
             </div>
-
-            <div class="space-y-4">
-                <div>
-                    <label class="text-[10px] text-zinc-500 font-bold block mb-1.5">類型</label>
-                    <select id="batch-delete-type" onchange="populateBatchDeleteTargets()">
-                        <option value="student">學生</option>
-                        <option value="school">學校</option>
-                        <option value="performance">演出</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label class="text-[10px] text-zinc-500 font-bold block mb-1.5">選擇對象</label>
-                    <select id="batch-delete-target"></select>
-                </div>
-
-                <div>
-                    <label class="text-[10px] text-zinc-500 font-bold block mb-1.5">從這一天起取消</label>
-                    <input id="batch-delete-date" type="date">
-                </div>
-
-                <div id="batch-delete-preview" class="rounded-xl border border-black/8 bg-black/[0.025] p-3 text-xs text-zinc-500">
-                    選好條件後，會顯示將取消的筆數。
-                </div>
+            <div class="batch-mode-tabs mb-4">
+                <button id="batch-mode-linked" class="batch-mode-btn active" onclick="setBatchDeleteMode('linked')">依學生／學校／演出</button>
+                <button id="batch-mode-title" class="batch-mode-btn" onclick="setBatchDeleteMode('title')">依行程名稱搜尋</button>
             </div>
-
-            <div class="flex gap-2 mt-5">
-                <button onclick="previewBatchDelete()" class="flex-1 py-3 rounded-xl border border-black/10 text-xs font-bold text-zinc-600">預覽</button>
-                <button onclick="confirmBatchDelete()" class="flex-[1.4] py-3 rounded-xl bg-[#111] text-white text-xs font-bold">確認取消後續</button>
+            <div id="batch-linked-fields" class="space-y-4">
+                <div><label class="text-[10px] text-zinc-500 font-bold block mb-1.5">類型</label><select id="batch-delete-type" onchange="populateBatchDeleteTargets()"><option value="student">學生</option><option value="school">學校</option><option value="performance">演出</option></select></div>
+                <div><label class="text-[10px] text-zinc-500 font-bold block mb-1.5">選擇對象</label><select id="batch-delete-target" onchange="updateBatchDeletePreview()"></select></div>
             </div>
+            <div id="batch-title-fields" class="space-y-4 hidden">
+                <div><label class="text-[10px] text-zinc-500 font-bold block mb-1.5">行程名稱關鍵字</label><div class="flex gap-2"><input id="batch-title-query" type="text" placeholder="例如：文心小學" oninput="updateBatchDeletePreview()"><button onclick="fillBatchTitleSuggestions()" class="batch-search-btn" type="button">搜尋</button></div></div>
+                <div id="batch-title-suggestions" class="batch-title-suggestions hidden"></div>
+            </div>
+            <div class="space-y-4 mt-4">
+                <div><label class="text-[10px] text-zinc-500 font-bold block mb-1.5">從這一天起取消</label><input id="batch-delete-date" type="date" onchange="updateBatchDeletePreview()"></div>
+                <div id="batch-delete-preview" class="rounded-xl border border-black/8 bg-black/[0.025] p-3 text-xs text-zinc-500">選好條件後，會顯示將取消的筆數。</div>
+            </div>
+            <div class="flex gap-2 mt-5"><button onclick="previewBatchDelete()" class="flex-1 py-3 rounded-xl border border-black/10 text-xs font-bold text-zinc-600">預覽</button><button onclick="confirmBatchDelete()" class="flex-[1.4] py-3 rounded-xl bg-[#111] text-white text-xs font-bold">確認取消後續</button></div>
         </div>
     </div>
 
-<div id="modal-event" class="fixed inset-0 z-[60] hidden flex items-end sm:items-center justify-center px-0 sm:px-4 pb-0 sm:pb-4">
+    <div id="modal-event" class="fixed inset-0 z-[60] hidden flex items-end sm:items-center justify-center px-0 sm:px-4 pb-0 sm:pb-4">
         <div class="absolute inset-0 bg-black/90 backdrop-blur-md" onclick="closeModal('modal-event')"></div>
         <div class="relative bg-[#181614] w-full max-w-md rounded-t-[2rem] sm:rounded-[2rem] p-5 shadow-2xl border border-[#c5a059]/20 max-h-[90vh] overflow-y-auto slide-up">
             <div class="flex justify-between items-center mb-5 border-b border-white/5 pb-3">
@@ -1908,7 +1954,10 @@
         const TIMELINE_START=360;
         const TIMELINE_END=1440;
         const PX_PER_MIN=64/60;
+        const LONG_PRESS_MS=500;
+        const LONG_PRESS_MOVE_TOLERANCE=8;
         let timelineDrag=null;
+        let pendingLongPress=null;
 
         function renderDayTimeline(events){
             const el=document.getElementById('day-timeline');
@@ -1947,9 +1996,13 @@
                 node.style.height=`${height}px`;
                 node.innerHTML=`<div class="timeline-event-time">${e.startTime||''}${e.endTime?' – '+e.endTime:''}</div><div class="timeline-event-title">${e.title||'未命名行程'}</div><div class="timeline-event-meta">${e.location||''}${Number(e.fee)>0?` · $${money(e.fee)}`:''}</div><div class="timeline-event-handle"><i data-lucide="grip-vertical" size="15"></i></div>`;
 
-                node.addEventListener('pointerdown',ev=>startTimelineDrag(ev,e,node));
-                node.addEventListener('click',ev=>{
-                    if(node.dataset.dragged==='1'){node.dataset.dragged='0';return}
+                node.addEventListener('pointerdown',ev=>beginLongPress(ev,e,node));
+                node.addEventListener('click',()=>{
+                    if(node.dataset.dragged==='1' || node.dataset.longpressed==='1'){
+                        node.dataset.dragged='0';
+                        node.dataset.longpressed='0';
+                        return;
+                    }
                     openEventModal(e.id);
                 });
                 el.appendChild(node);
@@ -1957,36 +2010,97 @@
             lucide.createIcons();
         }
 
-        function startTimelineDrag(ev,e,node){
+        function clearPendingLongPress(){
+            if(!pendingLongPress)return;
+            clearTimeout(pendingLongPress.timer);
+            const {node,onMove,onUp,onCancel}=pendingLongPress;
+            node?.removeEventListener('pointermove',onMove);
+            node?.removeEventListener('pointerup',onUp);
+            node?.removeEventListener('pointercancel',onCancel);
+            node?.classList.remove('longpress-ready');
+            pendingLongPress=null;
+        }
+
+        function beginLongPress(ev,e,node){
             if(ev.button!==undefined && ev.button!==0)return;
+            if(timelineDrag)return;
+
+            clearPendingLongPress();
+
+            const startX=ev.clientX;
+            const startY=ev.clientY;
+            const pointerId=ev.pointerId;
+
+            const onMove=moveEv=>{
+                if(!pendingLongPress)return;
+                const dx=moveEv.clientX-startX;
+                const dy=moveEv.clientY-startY;
+                if(Math.hypot(dx,dy)>LONG_PRESS_MOVE_TOLERANCE){
+                    clearPendingLongPress();
+                }
+            };
+            const onUp=()=>clearPendingLongPress();
+            const onCancel=()=>clearPendingLongPress();
+
+            const timer=setTimeout(()=>{
+                if(!pendingLongPress)return;
+
+                node.classList.add('longpress-ready');
+                node.dataset.longpressed='1';
+
+                node.removeEventListener('pointermove',onMove);
+                node.removeEventListener('pointerup',onUp);
+                node.removeEventListener('pointercancel',onCancel);
+                pendingLongPress=null;
+
+                startTimelineDragFromLongPress(ev,e,node,pointerId,startY);
+            },LONG_PRESS_MS);
+
+            pendingLongPress={timer,node,onMove,onUp,onCancel};
+            node.addEventListener('pointermove',onMove);
+            node.addEventListener('pointerup',onUp,{once:true});
+            node.addEventListener('pointercancel',onCancel,{once:true});
+        }
+
+        function startTimelineDragFromLongPress(ev,e,node,pointerId,startY){
             const originalStart=timeToMinutes(e.startTime);
             const originalEnd=Math.max(originalStart+30,timeToMinutes(e.endTime||''));
+
             timelineDrag={
-                pointerId:ev.pointerId,
+                pointerId,
                 event:e,
                 node,
-                startY:ev.clientY,
+                startY,
                 originalTop:parseFloat(node.style.top)||0,
                 originalStart,
                 originalEnd,
                 moved:false
             };
-            node.setPointerCapture?.(ev.pointerId);
+
+            try{node.setPointerCapture?.(pointerId)}catch(_){}
+            node.classList.remove('longpress-ready');
             node.classList.add('dragging');
+
             node.addEventListener('pointermove',moveTimelineDrag);
             node.addEventListener('pointerup',endTimelineDrag,{once:true});
             node.addEventListener('pointercancel',endTimelineDrag,{once:true});
+
+            // Subtle vibration on supported mobile browsers.
+            if(navigator.vibrate) navigator.vibrate(18);
         }
 
         function moveTimelineDrag(ev){
             if(!timelineDrag)return;
             const dy=ev.clientY-timelineDrag.startY;
-            if(Math.abs(dy)>4)timelineDrag.moved=true;
+            if(Math.abs(dy)>3)timelineDrag.moved=true;
+
             const duration=timelineDrag.originalEnd-timelineDrag.originalStart;
             let newStart=snapMinutes(timelineDrag.originalStart+dy/PX_PER_MIN,15);
             newStart=Math.max(TIMELINE_START,Math.min(newStart,TIMELINE_END-duration));
+
             timelineDrag.previewStart=newStart;
             timelineDrag.node.style.top=`${(newStart-TIMELINE_START)*PX_PER_MIN}px`;
+
             const t=timelineDrag.node.querySelector('.timeline-event-time');
             if(t)t.textContent=`${minutesToTime(newStart)} – ${minutesToTime(newStart+duration)}`;
         }
@@ -1994,7 +2108,9 @@
         function endTimelineDrag(){
             if(!timelineDrag)return;
             const d=timelineDrag;
-            d.node.classList.remove('dragging');
+
+            try{d.node.releasePointerCapture?.(d.pointerId)}catch(_){}
+            d.node.classList.remove('dragging','longpress-ready');
             d.node.removeEventListener('pointermove',moveTimelineDrag);
 
             if(d.moved && Number.isFinite(d.previewStart)){
@@ -2007,6 +2123,8 @@
             }else{
                 d.node.style.top=`${d.originalTop}px`;
             }
+
+            setTimeout(()=>{d.node.dataset.longpressed='0'},80);
             timelineDrag=null;
         }
 
@@ -2401,132 +2519,150 @@
         
         function openBatchDeleteModal(){
             closeModal('modal-settings');
-            const date=document.getElementById('batch-delete-date');
-            if(date) date.value=fmtDate(new Date());
-            const type=document.getElementById('batch-delete-type');
-            if(type) type.value='student';
+            document.getElementById('batch-delete-date').value=fmtDate(new Date());
+            batchDeleteMode='linked';
+            document.getElementById('batch-delete-type').value='student';
+            document.getElementById('batch-title-query').value='';
+            setBatchDeleteMode('linked');
             populateBatchDeleteTargets();
             updateBatchDeletePreview();
             openModal('modal-batch-delete');
             lucide.createIcons();
         }
+        let batchDeleteMode='linked';
+
+        function setBatchDeleteMode(mode){
+            batchDeleteMode=mode;
+            document.getElementById('batch-mode-linked')?.classList.toggle('active',mode==='linked');
+            document.getElementById('batch-mode-title')?.classList.toggle('active',mode==='title');
+            document.getElementById('batch-linked-fields')?.classList.toggle('hidden',mode!=='linked');
+            document.getElementById('batch-title-fields')?.classList.toggle('hidden',mode!=='title');
+            if(mode==='title')fillBatchTitleSuggestions();
+            updateBatchDeletePreview();
+        }
 
         function populateBatchDeleteTargets(){
-            const type=document.getElementById('batch-delete-type')?.value || 'student';
+            const type=document.getElementById('batch-delete-type')?.value||'student';
             const sel=document.getElementById('batch-delete-target');
-            if(!sel) return;
-
-            if(type==='student' || type==='school'){
-                const profiles=(Array.isArray(appData.profiles)?appData.profiles:[])
-                    .filter(p=>p.type===type)
-                    .sort((a,b)=>(a.name||'').localeCompare(b.name||'','zh-Hant'));
-
-                sel.innerHTML = profiles.length
-                    ? profiles.map(p=>`<option value="${p.id}">${p.name}</option>`).join('')
-                    : '<option value="">沒有資料</option>';
+            if(!sel)return;
+            if(type==='student'||type==='school'){
+                const arr=(Array.isArray(appData.profiles)?appData.profiles:[]).filter(p=>p.type===type).sort((a,b)=>(a.name||'').localeCompare(b.name||'','zh-Hant'));
+                sel.innerHTML=arr.length?arr.map(p=>`<option value="${p.id}">${p.name}</option>`).join(''):'<option value="">沒有資料</option>';
             }else{
-                const performances=getEventsArray()
-                    .filter(e=>e.type==='performance')
-                    .sort((a,b)=>(b.date||'').localeCompare(a.date||''));
-
-                // Group performances by groupId when possible; otherwise by event id.
                 const groups=new Map();
-                performances.forEach(e=>{
-                    const key=e.groupId ? `g:${e.groupId}` : `e:${e.id}`;
-                    if(!groups.has(key)){
-                        groups.set(key,{
-                            key,
-                            id:e.id,
-                            groupId:e.groupId||null,
-                            title:e.title||'未命名演出',
-                            date:e.date||''
-                        });
-                    }
+                getEventsArray().filter(e=>e.type==='performance').sort((a,b)=>(b.date||'').localeCompare(a.date||'')).forEach(e=>{
+                    const key=e.groupId?`g:${e.groupId}`:`e:${e.id}`;
+                    if(!groups.has(key))groups.set(key,{key,title:e.title||'未命名演出',date:e.date||''});
                 });
-
                 const arr=[...groups.values()];
-                sel.innerHTML = arr.length
-                    ? arr.map(g=>`<option value="${g.key}">${g.date}｜${g.title}</option>`).join('')
-                    : '<option value="">沒有演出資料</option>';
+                sel.innerHTML=arr.length?arr.map(g=>`<option value="${g.key}">${g.date}｜${g.title}</option>`).join(''):'<option value="">沒有演出資料</option>';
             }
+            updateBatchDeletePreview();
+        }
 
+        function getLegacyTitleCandidates(){
+            const map=new Map();
+            getEventsArray().forEach(e=>{
+                const title=(e.title||'').trim();
+                if(!title)return;
+                if(!map.has(title))map.set(title,{title,count:0,minDate:e.date||'',maxDate:e.date||''});
+                const x=map.get(title); x.count++;
+                if(!x.minDate||(e.date||'')<x.minDate)x.minDate=e.date||'';
+                if(!x.maxDate||(e.date||'')>x.maxDate)x.maxDate=e.date||'';
+            });
+            return [...map.values()].sort((a,b)=>b.count-a.count||a.title.localeCompare(b.title,'zh-Hant'));
+        }
+
+        function fillBatchTitleSuggestions(){
+            const q=(document.getElementById('batch-title-query')?.value||'').trim().toLowerCase();
+            const box=document.getElementById('batch-title-suggestions');
+            if(!box)return;
+            const arr=getLegacyTitleCandidates().filter(x=>!q||x.title.toLowerCase().includes(q)).slice(0,20);
+            box.innerHTML=arr.length?arr.map(x=>`<button type="button" class="batch-title-suggestion" data-title="${encodeURIComponent(x.title)}" onclick="selectBatchTitle(this.dataset.title)"><strong>${x.title}</strong><br>${x.count} 筆 · ${x.minDate||'—'} ～ ${x.maxDate||'—'}</button>`).join(''):'<div class="p-3 text-xs text-zinc-500">找不到符合的舊行程名稱</div>';
+            box.classList.remove('hidden');
+        }
+
+        function selectBatchTitle(encoded){
+            document.getElementById('batch-title-query').value=decodeURIComponent(encoded);
+            document.getElementById('batch-title-suggestions')?.classList.add('hidden');
             updateBatchDeletePreview();
         }
 
         function getBatchDeleteMatches(){
-            const type=document.getElementById('batch-delete-type')?.value;
-            const target=document.getElementById('batch-delete-target')?.value;
             const cutoff=document.getElementById('batch-delete-date')?.value;
-            if(!type || !target || !cutoff) return [];
-
+            if(!cutoff)return [];
             const events=getEventsArray();
 
-            if(type==='student' || type==='school'){
-                const profileId=Number(target);
-                return events.filter(e=>e.refId===profileId && (e.date||'')>=cutoff);
+            if(batchDeleteMode==='title'){
+                const q=(document.getElementById('batch-title-query')?.value||'').trim().toLowerCase();
+                if(!q)return [];
+                return events.filter(e=>(e.title||'').toLowerCase().includes(q)&&(e.date||'')>=cutoff);
             }
 
+            const type=document.getElementById('batch-delete-type')?.value;
+            const target=document.getElementById('batch-delete-target')?.value;
+            if(!type||!target)return [];
+
+            if(type==='student'||type==='school'){
+                const id=Number(target);
+                return events.filter(e=>e.refId===id&&(e.date||'')>=cutoff);
+            }
             if(type==='performance'){
                 if(target.startsWith('g:')){
                     const groupId=Number(target.slice(2));
-                    return events.filter(e=>e.groupId===groupId && (e.date||'')>=cutoff);
+                    return events.filter(e=>e.groupId===groupId&&(e.date||'')>=cutoff);
                 }
                 if(target.startsWith('e:')){
                     const id=Number(target.slice(2));
                     const ev=events.find(e=>e.id===id);
-                    if(!ev) return [];
-                    return events.filter(e=>{
-                        if(ev.groupId) return e.groupId===ev.groupId && (e.date||'')>=cutoff;
-                        return e.id===id && (e.date||'')>=cutoff;
-                    });
+                    if(!ev)return [];
+                    return events.filter(e=>(ev.groupId?e.groupId===ev.groupId:e.id===id)&&(e.date||'')>=cutoff);
                 }
             }
-
             return [];
         }
 
         function updateBatchDeletePreview(){
             const box=document.getElementById('batch-delete-preview');
-            if(!box) return;
+            if(!box)return;
+            const cutoff=document.getElementById('batch-delete-date')?.value;
+            if(!cutoff){box.textContent='請先選擇起始日期。';return}
+            if(batchDeleteMode==='title'&&!document.getElementById('batch-title-query')?.value.trim()){box.textContent='輸入舊行程名稱，例如「文心小學」。';return}
+
             const matches=getBatchDeleteMatches();
+            if(!matches.length){box.textContent='目前條件下沒有會被取消的排程。';return}
 
-            if(!matches.length){
-                box.innerHTML='<span class="text-zinc-500">目前條件下沒有會被取消的排程。</span>';
-                return;
-            }
-
-            const sample=[...matches]
-                .sort((a,b)=>(a.date||'').localeCompare(b.date||''))
-                .slice(0,4)
-                .map(e=>`${e.date} ${e.startTime||''}｜${e.title||''}`)
-                .join('<br>');
-
-            box.innerHTML=`<strong class="text-[#171717]">將取消 ${matches.length} 筆排程</strong><div class="mt-2 leading-relaxed">${sample}${matches.length>4?'<br>…':''}</div>`;
+            const sorted=[...matches].sort((a,b)=>(a.date||'').localeCompare(b.date||'')||(a.startTime||'').localeCompare(b.startTime||''));
+            const sample=sorted.slice(0,5).map(e=>`${e.date} ${e.startTime||''}｜${e.title||''}`).join('<br>');
+            box.innerHTML=`<strong class="text-[#171717]">將取消 ${matches.length} 筆排程</strong><div class="mt-1">範圍：${sorted[0]?.date||'—'} ～ ${sorted.at(-1)?.date||'—'}</div><div class="mt-2 leading-relaxed">${sample}${matches.length>5?'<br>…':''}</div>`;
         }
 
         function previewBatchDelete(){
+            if(batchDeleteMode==='title')fillBatchTitleSuggestions();
             updateBatchDeletePreview();
         }
 
         function confirmBatchDelete(){
-            const type=document.getElementById('batch-delete-type')?.value;
-            const targetSel=document.getElementById('batch-delete-target');
-            const targetLabel=targetSel?.selectedOptions?.[0]?.textContent || '';
             const cutoff=document.getElementById('batch-delete-date')?.value;
             const matches=getBatchDeleteMatches();
+            if(!cutoff)return alert('請先選擇日期');
+            if(!matches.length)return alert('目前條件下沒有可取消的排程');
 
-            if(!cutoff) return alert('請先選擇日期');
-            if(!matches.length) return alert('目前條件下沒有可取消的排程');
+            let label='';
+            if(batchDeleteMode==='title'){
+                label=`行程名稱包含「${document.getElementById('batch-title-query')?.value||''}」`;
+            }else{
+                const type=document.getElementById('batch-delete-type')?.value;
+                const targetLabel=document.getElementById('batch-delete-target')?.selectedOptions?.[0]?.textContent||'';
+                label=`${type==='student'?'學生':type==='school'?'學校':'演出'}：${targetLabel}`;
+            }
 
-            const typeLabel=type==='student'?'學生':type==='school'?'學校':'演出';
-            if(!confirm(`確定取消「${targetLabel}」從 ${cutoff} 起的 ${matches.length} 筆排程？\n\n類型：${typeLabel}\n過去資料會保留，這個動作無法復原。`)) return;
-
+            if(!confirm(`確定取消 ${cutoff} 起的 ${matches.length} 筆排程？\n\n${label}\n過去資料會保留，這個動作無法復原。`))return;
             const ids=new Set(matches.map(e=>e.id));
             appData.events=getEventsArray().filter(e=>!ids.has(e.id));
             saveData();
             closeModal('modal-batch-delete');
         }
-
 
         // Modal Controls
         function openEventModal(id = null, forceType = null, refId = null) {
