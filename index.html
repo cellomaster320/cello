@@ -842,7 +842,7 @@
         #action-sheet .grid.grid-cols-3 > button > div { width:50px!important;height:50px!important; }
         @media(max-width:700px){.workspace-dashboard{grid-template-columns:repeat(2,1fr)}.year-grid{grid-template-columns:repeat(2,1fr)}#action-sheet .grid.grid-cols-3{grid-template-columns:repeat(3,1fr)!important}.month-day{min-height:58px;padding:6px}.finance-kpis{grid-template-columns:1fr 1fr 1fr}}
 
-        #modal-task,#modal-expense,#modal-search { position:fixed !important; inset:0 !important; }
+        #modal-expense,#modal-search { position:fixed !important; inset:0 !important; }
 
         /* ===== CELLO 2.1 UX cleanup ===== */
         .schedule-control-bar{display:flex;align-items:center;gap:10px;justify-content:space-between;margin-bottom:2px}
@@ -1818,7 +1818,7 @@
                 <div><label class="text-[10px] text-zinc-500 font-bold block mb-1.5">選擇對象</label><select id="batch-delete-target" onchange="updateBatchDeletePreview()"></select></div>
             </div>
             <div id="batch-title-fields" class="space-y-4 hidden">
-                <div><label class="text-[10px] text-zinc-500 font-bold block mb-1.5">行程名稱關鍵字</label><div class="flex gap-2"><input id="batch-title-query" type="text" placeholder="例如：文心小學" oninput="updateBatchDeletePreview()"><button onclick="fillBatchTitleSuggestions()" class="batch-search-btn" type="button">搜尋</button></div></div>
+                <div><label class="text-[10px] text-zinc-500 font-bold block mb-1.5">行程名稱關鍵字</label><div class="flex gap-2"><input id="batch-title-query" type="text" placeholder="例如：文欣小學" oninput="updateBatchDeletePreview()"><button onclick="fillBatchTitleSuggestions()" class="batch-search-btn" type="button">搜尋</button></div></div>
                 <div id="batch-title-suggestions" class="batch-title-suggestions hidden"></div>
             </div>
             <div class="space-y-4 mt-4">
@@ -2004,19 +2004,6 @@
     </div>
 
 
-    <div id="modal-task" class="fixed inset-0 z-[60] hidden flex items-center justify-center px-6 bg-black/70 backdrop-blur-md">
-        <div class="workspace-modal w-full max-w-sm p-6 slide-up">
-            <div class="flex justify-between items-center mb-5"><h3 class="text-lg font-bold font-zh">待辦事項</h3><button onclick="closeModal('modal-task')"><i data-lucide="x" size="20"></i></button></div>
-            <input type="hidden" id="task-id">
-            <div class="space-y-3">
-                <input id="task-title" type="text" placeholder="要處理什麼？">
-                <input id="task-date" type="date">
-                <textarea id="task-note" class="h-20 resize-none" placeholder="備註（選填）"></textarea>
-            </div>
-            <div class="flex gap-2 mt-5"><button id="task-delete" onclick="deleteTask()" class="hidden flex-1 workspace-secondary-btn text-red-600">刪除</button><button onclick="saveTask()" class="flex-[2] workspace-primary-btn">儲存</button></div>
-        </div>
-    </div>
-
     <div id="modal-expense" class="fixed inset-0 z-[60] hidden flex items-center justify-center px-6 bg-black/70 backdrop-blur-md">
         <div class="workspace-modal w-full max-w-sm p-6 slide-up">
             <div class="flex justify-between items-center mb-5"><h3 class="text-lg font-bold font-zh">支出紀錄</h3><button onclick="closeModal('modal-expense')"><i data-lucide="x" size="20"></i></button></div>
@@ -2034,7 +2021,7 @@
 
     <div id="modal-search" class="fixed inset-0 z-[70] hidden flex items-start justify-center px-5 pt-20 bg-black/50 backdrop-blur-md">
         <div class="workspace-modal w-full max-w-lg p-5 slide-up">
-            <div class="flex items-center gap-3 mb-4"><i data-lucide="search" size="18"></i><input id="global-search" type="search" placeholder="搜尋學生、學校、行程、待辦…" oninput="renderSearchResults()"><button onclick="closeModal('modal-search')"><i data-lucide="x" size="20"></i></button></div>
+            <div class="flex items-center gap-3 mb-4"><i data-lucide="search" size="18"></i><input id="global-search" type="search" placeholder="搜尋學生、學校、行程…" oninput="renderSearchResults()"><button onclick="closeModal('modal-search')"><i data-lucide="x" size="20"></i></button></div>
             <div id="search-results" class="space-y-2 max-h-[60vh] overflow-y-auto"></div>
         </div>
     </div>
@@ -2103,7 +2090,6 @@
         function fmtDate(d){ return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`; }
         function money(n){ return Number(n||0).toLocaleString(); }
         function getEventsArray(){ return Array.isArray(appData.events) ? appData.events : (appData.events && typeof appData.events==='object' ? Object.values(appData.events) : []); }
-        function getTasksArray(){ return Array.isArray(appData.tasks) ? appData.tasks : (appData.tasks && typeof appData.tasks==='object' ? Object.values(appData.tasks) : []); }
         function getExpensesArray(){ return Array.isArray(appData.expenses) ? appData.expenses : (appData.expenses && typeof appData.expenses==='object' ? Object.values(appData.expenses) : []); }
 
         function getTrashArray(){ return Array.isArray(appData.trash) ? appData.trash : (appData.trash && typeof appData.trash==='object' ? Object.values(appData.trash) : []); }
@@ -2430,11 +2416,6 @@
             const monthEvents=events.filter(e=>{ if(!e?.date)return false; const d=new Date(e.date+'T12:00:00'); return d.getFullYear()===y&&d.getMonth()===m; });
             const billable=monthEvents.filter(e=>Number(e.fee)>0); const gross=billable.reduce((s,e)=>s+Number(e.fee||0),0); const unpaid=billable.filter(e=>!e.isPaid).reduce((s,e)=>s+Number(e.fee||0),0); const performances=monthEvents.filter(e=>e.type==='performance').length;
             el.innerHTML=`<div class="dash-card dark"><div class="dash-label">${y}.${pad2(m+1)} WORKLOAD</div><div><div class="dash-value">${monthEvents.length}</div><div class="dash-sub">本月行程</div></div></div><div class="dash-card"><div class="dash-label">EXPECTED</div><div><div class="dash-value">NT$ ${money(gross)}</div><div class="dash-sub">預計收入</div></div></div><div class="dash-card"><div class="dash-label">RECEIVABLE</div><div><div class="dash-value">NT$ ${money(unpaid)}</div><div class="dash-sub">尚未收到</div></div></div><div class="dash-card"><div class="dash-label">PERFORMANCE</div><div><div class="dash-value">${performances}</div><div class="dash-sub">本月演出</div></div></div>`;
-        }
-        function renderTaskPreview(){
-            const el=document.getElementById('task-preview'); if(!el)return; const tasks=getTasksArray().filter(t=>!t.done).sort((a,b)=>(a.dueDate||'9999').localeCompare(b.dueDate||'9999')).slice(0,3);
-            if(!tasks.length){ el.className='workspace-task-preview'; el.innerHTML=''; return; }
-            el.className='workspace-task-preview has-tasks'; el.innerHTML=`<div class="flex justify-between items-center mb-1"><span class="text-[10px] font-bold text-zinc-500">NEXT TO DO</span><button onclick="openTaskModal()" class="text-[10px]">＋ 新增</button></div>`+tasks.map(t=>`<div class="task-mini-row" onclick="openTaskModal(${t.id})"><span class="task-dot"></span><span class="task-mini-title">${t.title}</span><span class="task-mini-date">${t.dueDate||''}</span></div>`).join('');
         }
         function renderEventCard(e){
             let typeLabel='演出'; if(e.type==='lesson')typeLabel='家教'; if(e.type==='school')typeLabel='學校'; if(e.type==='rehearsal')typeLabel='彩排';
@@ -2774,11 +2755,6 @@
                 </div>`;
             }).join('');
         }
-
-        function openTaskModal(id=null){closeActionSheet();const t=id?getTasksArray().find(x=>x.id===id):null;document.getElementById('task-id').value=t?.id||'';document.getElementById('task-title').value=t?.title||'';document.getElementById('task-date').value=t?.dueDate||fmtDate(new Date());document.getElementById('task-note').value=t?.note||'';document.getElementById('task-delete').classList.toggle('hidden',!t);openModal('modal-task');lucide.createIcons();}
-        function saveTask(){const title=document.getElementById('task-title').value.trim();if(!title)return;const id=Number(document.getElementById('task-id').value)||Date.now(),arr=getTasksArray(),idx=arr.findIndex(x=>x.id===id),obj={id,title,dueDate:document.getElementById('task-date').value,note:document.getElementById('task-note').value,done:idx>=0?!!arr[idx].done:false};if(idx>=0)arr[idx]=obj;else arr.push(obj);appData.tasks=arr;saveData();closeModal('modal-task');}
-        function toggleTask(id){const t=getTasksArray().find(x=>x.id===id);if(t){t.done=!t.done;appData.tasks=getTasksArray();saveData();}}
-        function deleteTask(){const id=Number(document.getElementById('task-id').value);if(id&&confirm('刪除此待辦？')){appData.tasks=getTasksArray().filter(x=>x.id!==id);saveData();closeModal('modal-task');}}
         function openExpenseModal(id=null){closeActionSheet();const e=id?getExpensesArray().find(x=>x.id===id):null;document.getElementById('expense-id').value=e?.id||'';document.getElementById('expense-title').value=e?.title||'';document.getElementById('expense-date').value=e?.date||fmtDate(new Date());document.getElementById('expense-category').value=e?.category||'器材';document.getElementById('expense-amount').value=e?.amount||'';document.getElementById('expense-note').value=e?.note||'';document.getElementById('expense-delete').classList.toggle('hidden',!e);openModal('modal-expense');lucide.createIcons();}
         function saveExpense(){const title=document.getElementById('expense-title').value.trim(),amount=Number(document.getElementById('expense-amount').value);if(!title||!amount)return alert('請填寫支出項目與金額');const id=Number(document.getElementById('expense-id').value)||Date.now(),arr=getExpensesArray(),idx=arr.findIndex(x=>x.id===id),obj={id,title,date:document.getElementById('expense-date').value,category:document.getElementById('expense-category').value,amount,note:document.getElementById('expense-note').value};if(idx>=0)arr[idx]=obj;else arr.push(obj);appData.expenses=arr;saveData();closeModal('modal-expense');}
         function deleteExpense(){const id=Number(document.getElementById('expense-id').value);if(id&&confirm('刪除此支出？')){appData.expenses=getExpensesArray().filter(x=>x.id!==id);saveData();closeModal('modal-expense');}}
@@ -2911,7 +2887,7 @@
             if(!box)return;
             const cutoff=document.getElementById('batch-delete-date')?.value;
             if(!cutoff){box.textContent='請先選擇起始日期。';return}
-            if(batchDeleteMode==='title'&&!document.getElementById('batch-title-query')?.value.trim()){box.textContent='輸入舊行程名稱，例如「文心小學」。';return}
+            if(batchDeleteMode==='title'&&!document.getElementById('batch-title-query')?.value.trim()){box.textContent='輸入舊行程名稱，例如「文欣小學」。';return}
 
             const matches=getBatchDeleteMatches();
             if(!matches.length){box.textContent='目前條件下沒有會被取消的排程。';return}
@@ -2988,9 +2964,31 @@
         function openEventModal(id = null, forceType = null, refId = null) {
             closeActionSheet(); closeModal('modal-detail'); editingEventId = id; document.getElementById('modal-event').classList.remove('hidden');
             document.getElementById('modal-event-title').innerText = id ? "編輯行程" : "新增行程";
-            document.getElementById('evt-title').value = ''; document.getElementById('evt-date').value = viewDate.toISOString().split('T')[0];
-            document.getElementById('evt-start').value = '10:00'; document.getElementById('evt-end').value = '12:00';
-            document.getElementById('evt-rehearsal-count').value = '0'; document.getElementById('rehearsal-inputs').innerHTML = '';
+            document.getElementById('evt-title').value = '';
+            document.getElementById('evt-date').value = viewDate.toISOString().split('T')[0];
+            document.getElementById('evt-start').value = '10:00';
+            document.getElementById('evt-end').value = '12:00';
+
+            // New-event reset: never inherit values from the previously edited event.
+            document.getElementById('evt-location').value = '';
+            document.getElementById('evt-fee').value = '';
+            document.getElementById('evt-fin-note').value = '';
+            document.getElementById('evt-ref-id').value = '';
+            const studentSelect = document.getElementById('evt-student');
+            if(studentSelect) studentSelect.value = '';
+
+            const recurCheck = document.getElementById('evt-recur-check');
+            if(recurCheck) recurCheck.checked = false;
+            const recurWeeks = document.getElementById('evt-recur-weeks');
+            if(recurWeeks) {
+                recurWeeks.value = '1';
+                recurWeeks.disabled = true;
+            }
+            const recurGroup = document.getElementById('recur-input-group');
+            if(recurGroup) recurGroup.classList.add('opacity-50');
+
+            document.getElementById('evt-rehearsal-count').value = '0';
+            document.getElementById('rehearsal-inputs').innerHTML = '';
             document.getElementById('rehearsal-inputs').classList.add('hidden');
             document.getElementById('evt-call-time').value = '';
             document.getElementById('evt-repertoire').value = '';
@@ -3019,7 +3017,8 @@
                 document.getElementById('btn-delete-evt').classList.add('hidden'); document.getElementById('btn-delete-future-evt').classList.add('hidden');
                 if(refId) { const p = appData.profiles.find(x => x.id === refId); if(p) document.getElementById('evt-title').value = p.name + (p.type==='school'?' 分部課':' 大提琴課'); }
             }
-            document.getElementById('evt-type').value = type; document.getElementById('evt-ref-id').value = refId || '';
+            document.getElementById('evt-type').value = type;
+            if(!id) document.getElementById('evt-ref-id').value = refId || '';
             document.getElementById('section-performance').classList.toggle('hidden', type !== 'performance');
             if(type === 'performance' || id) document.getElementById('section-recur').classList.add('hidden');
             else document.getElementById('section-recur').classList.remove('hidden');
