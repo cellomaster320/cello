@@ -1520,6 +1520,141 @@
         .batch-title-suggestion{width:100%;text-align:left;padding:10px 12px;border-bottom:1px solid rgba(17,17,17,.06);color:#4f4a44;font-size:11px}
         .batch-title-suggestion:last-child{border-bottom:0}.batch-title-suggestion strong{color:#111}
 
+        /* ===== 3.1 management upgrade ===== */
+        .cancel-future-profile-btn{
+            background:#fff !important;
+            color:#8a6114 !important;
+            border:1px solid rgba(178,133,44,.28) !important;
+            box-shadow:none !important;
+        }
+        .cancel-future-profile-btn:hover{
+            background:rgba(178,133,44,.07) !important;
+            color:#694b10 !important;
+        }
+        .profile-report-grid{
+            display:grid;
+            grid-template-columns:repeat(2,1fr);
+            gap:8px;
+            margin:0 0 16px;
+        }
+        .profile-report-card{
+            padding:12px;
+            border-radius:14px;
+            border:1px solid rgba(17,17,17,.07);
+            background:rgba(255,255,255,.56);
+        }
+        .profile-report-label{font-size:9px;color:#8b857d;font-weight:700}
+        .profile-report-value{font-family:'DM Serif Display',Georgia,serif!important;font-size:16px;margin-top:4px;color:#111}
+        .overdue-badge{
+            display:inline-flex;
+            align-items:center;
+            gap:4px;
+            margin-left:6px;
+            padding:2px 6px;
+            border-radius:999px;
+            font-size:9px;
+            font-weight:700;
+            background:rgba(180,67,58,.08);
+            color:#a44740;
+            border:1px solid rgba(180,67,58,.12);
+        }
+        .trash-row{
+            display:flex;
+            align-items:center;
+            gap:10px;
+            padding:12px;
+            border:1px solid rgba(17,17,17,.07);
+            border-radius:14px;
+            background:rgba(255,255,255,.58);
+        }
+        .trash-row-main{flex:1;min-width:0}
+        .trash-title{font-weight:700;font-size:12px;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .trash-meta{font-size:10px;color:#817a72;margin-top:2px}
+        .trash-restore{
+            width:32px;height:32px;border-radius:10px;
+            display:flex;align-items:center;justify-content:center;
+            border:1px solid rgba(17,17,17,.08);background:#fff;color:#111
+        }
+
+        /* ===== 3.2 performance details ===== */
+        .perf-field-label{
+            display:block;
+            margin:0 0 5px 2px;
+            font-size:9px;
+            color:#8b847a;
+            font-weight:700;
+            font-family:'Noto Serif TC','Songti TC','PMingLiU',serif!important;
+        }
+        .perf-paid-toggle{
+            display:inline-flex;
+            align-items:center;
+            gap:6px;
+            padding:5px 8px;
+            border-radius:999px;
+            background:rgba(255,255,255,.06);
+            border:1px solid rgba(255,255,255,.08);
+            color:#8e887f;
+            font-size:10px;
+            font-weight:700;
+            cursor:pointer;
+        }
+        .perf-paid-toggle input{
+            width:14px!important;
+            height:14px!important;
+            margin:0!important;
+            accent-color:#111;
+        }
+        .stage-detail-grid{
+            display:grid;
+            grid-template-columns:repeat(2,minmax(0,1fr));
+            gap:6px;
+            margin-top:9px;
+        }
+        .stage-detail-chip{
+            padding:7px 8px;
+            border-radius:10px;
+            background:rgba(17,17,17,.035);
+            border:1px solid rgba(17,17,17,.055);
+            font-size:10px;
+            color:#736d65;
+            min-width:0;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            white-space:nowrap;
+        }
+        .stage-detail-chip strong{
+            color:#26231f;
+            font-weight:700;
+        }
+        .stage-payment-status{
+            display:inline-flex;
+            align-items:center;
+            gap:5px;
+            padding:3px 7px;
+            border-radius:999px;
+            font-size:9px;
+            font-weight:700;
+            border:1px solid rgba(17,17,17,.08);
+        }
+        .stage-payment-status.paid{background:rgba(17,17,17,.07);color:#111}
+        .stage-payment-status.pending{background:rgba(174,120,30,.08);color:#8b611b}
+
+        /* ===== batch cancel confirm button contrast fix ===== */
+        .batch-confirm-btn{
+            background:#111 !important;
+            color:#fff !important;
+            border:1px solid #111 !important;
+        }
+        .batch-confirm-btn:hover{
+            background:#222 !important;
+            color:#fff !important;
+        }
+        .batch-confirm-btn:disabled{
+            background:#111 !important;
+            color:rgba(255,255,255,.38) !important;
+            opacity:1 !important;
+        }
+
     </style>
 </head>
 <body class="flex flex-col">
@@ -1656,6 +1791,9 @@
             </div>
             <div class="border-t border-white/5 pt-4">
                 <h4 class="text-[10px] text-[#c5a059] font-zh font-bold mb-3">資料管理</h4>
+                <button onclick="openTrashModal()" class="w-full mb-3 py-3 bg-zinc-800 rounded-xl text-xs font-zh text-zinc-400 hover:text-white hover:bg-zinc-700 transition flex items-center justify-center gap-2 font-bold">
+                    <i data-lucide="archive-restore" size="14"></i> 最近刪除
+                </button>
                 <div class="flex gap-3">
                     <button onclick="exportData()" class="flex-1 py-3 bg-zinc-800 rounded-xl text-xs font-zh text-zinc-400 hover:text-white hover:bg-zinc-700 transition flex items-center justify-center gap-2 font-bold"><i data-lucide="download" size="14"></i> 備份代碼</button>
                 </div>
@@ -1687,11 +1825,26 @@
                 <div><label class="text-[10px] text-zinc-500 font-bold block mb-1.5">從這一天起取消</label><input id="batch-delete-date" type="date" onchange="updateBatchDeletePreview()"></div>
                 <div id="batch-delete-preview" class="rounded-xl border border-black/8 bg-black/[0.025] p-3 text-xs text-zinc-500">選好條件後，會顯示將取消的筆數。</div>
             </div>
-            <div class="flex gap-2 mt-5"><button onclick="previewBatchDelete()" class="flex-1 py-3 rounded-xl border border-black/10 text-xs font-bold text-zinc-600">預覽</button><button onclick="confirmBatchDelete()" class="flex-[1.4] py-3 rounded-xl bg-[#111] text-white text-xs font-bold">確認取消後續</button></div>
+            <div class="flex gap-2 mt-5"><button onclick="previewBatchDelete()" class="flex-1 py-3 rounded-xl border border-black/10 text-xs font-bold text-zinc-600">預覽</button><button onclick="confirmBatchDelete()" class="batch-confirm-btn flex-[1.4] py-3 rounded-xl text-xs font-bold">確認取消後續</button></div>
         </div>
     </div>
 
-    <div id="modal-event" class="fixed inset-0 z-[60] hidden flex items-end sm:items-center justify-center px-0 sm:px-4 pb-0 sm:pb-4">
+    
+    <div id="modal-trash" class="fixed inset-0 z-[76] hidden flex items-center justify-center px-6 bg-black/70 backdrop-blur-md">
+        <div class="bg-[#f8f7f3] w-full max-w-md rounded-[2rem] p-6 border border-black/10 shadow-2xl slide-up">
+            <div class="flex justify-between items-center mb-5">
+                <div>
+                    <h3 class="text-lg font-bold font-zh text-[#171717]">最近刪除</h3>
+                    <p class="text-[11px] text-zinc-500 mt-1">刪除的行程會暫存在這裡，可復原</p>
+                </div>
+                <button onclick="closeModal('modal-trash')" class="text-zinc-500"><i data-lucide="x" size="20"></i></button>
+            </div>
+            <div id="trash-list" class="space-y-2 max-h-[55vh] overflow-auto"></div>
+            <button onclick="emptyTrash()" class="w-full mt-5 py-3 rounded-xl border border-red-500/20 text-red-500 text-xs font-bold">清空最近刪除</button>
+        </div>
+    </div>
+
+<div id="modal-event" class="fixed inset-0 z-[60] hidden flex items-end sm:items-center justify-center px-0 sm:px-4 pb-0 sm:pb-4">
         <div class="absolute inset-0 bg-black/90 backdrop-blur-md" onclick="closeModal('modal-event')"></div>
         <div class="relative bg-[#181614] w-full max-w-md rounded-t-[2rem] sm:rounded-[2rem] p-5 shadow-2xl border border-[#c5a059]/20 max-h-[90vh] overflow-y-auto slide-up">
             <div class="flex justify-between items-center mb-5 border-b border-white/5 pb-3">
@@ -1715,14 +1868,61 @@
                     </div>
                     <div id="section-title"><input type="text" id="evt-title" placeholder="輸入主題" class="w-full p-3 rounded-xl text-sm font-zh font-bold bg-[#24201c]"></div>
                 </div>
-                <div id="section-performance" class="hidden space-y-3 bg-white/5 p-3 rounded-xl border border-dashed border-[#c5a059]/30">
-                    <h4 class="text-[10px] text-[#c5a059] font-zh font-bold">演出細節</h4>
-                    <div class="space-y-2">
-                        <select id="evt-perf-type" class="w-full p-2.5 rounded-lg text-xs font-zh bg-[#24201c] font-bold"><option value="樂團">樂團</option><option value="商演">商演</option><option value="婚禮">婚禮</option><option value="演出">一般演出</option></select>
-                        <input type="text" id="evt-dress" placeholder="服裝建議" class="w-full p-2.5 rounded-lg text-xs font-zh bg-[#24201c]">
+                <div id="section-performance" class="hidden space-y-4 bg-white/5 p-3 rounded-xl border border-dashed border-[#c5a059]/30">
+                    <div class="flex justify-between items-center">
+                        <h4 class="text-[10px] text-[#c5a059] font-zh font-bold">演出細節</h4>
+                        <label class="perf-paid-toggle">
+                            <input type="checkbox" id="evt-paid-check">
+                            <span>已收款</span>
+                        </label>
                     </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="perf-field-label">演出類型</label>
+                            <select id="evt-perf-type" class="w-full p-2.5 rounded-lg text-xs font-zh bg-[#24201c] font-bold">
+                                <option value="樂團">樂團</option>
+                                <option value="商演">商演</option>
+                                <option value="婚禮">婚禮</option>
+                                <option value="錄音">錄音</option>
+                                <option value="演出">一般演出</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="perf-field-label">集合時間</label>
+                            <input type="time" id="evt-call-time" class="w-full p-2.5 rounded-lg text-xs font-num bg-[#24201c]">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="perf-field-label">Dress code</label>
+                        <input type="text" id="evt-dress" placeholder="例如：全黑、正式黑西裝" class="w-full p-2.5 rounded-lg text-xs font-zh bg-[#24201c]">
+                    </div>
+
+                    <div>
+                        <label class="perf-field-label">曲目</label>
+                        <textarea id="evt-repertoire" placeholder="輸入曲目／曲序" class="w-full h-20 resize-none p-2.5 rounded-lg text-xs font-zh bg-[#24201c]"></textarea>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="perf-field-label">聯絡人</label>
+                            <input type="text" id="evt-contact-name" placeholder="姓名" class="w-full p-2.5 rounded-lg text-xs font-zh bg-[#24201c]">
+                        </div>
+                        <div>
+                            <label class="perf-field-label">聯絡方式</label>
+                            <input type="text" id="evt-contact-info" placeholder="電話 / LINE" class="w-full p-2.5 rounded-lg text-xs font-zh bg-[#24201c]">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="perf-field-label">演出備註</label>
+                        <textarea id="evt-perf-note" placeholder="停車、進場、譜架、器材、其他提醒…" class="w-full h-20 resize-none p-2.5 rounded-lg text-xs font-zh bg-[#24201c]"></textarea>
+                    </div>
+
                     <div class="pt-2 border-t border-white/5 mt-1">
-                        <label class="flex items-center gap-2 cursor-pointer"><span class="text-[10px] text-zinc-400 font-zh whitespace-nowrap font-bold">彩排場次</span>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <span class="text-[10px] text-zinc-400 font-zh whitespace-nowrap font-bold">彩排場次</span>
                             <select id="evt-rehearsal-count" onchange="toggleRehearsalInputs()" class="p-2 rounded-lg text-xs bg-[#24201c] text-[#c5a059] font-bold border border-zinc-700 flex-1 font-num">
                                 <option value="0">無</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option>
                             </select>
@@ -1759,7 +1959,7 @@
             <div class="flex justify-between items-start mb-6"><div><h3 id="det-name" class="text-2xl text-white font-bold font-zh">名稱</h3><p id="det-info" class="text-xs text-zinc-500 mt-1 font-zh font-bold">Info</p></div><button onclick="closeModal('modal-detail')" class="text-zinc-500"><i data-lucide="x" size="24"></i></button></div>
             <div class="grid grid-cols-2 gap-3 mb-3">
                 <button onclick="openEventModalForDetail()" class="bg-[#c5a059] text-[#12100e] py-3 rounded-xl font-bold font-zh text-xs shadow-lg">+ 新增排課</button>
-                <button onclick="cancelFutureScheduleForProfile()" class="bg-zinc-900 text-amber-500 py-3 rounded-xl font-bold font-zh text-xs border border-amber-500/20 transition">取消後續排程</button>
+                <button onclick="cancelFutureScheduleForProfile()" class="cancel-future-profile-btn py-3 rounded-xl font-bold font-zh text-xs transition">取消後續排程</button>
             </div>
             <button onclick="deleteProfile()" class="w-full mb-6 bg-zinc-900 text-red-500 py-3 rounded-xl font-bold font-zh text-xs border border-white/5 transition">刪除整份資料</button>
             <h4 class="text-[10px] text-[#c5a059] font-zh tracking-widest font-bold mb-3 border-b border-white/10 pb-2">上課紀錄</h4>
@@ -1853,7 +2053,7 @@
         const db = firebase.database();
         const DATA_PATH = 'cello_data'; 
 
-        let appData = { events: [], profiles: [], subs: [], tasks: [], expenses: [] };
+        let appData = { events: [], profiles: [], subs: [], tasks: [], expenses: [], trash: [] };
         let draggedEventId = null;
         let isDraggingSchedule = false;
         let calendarMode = 'week';
@@ -1885,6 +2085,7 @@
                     if (!appData.subs) appData.subs = [];
                     if (!appData.tasks) appData.tasks = [];
                     if (!appData.expenses) appData.expenses = [];
+                    if (!appData.trash) appData.trash = [];
                     refreshAll();
                     statusEl.className = 'connected';
                 } else statusEl.className = 'connected';
@@ -1904,6 +2105,46 @@
         function getEventsArray(){ return Array.isArray(appData.events) ? appData.events : (appData.events && typeof appData.events==='object' ? Object.values(appData.events) : []); }
         function getTasksArray(){ return Array.isArray(appData.tasks) ? appData.tasks : (appData.tasks && typeof appData.tasks==='object' ? Object.values(appData.tasks) : []); }
         function getExpensesArray(){ return Array.isArray(appData.expenses) ? appData.expenses : (appData.expenses && typeof appData.expenses==='object' ? Object.values(appData.expenses) : []); }
+
+        function getTrashArray(){ return Array.isArray(appData.trash) ? appData.trash : (appData.trash && typeof appData.trash==='object' ? Object.values(appData.trash) : []); }
+
+        function putEventsInTrash(events, reason='刪除行程'){
+            if(!events || !events.length) return;
+            if(!appData.trash) appData.trash=[];
+            const deletedAt=new Date().toISOString();
+            events.forEach(e=>{
+                appData.trash.push({
+                    trashId:Date.now()+Math.random(),
+                    deletedAt,
+                    reason,
+                    event:{...e}
+                });
+            });
+        }
+
+        function hasScheduleConflict(candidate, ignoreId=null){
+            if(!candidate?.date || !candidate.startTime || !candidate.endTime) return [];
+            const s=timeToMinutes(candidate.startTime), end=timeToMinutes(candidate.endTime);
+            if(end<=s) return [];
+            return getEventsArray().filter(e=>{
+                if(!e || e.id===ignoreId || e.date!==candidate.date || !e.startTime || !e.endTime) return false;
+                const es=timeToMinutes(e.startTime), ee=timeToMinutes(e.endTime);
+                return Math.max(s,es) < Math.min(end,ee);
+            });
+        }
+
+        function describeOverdue(e){
+            if(e?.isPaid || !e?.date) return '';
+            const today=new Date(); today.setHours(0,0,0,0);
+            const due=new Date(e.date+'T00:00:00');
+            const days=Math.floor((today-due)/86400000);
+            if(days<=0) return '';
+            if(days<=7) return `逾期 ${days} 天`;
+            if(days<=30) return `逾期 ${days} 天`;
+            if(days<=60) return `逾期 ${days} 天`;
+            return `逾期 60+ 天`;
+        }
+
 
         function goToday(){ viewDate = new Date(); renderSchedule(); renderDashboard(); renderFinance(); }
         function setScheduleLayout(mode, btn){
@@ -2118,8 +2359,12 @@
                 d.event.startTime=minutesToTime(d.previewStart);
                 d.event.endTime=minutesToTime(d.previewStart+duration);
                 d.node.dataset.dragged='1';
+                const conflicts=hasScheduleConflict(d.event,d.event.id);
                 appData.events=getEventsArray();
                 saveData();
+                if(conflicts.length){
+                    setTimeout(()=>alert(`時間已更新，但與以下行程衝突：\n${conflicts.map(c=>`${c.startTime||''}-${c.endTime||''} ${c.title||''}`).join('\n')}`),50);
+                }
             }else{
                 d.node.style.top=`${d.originalTop}px`;
             }
@@ -2140,6 +2385,7 @@
             if(!matches.length)return alert('這個日期之後沒有排程');
             if(!confirm(`確定取消 ${cutoff} 起的 ${matches.length} 筆「${profile.name}」排程？\n過去紀錄不會刪除。`))return;
 
+            putEventsInTrash(matches,'取消後續排程');
             const ids=new Set(matches.map(e=>e.id));
             appData.events=getEventsArray().filter(e=>!ids.has(e.id));
             saveData();
@@ -2150,6 +2396,7 @@
             const ev=getEventsArray().find(e=>e.id===editingEventId);
             if(!ev)return;
             if(!confirm(`確定只刪除「${ev.title}」這一筆 ${ev.date} 的行程？`))return;
+            putEventsInTrash([ev],'刪除此筆');
             appData.events=getEventsArray().filter(e=>e.id!==editingEventId);
             saveData();
             closeModal('modal-event');
@@ -2337,8 +2584,15 @@
                 refId: document.getElementById('evt-ref-id').value ? parseInt(document.getElementById('evt-ref-id').value) : null,
                 dressCode: document.getElementById('evt-dress').value,
                 perfType: type === 'performance' ? document.getElementById('evt-perf-type').value : null,
+                callTime: type === 'performance' ? document.getElementById('evt-call-time').value : null,
+                repertoire: type === 'performance' ? document.getElementById('evt-repertoire').value : null,
+                contactName: type === 'performance' ? document.getElementById('evt-contact-name').value : null,
+                contactInfo: type === 'performance' ? document.getElementById('evt-contact-info').value : null,
+                perfNote: type === 'performance' ? document.getElementById('evt-perf-note').value : null,
                 groupId: groupId,
-                isPaid: existingEvent ? !!existingEvent.isPaid : false,
+                isPaid: type === 'performance'
+                    ? !!document.getElementById('evt-paid-check').checked
+                    : (existingEvent ? !!existingEvent.isPaid : false),
                 sortOrder: computedSortOrder
             };
 
@@ -2359,6 +2613,15 @@
                         const clonedDate = d.toISOString().split('T')[0];
                         appData.events.push({ ...base, id: Date.now()+i, date: clonedDate, groupId: groupId, sortOrder: nextSortOrderForDate(clonedDate) });
                     }
+                }
+            }
+            const savedEvent = editingEventId
+                ? getEventsArray().find(e=>e.id===editingEventId)
+                : getEventsArray().slice(-1)[0];
+            if(savedEvent){
+                const conflicts=hasScheduleConflict(savedEvent, savedEvent.id);
+                if(conflicts.length){
+                    alert(`行程已儲存，但有時間衝突：\n${conflicts.map(c=>`${c.startTime||''}-${c.endTime||''} ${c.title||''}`).join('\n')}`);
                 }
             }
             saveData(); closeModal('modal-event');
@@ -2443,7 +2706,7 @@
                         </button>
                         <div class="min-w-0 flex-1">
                             <div class="finance-title font-bold truncate">${e.title||'未命名行程'}</div>
-                            <div class="finance-date">${e.date||''}${e.startTime?' · '+e.startTime:''} · ${e.isPaid?'已收':'待收'}</div>
+                            <div class="finance-date">${e.date||''}${e.startTime?' · '+e.startTime:''} · ${e.isPaid?'已收':'待收'}${!e.isPaid&&describeOverdue(e)?`<span class="overdue-badge">${describeOverdue(e)}</span>`:''}</div>
                         </div>
                     </div>
 
@@ -2469,6 +2732,7 @@
             if(!ev) return;
             if(!confirm(`確定刪除「${ev.title}」這一筆帳務與對應行程？\n${ev.date||''} ${ev.startTime||''}\nNT$ ${money(ev.fee)}`)) return;
 
+            putEventsInTrash([ev],'帳務刪除');
             appData.events=getEventsArray().filter(e=>e.id!==id);
             saveData();
         }
@@ -2488,7 +2752,27 @@
 
             if(sum)sum.innerHTML=`<div class="mini-stat"><div class="mini-stat-label">即將演出</div><div class="mini-stat-value">${upcoming.length}</div></div><div class="mini-stat"><div class="mini-stat-label">${year} 演出</div><div class="mini-stat-value">${yearE.length}</div></div><div class="mini-stat"><div class="mini-stat-label">年度收入</div><div class="mini-stat-value">NT$ ${money(rev)}</div></div>`;
 
-            list.innerHTML=events.map(e=>`<div class="glass p-4 rounded-xl relative mb-3 cursor-pointer ${(e.date||'')<today?'opacity-55':''}" onclick="openEventModal(${e.id})"><div class="flex justify-between mb-1"><span class="text-[9px] font-bold bg-black/5 px-1.5 py-0.5 rounded">${e.perfType||'演出'}</span><span class="text-[10px] font-num">${e.date}</span></div><h3 class="text-base font-bold font-zh mb-2">${e.title}</h3><div class="flex text-[10px] text-zinc-500"><span>${e.location||''}</span>${Number(e.fee)>0?`<span class="ml-auto font-num">$${money(e.fee)}</span>`:''}</div></div>`).join('');
+            list.innerHTML=events.map(e=>{
+                const chips=[];
+                if(e.callTime)chips.push(`<div class="stage-detail-chip"><strong>集合</strong> ${e.callTime}</div>`);
+                if(e.dressCode)chips.push(`<div class="stage-detail-chip"><strong>Dress</strong> ${e.dressCode}</div>`);
+                if(e.contactName)chips.push(`<div class="stage-detail-chip"><strong>聯絡</strong> ${e.contactName}</div>`);
+                if(e.repertoire)chips.push(`<div class="stage-detail-chip"><strong>曲目</strong> ${String(e.repertoire).replace(/<[^>]*>/g,'').slice(0,24)}</div>`);
+
+                return `<div class="glass p-4 rounded-xl relative mb-3 cursor-pointer ${(e.date||'')<today?'opacity-55':''}" onclick="openEventModal(${e.id})">
+                    <div class="flex justify-between items-start mb-1">
+                        <div class="flex items-center gap-2">
+                            <span class="text-[9px] font-bold bg-black/5 px-1.5 py-0.5 rounded">${e.perfType||'演出'}</span>
+                            <span class="stage-payment-status ${e.isPaid?'paid':'pending'}">${e.isPaid?'已收款':'未收款'}</span>
+                        </div>
+                        <span class="text-[10px] font-num">${e.date}</span>
+                    </div>
+                    <h3 class="text-base font-bold font-zh mb-1">${e.title}</h3>
+                    <div class="flex text-[10px] text-zinc-500"><span>${e.startTime||''}${e.endTime?'–'+e.endTime:''}${e.location?' · '+e.location:''}</span>${Number(e.fee)>0?`<span class="ml-auto font-num">$${money(e.fee)}</span>`:''}</div>
+                    ${chips.length?`<div class="stage-detail-grid">${chips.join('')}</div>`:''}
+                    ${e.perfNote?`<div class="mt-2 text-[10px] text-zinc-500 line-clamp-2">${e.perfNote}</div>`:''}
+                </div>`;
+            }).join('');
         }
 
         function openTaskModal(id=null){closeActionSheet();const t=id?getTasksArray().find(x=>x.id===id):null;document.getElementById('task-id').value=t?.id||'';document.getElementById('task-title').value=t?.title||'';document.getElementById('task-date').value=t?.dueDate||fmtDate(new Date());document.getElementById('task-note').value=t?.note||'';document.getElementById('task-delete').classList.toggle('hidden',!t);openModal('modal-task');lucide.createIcons();}
@@ -2658,11 +2942,47 @@
             }
 
             if(!confirm(`確定取消 ${cutoff} 起的 ${matches.length} 筆排程？\n\n${label}\n過去資料會保留，這個動作無法復原。`))return;
+            putEventsInTrash(matches,'批次取消排程');
             const ids=new Set(matches.map(e=>e.id));
             appData.events=getEventsArray().filter(e=>!ids.has(e.id));
             saveData();
             closeModal('modal-batch-delete');
         }
+
+        
+        function openTrashModal(){
+            renderTrash();
+            openModal('modal-trash');
+            lucide.createIcons();
+        }
+        function renderTrash(){
+            const box=document.getElementById('trash-list');
+            if(!box)return;
+            const items=[...getTrashArray()].sort((a,b)=>(b.deletedAt||'').localeCompare(a.deletedAt||''));
+            box.innerHTML=items.length?items.map(t=>{
+                const e=t.event||{};
+                return `<div class="trash-row"><div class="trash-row-main"><div class="trash-title">${e.title||'未命名行程'}</div><div class="trash-meta">${e.date||''} ${e.startTime||''} · ${t.reason||'刪除'}</div></div><button class="trash-restore" onclick="restoreTrashItem('${t.trashId}')"><i data-lucide="rotate-ccw" size="15"></i></button></div>`;
+            }).join(''):'<div class="text-center py-10 text-zinc-500 text-xs">最近刪除是空的</div>';
+            lucide.createIcons();
+        }
+        function restoreTrashItem(trashId){
+            const items=getTrashArray();
+            const item=items.find(t=>String(t.trashId)===String(trashId));
+            if(!item||!item.event)return;
+            appData.events=getEventsArray();
+            appData.events.push({...item.event});
+            appData.trash=items.filter(t=>String(t.trashId)!==String(trashId));
+            saveData();
+            renderTrash();
+        }
+        function emptyTrash(){
+            if(!getTrashArray().length)return;
+            if(!confirm('確定要永久清空最近刪除？清空後無法復原。'))return;
+            appData.trash=[];
+            saveData();
+            renderTrash();
+        }
+
 
         // Modal Controls
         function openEventModal(id = null, forceType = null, refId = null) {
@@ -2672,13 +2992,28 @@
             document.getElementById('evt-start').value = '10:00'; document.getElementById('evt-end').value = '12:00';
             document.getElementById('evt-rehearsal-count').value = '0'; document.getElementById('rehearsal-inputs').innerHTML = '';
             document.getElementById('rehearsal-inputs').classList.add('hidden');
+            document.getElementById('evt-call-time').value = '';
+            document.getElementById('evt-repertoire').value = '';
+            document.getElementById('evt-contact-name').value = '';
+            document.getElementById('evt-contact-info').value = '';
+            document.getElementById('evt-perf-note').value = '';
+            document.getElementById('evt-dress').value = '';
+            document.getElementById('evt-paid-check').checked = false;
             let type = forceType || 'lesson';
             if (id) {
                 const e = appData.events.find(x => x.id === id); type = e.type;
                 document.getElementById('evt-title').value = e.title; document.getElementById('evt-date').value = e.date;
                 document.getElementById('evt-start').value = e.startTime; document.getElementById('evt-end').value = e.endTime;
                 document.getElementById('evt-location').value = e.location; document.getElementById('evt-fee').value = e.fee;
-                document.getElementById('evt-fin-note').value = e.finNote || ''; document.getElementById('evt-dress').value = e.dressCode || '';
+                document.getElementById('evt-fin-note').value = e.finNote || '';
+                document.getElementById('evt-dress').value = e.dressCode || '';
+                document.getElementById('evt-call-time').value = e.callTime || '';
+                document.getElementById('evt-repertoire').value = e.repertoire || '';
+                document.getElementById('evt-contact-name').value = e.contactName || '';
+                document.getElementById('evt-contact-info').value = e.contactInfo || '';
+                document.getElementById('evt-perf-note').value = e.perfNote || '';
+                document.getElementById('evt-paid-check').checked = !!e.isPaid;
+                if(e.perfType) document.getElementById('evt-perf-type').value = e.perfType;
                 document.getElementById('btn-delete-evt').classList.remove('hidden'); document.getElementById('btn-delete-future-evt').classList.remove('hidden'); document.getElementById('section-recur').classList.add('hidden');
             } else {
                 document.getElementById('btn-delete-evt').classList.add('hidden'); document.getElementById('btn-delete-future-evt').classList.add('hidden');
@@ -2697,10 +3032,34 @@
         function autoFillStudent() { const p = appData.profiles.find(x => x.id == document.getElementById('evt-student').value); if(p) { document.getElementById('evt-title').value = p.name + (p.type==='school'?' 分部課':' 大提琴課'); document.getElementById('evt-ref-id').value = p.id; } }
         function toggleRecurInput(chk) { document.getElementById('recur-input-group').classList.toggle('opacity-50', !chk.checked); document.getElementById('evt-recur-weeks').disabled = !chk.checked; }
         function openProfileDetail(id) {
-            activeProfileId = id; const p = appData.profiles.find(x => x.id === id); document.getElementById('det-name').innerText = p.name;
-            document.getElementById('det-info').innerText = p.contact || '無備註';
-            const history = appData.events.filter(e => e.refId === id).sort((a,b) => b.date.localeCompare(a.date));
-            document.getElementById('det-history').innerHTML = history.map(h => `<div class="border-l-2 border-white/10 pl-3 py-1.5 relative"><div class="absolute -left-[5px] top-2.5 w-2.5 h-2.5 rounded-full bg-[#c5a059]"></div><div class="flex justify-between items-center"><div class="text-xs text-[#c5a059] font-bold">${h.date}</div><button onclick="openReportGen('${h.id}')" class="text-[9px] bg-white/5 border border-white/10 px-2 py-0.5 rounded text-zinc-400">匯報</button></div><div class="text-sm font-bold">${h.title}</div>${h.report ? `<div class="bg-black/30 p-2 rounded mt-1 text-[10px] text-zinc-400 whitespace-pre-wrap">${h.report}</div>` : ''}</div>`).join('');
+            activeProfileId=id;
+            const p=appData.profiles.find(x=>x.id===id);
+            if(!p)return;
+            document.getElementById('det-name').innerText=p.name;
+            document.getElementById('det-info').innerText=p.contact||'無備註';
+
+            const all=getEventsArray().filter(e=>e.refId===id).sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+            const year=new Date().getFullYear();
+            const yearEvents=all.filter(e=>String(e.date||'').startsWith(String(year)));
+            const total=yearEvents.reduce((s,e)=>s+Number(e.fee||0),0);
+            const received=yearEvents.filter(e=>e.isPaid).reduce((s,e)=>s+Number(e.fee||0),0);
+            const pending=yearEvents.filter(e=>!e.isPaid).reduce((s,e)=>s+Number(e.fee||0),0);
+            const today=fmtDate(new Date());
+            const past=[...all].filter(e=>(e.date||'')<today).sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+            const future=[...all].filter(e=>(e.date||'')>=today).sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+
+            const historyEl=document.getElementById('det-history');
+            historyEl.innerHTML=`
+                <div class="profile-report-grid">
+                    <div class="profile-report-card"><div class="profile-report-label">${year} 堂數</div><div class="profile-report-value">${yearEvents.length}</div></div>
+                    <div class="profile-report-card"><div class="profile-report-label">年度總收入</div><div class="profile-report-value">NT$ ${money(total)}</div></div>
+                    <div class="profile-report-card"><div class="profile-report-label">已收款</div><div class="profile-report-value">NT$ ${money(received)}</div></div>
+                    <div class="profile-report-card"><div class="profile-report-label">未收款</div><div class="profile-report-value">NT$ ${money(pending)}</div></div>
+                    <div class="profile-report-card"><div class="profile-report-label">最近一次</div><div class="profile-report-value">${past[0]?.date||'—'}</div></div>
+                    <div class="profile-report-card"><div class="profile-report-label">下一次</div><div class="profile-report-value">${future[0]?.date||'—'}</div></div>
+                </div>
+                ${all.map(h=>`<div class="border-l-2 border-white/10 pl-3 py-1.5 relative"><div class="absolute -left-[5px] top-2.5 w-2.5 h-2.5 rounded-full bg-[#c5a059]"></div><div class="flex justify-between items-center"><div class="text-xs text-[#c5a059] font-bold">${h.date}</div><button onclick="openReportGen('${h.id}')" class="text-[9px] bg-white/5 border border-white/10 px-2 py-0.5 rounded text-zinc-400">匯報</button></div><div class="text-sm font-bold">${h.title}</div>${h.report?`<div class="bg-black/30 p-2 rounded mt-1 text-[10px] text-zinc-400 whitespace-pre-wrap">${h.report}</div>`:''}</div>`).join('')}
+            `;
             openModal('modal-detail');
         }
         function openProfileModal(type) { closeActionSheet(); document.getElementById('prof-type').value = type; openModal('modal-profile'); }
